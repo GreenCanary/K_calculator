@@ -21,7 +21,7 @@ public class LiquidMaterial {
     public BigDecimal getLiquidH2O() {
         return liquidH2O;
     }
-    public void setLiquidH20(BigDecimal liquidH2O) {
+    public void setLiquidH2O(BigDecimal liquidH2O) {
         this.liquidH2O = liquidH2O;
     }
     public BigDecimal getLiquidKCl() {
