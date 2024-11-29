@@ -9,11 +9,11 @@ public class SolidMaterial {
         private BigDecimal solidWaste = BigDecimal.ZERO;
         private BigDecimal s_Q = BigDecimal.ZERO;
 
-        public SolidMaterial(BigDecimal initialQuantity, BigDecimal liqSolidRatio) {
+        public SolidMaterial(BigDecimal initialQuantity) {
                 this.s_Q = initialQuantity;
         }
 
-        public SolidMaterial(double v, double v1) {
+        public SolidMaterial(double v) {
         }
 
         // Getters and Setters
