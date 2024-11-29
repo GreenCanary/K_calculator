@@ -15,38 +15,38 @@ import javafx.scene.control.ScrollPane;
 public class App extends Application {
     @Override
     public void start(Stage primaryStage) {
-        // Create liquid and solid material objects
+// Create liquid and solid material objects
         Liquid liquid = new Liquid();
         SolidMaterial solidMaterial = new SolidMaterial(1000);
         LiquidMaterial liquidMaterial = new LiquidMaterial(0.8);
 
-        // Layout
+// Layout
         VBox layout = new VBox(20);
         layout.setPadding(new Insets(10));
 
-        // Liquid Section
+// Liquid Section
         Label liquidLabel = new Label("Liquid Properties");
         liquidLabel.setFont(new Font(18));
         GridPane liquidGrid = createLiquidSection(liquid, liquidLabel);
 
-        // Solid Material Section
+// Solid Material Section
         Label solidMaterialLabel = new Label("Solid Material Properties");
         solidMaterialLabel.setFont(new Font(18));
         GridPane solidMaterialGrid = createSolidMaterialSection(solidMaterial, solidMaterialLabel);
 
-        // Liquid Material Section
+// Liquid Material Section
         Label liquidMaterialLabel = new Label("Liquid Material Properties");
         liquidMaterialLabel.setFont(new Font(18));
         GridPane liquidMaterialGrid = createLiquidMaterialSection(liquidMaterial, liquidMaterialLabel);
 
-        // Combine all sections
-        layout.getChildren().addAll(liquidLabel, liquidGrid, liquidMaterialLabel, liquidMaterialGrid);
+// Combine all sections
+        layout.getChildren().addAll(liquidLabel, liquidGrid, solidMaterialLabel, solidMaterialGrid, liquidMaterialLabel, liquidMaterialGrid);
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setContent(layout);
         scrollPane.setFitToWidth(true);
 
-        // Create a scene and display the stage
+// Create a scene and display the stage
         Scene scene = new Scene(scrollPane, 800, 600);
         primaryStage.setScene(scene);
         primaryStage.setTitle("K-calculator");
@@ -58,7 +58,7 @@ public class App extends Application {
         grid.setHgap(20);
         grid.setVgap(10);
 
-        // Input Section for Liquid
+// Input Section for Liquid
         Label qLabel = new Label("Total Quantity (Q):");
         TextField qInput = new TextField();
         grid.add(qLabel, 0, 0);
@@ -84,11 +84,11 @@ public class App extends Application {
         grid.add(caso4Label, 0, 4);
         grid.add(caso4Input, 1, 4);
 
-        // Button to calculate results
+// Button to calculate results
         Button calculateLiquidButton = new Button("Calculate Liquid");
         grid.add(calculateLiquidButton, 1, 5);
 
-        // Results Section for Liquid
+// Results Section for Liquid
         Label resultsLabel = new Label("Results:");
         grid.add(resultsLabel, 0, 6, 2, 1);
 
@@ -254,10 +254,10 @@ public class App extends Application {
         grid.setVgap(10);
 
         // Input Section for Liquid Material
-        Label qLabel = new Label("Liquid Material Quantity (Q):");
-        TextField qInput = new TextField();
-        grid.add(qLabel, 0, 0);
-        grid.add(qInput, 1, 0);
+        Label liqSolRatLabel = new Label("Liquid-to-Solid Ratio:");
+        TextField liqSolRatInput = new TextField();
+        grid.add(liqSolRatLabel, 0, 0);
+        grid.add(liqSolRatInput, 1, 0);
 
         Label h2OLabel = new Label("H2O Percentage (%):");
         TextField h2OInput = new TextField();
@@ -278,8 +278,6 @@ public class App extends Application {
         TextField caso4Input = new TextField();
         grid.add(caso4Label, 0, 4);
         grid.add(caso4Input, 1, 4);
-
-
 
         // Button to calculate liquid material
         Button calculateLiquidButton = new Button("Calculate Liquid Material");
@@ -309,36 +307,38 @@ public class App extends Application {
         grid.add(caso4ResultLabel, 0, 10);
         grid.add(caso4ResultValue, 1, 10);
 
-
         // Calculate Liquid Material Logic
         calculateLiquidButton.setOnAction(event -> {
             try {
-                BigDecimal q = new BigDecimal(qInput.getText());
+                BigDecimal liqSolRat = new BigDecimal(liqSolRatInput.getText());
+                BigDecimal solidMaterialQ = SolidMaterial.getS_Q();
+                BigDecimal q = solidMaterialQ.multiply(liqSolRat);
+
+                BigDecimal h2OPercentage = new BigDecimal(h2OInput.getText());
                 BigDecimal kclPercentage = new BigDecimal(kclInput.getText());
                 BigDecimal naclPercentage = new BigDecimal(naclInput.getText());
                 BigDecimal caso4Percentage = new BigDecimal(caso4Input.getText());
-                BigDecimal wastePercentage = new BigDecimal(h2OInput.getText());
 
-                BigDecimal totalPercentage = kclPercentage.add(naclPercentage).add(caso4Percentage).add(wastePercentage);
+                BigDecimal totalPercentage = h2OPercentage.add(kclPercentage).add(naclPercentage).add(caso4Percentage);
                 if (totalPercentage.compareTo(BigDecimal.valueOf(100)) != 0) {
                     throw new IllegalArgumentException("Total percentage must equal 100%");
                 }
 
+                BigDecimal h2OAmount = q.multiply(h2OPercentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
                 BigDecimal kclAmount = q.multiply(kclPercentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
                 BigDecimal naclAmount = q.multiply(naclPercentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
                 BigDecimal caso4Amount = q.multiply(caso4Percentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
-                BigDecimal wasteAmount = q.multiply(wastePercentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
 
-                liquidMaterial.setLiquidH2O(wasteAmount);
+                liquidMaterial.setLiquidH2O(h2OAmount);
                 liquidMaterial.setLiquidKCl(kclAmount);
                 liquidMaterial.setLiquidNaCl(naclAmount);
                 liquidMaterial.setLiquidCaSO4(caso4Amount);
                 liquidMaterial.setL_Q(q);
 
+                wasteResultValue.setText(h2OAmount.setScale(2, RoundingMode.HALF_UP).toString());
                 kclResultValue.setText(kclAmount.setScale(2, RoundingMode.HALF_UP).toString());
                 naclResultValue.setText(naclAmount.setScale(2, RoundingMode.HALF_UP).toString());
                 caso4ResultValue.setText(caso4Amount.setScale(2, RoundingMode.HALF_UP).toString());
-                wasteResultValue.setText(wasteAmount.setScale(2, RoundingMode.HALF_UP).toString());
             } catch (Exception e) {
                 showError(e.getMessage());
             }
