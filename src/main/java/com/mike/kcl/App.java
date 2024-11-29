@@ -287,25 +287,30 @@ public class App extends Application {
         Label resultsLabel = new Label("Results for Liquid Material:");
         grid.add(resultsLabel, 0, 6, 2, 1);
 
+        Label liquidQResultLabel = new Label("Liquid Quantity (Q):");
+        Label liquidQResultValue = new Label();
+        grid.add(liquidQResultLabel, 0, 7);
+        grid.add(liquidQResultValue, 1, 7);
+
         Label wasteResultLabel = new Label("H2O Amount:");
         Label wasteResultValue = new Label();
-        grid.add(wasteResultLabel, 0, 7);
-        grid.add(wasteResultValue, 1, 7);
+        grid.add(wasteResultLabel, 0, 8);
+        grid.add(wasteResultValue, 1, 8);
 
         Label kclResultLabel = new Label("KCl Amount:");
         Label kclResultValue = new Label();
-        grid.add(kclResultLabel, 0, 8);
-        grid.add(kclResultValue, 1, 8);
+        grid.add(kclResultLabel, 0, 9);
+        grid.add(kclResultValue, 1, 9);
 
         Label naclResultLabel = new Label("NaCl Amount:");
         Label naclResultValue = new Label();
-        grid.add(naclResultLabel, 0, 9);
-        grid.add(naclResultValue, 1, 9);
+        grid.add(naclResultLabel, 0, 10);
+        grid.add(naclResultValue, 1, 10);
 
         Label caso4ResultLabel = new Label("CaSO4 Amount:");
         Label caso4ResultValue = new Label();
-        grid.add(caso4ResultLabel, 0, 10);
-        grid.add(caso4ResultValue, 1, 10);
+        grid.add(caso4ResultLabel, 0, 11);
+        grid.add(caso4ResultValue, 1, 11);
 
         // Calculate Liquid Material Logic
         calculateLiquidButton.setOnAction(event -> {
@@ -328,13 +333,16 @@ public class App extends Application {
                 BigDecimal kclAmount = q.multiply(kclPercentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
                 BigDecimal naclAmount = q.multiply(naclPercentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
                 BigDecimal caso4Amount = q.multiply(caso4Percentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
+                BigDecimal liquidQ = liqSolRat.multiply((SolidMaterial.getS_Q())); // Simplified assumption for example purposes
 
                 liquidMaterial.setLiquidH2O(h2OAmount);
                 liquidMaterial.setLiquidKCl(kclAmount);
                 liquidMaterial.setLiquidNaCl(naclAmount);
                 liquidMaterial.setLiquidCaSO4(caso4Amount);
-                liquidMaterial.setL_Q(q);
+                liquidMaterial.setL_Q(liquidQ);
 
+
+                liquidQResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString());
                 wasteResultValue.setText(h2OAmount.setScale(2, RoundingMode.HALF_UP).toString());
                 kclResultValue.setText(kclAmount.setScale(2, RoundingMode.HALF_UP).toString());
                 naclResultValue.setText(naclAmount.setScale(2, RoundingMode.HALF_UP).toString());
