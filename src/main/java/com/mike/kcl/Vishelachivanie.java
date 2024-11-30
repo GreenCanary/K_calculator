@@ -108,6 +108,9 @@ public class Vishelachivanie {
     public BigDecimal getCaSO4() {
         return CaSO4;
     }
+    public BigDecimal getQ() {
+        return Q;
+    }
 
     // Computed Liquid-to-Solid Ratio
     public BigDecimal getLiqSolRat() {
