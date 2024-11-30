@@ -1,9 +1,13 @@
 package com.mike.kcl;
 
+import com.mike.kcl.Liquid;
+import com.mike.kcl.LiquidMaterial;
+import com.mike.kcl.SolidMaterial;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class Vishelachivanie {
+public class HydrocycloneLiquid {
 
     // Fields for Liquid Material
     private final BigDecimal liquidH2O;
@@ -27,7 +31,7 @@ public class Vishelachivanie {
     private final BigDecimal Q;
 
     // Constructor accepting prerequisite classes
-    public Vishelachivanie(SolidMaterial solidMaterial, LiquidMaterial liquidMaterial, Liquid liquid) {
+    public HydrocycloneLiquid(SolidMaterial solidMaterial, LiquidMaterial liquidMaterial, Liquid liquid) {
         // Extracting values from Liquid
         this.H2O = liquid.getH2O();
         this.KCl = liquid.getKCl();
