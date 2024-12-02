@@ -6,23 +6,24 @@ import java.math.RoundingMode;
 public class Vishelachivanie {
 
     // Fields for Liquid Material
-    private final BigDecimal liquidH2O;
-    private final BigDecimal liquidKCl;
-    private final BigDecimal liquidNaCl;
-    private final BigDecimal liquidCaSO4;
-    private final BigDecimal l_Q; // Liquid quantity
+    private BigDecimal liquidH2O;
+    private BigDecimal liquidKCl;
+    private BigDecimal liquidNaCl;
+    private BigDecimal liquidCaSO4;
+    private BigDecimal l_Q; // Liquid quantity
 
     // Fields for Solid Material
-    private final BigDecimal solidKCl;
-    private final BigDecimal solidNaCl;
-    private final BigDecimal solidCaSO4;
-    private final BigDecimal solidWaste;
-    private final BigDecimal s_Q; // Solid quantity
+    private BigDecimal solidKCl;
+    private BigDecimal solidNaCl;
+    private BigDecimal solidCaSO4;
+    private BigDecimal solidWaste;
+    private BigDecimal s_Q;
 
+    // Solid quantity
 
+    private BigDecimal H2O;
     // Constructor accepting prerequisite classes
     public Vishelachivanie(SolidMaterial solidMaterial, LiquidMaterial liquidMaterial, Liquid liquid) {
-
         // Extracting values from SolidMaterial
         this.solidKCl = solidMaterial.getSolidKCl();
         this.solidNaCl = solidMaterial.getSolidNaCl();
@@ -37,6 +38,7 @@ public class Vishelachivanie {
         this.liquidCaSO4 = liquidMaterial.getLiquidCaSO4();
         this.l_Q = liquidMaterial.getL_Q();
 
+        this.H2O = liquid.getH2O();
     }
 
     // Getters for Liquid Material
@@ -81,6 +83,57 @@ public class Vishelachivanie {
         return s_Q;
     }
 
+    public BigDecimal getH2O() {
+        return H2O;
+    }
+
+
+    // Setters for Liquid Material
+    public void setLiquidH2O(BigDecimal liquidH2O) {
+        this.liquidH2O = liquidH2O;
+    }
+
+    public void setLiquidKCl(BigDecimal liquidKCl) {
+        this.liquidKCl = liquidKCl;
+    }
+
+    public void setLiquidNaCl(BigDecimal liquidNaCl) {
+        this.liquidNaCl = liquidNaCl;
+    }
+
+    public void setLiquidCaSO4(BigDecimal liquidCaSO4) {
+        this.liquidCaSO4 = liquidCaSO4;
+    }
+
+    public void setL_Q(BigDecimal l_Q) {
+        this.l_Q = l_Q;
+    }
+
+    // Setters for Solid Material
+    public void setSolidKCl(BigDecimal solidKCl) {
+        this.solidKCl = solidKCl;
+    }
+
+    public void setSolidNaCl(BigDecimal solidNaCl) {
+        this.solidNaCl = solidNaCl;
+    }
+
+    public void setSolidCaSO4(BigDecimal solidCaSO4) {
+        this.solidCaSO4 = solidCaSO4;
+    }
+
+    public void setSolidWaste(BigDecimal solidWaste) {
+        this.solidWaste = solidWaste;
+    }
+
+    public void setS_Q(BigDecimal s_Q) {
+        this.s_Q = s_Q;
+    }
+
+    public void setH2O(BigDecimal H2O) {
+        this.H2O = H2O;
+    }
+
     // Computed Liquid-to-Solid Ratio
     public BigDecimal getLiqSolRat() {
         if (s_Q.compareTo(BigDecimal.ZERO) == 0) {
@@ -88,5 +141,4 @@ public class Vishelachivanie {
         }
         return l_Q.divide(s_Q, 4, RoundingMode.HALF_UP); // Rounded to 4 decimal places
     }
-
 }
