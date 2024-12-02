@@ -28,9 +28,9 @@ public class App extends Application {
 
         // Sections
         layout.getChildren().addAll(
-                createSection("Жидкость", createLiquidSection(liquid)),
-                createSection("Руда", createSolidMaterialSection(solidMaterial)),
-                createSection("Маточник", createLiquidMaterialSection(liquidMaterial, solidMaterial)),
+                createSection("Жидкость", createLiquidSection(liquid, vishelachivanie)),
+                createSection("Руда", createSolidMaterialSection(solidMaterial, vishelachivanie)),
+                createSection("Маточник", createLiquidMaterialSection(liquidMaterial, solidMaterial, vishelachivanie)),
                 createSection("Выщелачивание", createVishelachivanieSection(vishelachivanie))
 
         );
@@ -54,7 +54,7 @@ public class App extends Application {
         return section;
     }
 
-    private GridPane createLiquidSection(Liquid liquid) {
+    private GridPane createLiquidSection(Liquid liquid, Vishelachivanie vishelachivanie) {
         GridPane grid = createAlignedGridPane();
 
         Label qLabel = new Label("Кол-во всего (Q):");
@@ -82,7 +82,7 @@ public class App extends Application {
         return grid;
     }
 
-    private GridPane createSolidMaterialSection(SolidMaterial solidMaterial) {
+    private GridPane createSolidMaterialSection(SolidMaterial solidMaterial, Vishelachivanie vishelachivanie) {
         GridPane grid = createAlignedGridPane();
 
         Label qLabel = new Label("Кол-во всего (Q):");
@@ -120,9 +120,9 @@ public class App extends Application {
                 solidMaterial.setSolidWaste(wasteAmount);
 
                 vishelachivanie.setSolidKCl(kclAmount);
-                solidMaterial.setSolidNaCl(naclAmount);
-                solidMaterial.setSolidCaSO4(caso4Amount);
-                solidMaterial.setSolidWaste(wasteAmount);
+                vishelachivanie.setSolidNaCl(naclAmount);
+                vishelachivanie.setSolidCaSO4(caso4Amount);
+                vishelachivanie.setSolidWaste(wasteAmount);
 
                 kclResultValue.setText(kclAmount.setScale(2, RoundingMode.HALF_UP).toString());
                 naclResultValue.setText(naclAmount.setScale(2, RoundingMode.HALF_UP).toString());
@@ -136,7 +136,7 @@ public class App extends Application {
         return grid;
     }
 
-    private GridPane createLiquidMaterialSection(LiquidMaterial liquidMaterial, SolidMaterial solidMaterial) {
+    private GridPane createLiquidMaterialSection(LiquidMaterial liquidMaterial, SolidMaterial solidMaterial, Vishelachivanie vishelachivanie) {
         GridPane grid = createAlignedGridPane();
 
         Label ratioLabel = new Label("Ж/Т:");
