@@ -19,21 +19,9 @@ public class Vishelachivanie {
     private final BigDecimal solidWaste;
     private final BigDecimal s_Q; // Solid quantity
 
-    // Fields for Liquid
-    private final BigDecimal H2O;
-    private final BigDecimal KCl;
-    private final BigDecimal NaCl;
-    private final BigDecimal CaSO4;
-    private final BigDecimal Q;
 
     // Constructor accepting prerequisite classes
     public Vishelachivanie(SolidMaterial solidMaterial, LiquidMaterial liquidMaterial, Liquid liquid) {
-        // Extracting values from Liquid
-        this.H2O = liquid.getH2O();
-        this.KCl = liquid.getKCl();
-        this.NaCl = liquid.getNaCl();
-        this.CaSO4 = liquid.getCaSO4();
-        this.Q = liquid.getQ();
 
         // Extracting values from SolidMaterial
         this.solidKCl = solidMaterial.getSolidKCl();
@@ -44,7 +32,7 @@ public class Vishelachivanie {
 
         // Extracting values from LiquidMaterial
         this.liquidH2O = liquidMaterial.getLiquidH2O().add(liquid.getH2O());
-        this.liquidKCl = liquidMaterial.getLiquidKCl();
+        this.liquidKCl = liquidMaterial.getLiquidKCl().add(liquid.getKCl());
         this.liquidNaCl = liquidMaterial.getLiquidNaCl();
         this.liquidCaSO4 = liquidMaterial.getLiquidCaSO4();
         this.l_Q = liquidMaterial.getL_Q();
