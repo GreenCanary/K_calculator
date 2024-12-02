@@ -59,88 +59,37 @@ public class App extends Application {
         grid.setVgap(10);
 
 // Input Section for Liquid
-        Label qLabel = new Label("Кол-во жидкости (Q):");
+        Label qLabel = new Label("Кол-во всего (Q):");
         TextField qInput = new TextField();
         grid.add(qLabel, 0, 0);
         grid.add(qInput, 1, 0);
 
-        Label h2oLabel = new Label("H2O (%):");
-        TextField h2oInput = new TextField();
-        grid.add(h2oLabel, 0, 1);
-        grid.add(h2oInput, 1, 1);
-
-        Label kclLabel = new Label("KCl (%):");
-        TextField kclInput = new TextField();
-        grid.add(kclLabel, 0, 2);
-        grid.add(kclInput, 1, 2);
-
-        Label naclLabel = new Label("NaCl (%):");
-        TextField naclInput = new TextField();
-        grid.add(naclLabel, 0, 3);
-        grid.add(naclInput, 1, 3);
-
-        Label caso4Label = new Label("CaSO4 (%):");
-        TextField caso4Input = new TextField();
-        grid.add(caso4Label, 0, 4);
-        grid.add(caso4Input, 1, 4);
 
 // Button to calculate results
-        Button calculateLiquidButton = new Button("Расчитать состав жидкости");
-        grid.add(calculateLiquidButton, 1, 5);
+        Button calculateLiquidButton = new Button("Ввести кол-во воды");
+        grid.add(calculateLiquidButton, 1, 2);
 
 // Results Section for Liquid
         Label resultsLabel = new Label("Результат:");
-        grid.add(resultsLabel, 0, 6, 2, 1);
+        grid.add(resultsLabel, 0, 3, 2, 1);
 
         Label h2oResultLabel = new Label("H2O кол-во:");
         Label h2oResultValue = new Label();
-        grid.add(h2oResultLabel, 0, 7);
-        grid.add(h2oResultValue, 1, 7);
+        grid.add(h2oResultLabel, 0, 4);
+        grid.add(h2oResultValue, 1, 4);
 
-        Label kclResultLabel = new Label("KCl кол-во:");
-        Label kclResultValue = new Label();
-        grid.add(kclResultLabel, 0, 8);
-        grid.add(kclResultValue, 1, 8);
-
-        Label naclResultLabel = new Label("NaCl кол-во:");
-        Label naclResultValue = new Label();
-        grid.add(naclResultLabel, 0, 9);
-        grid.add(naclResultValue, 1, 9);
-
-        Label caso4ResultLabel = new Label("CaSO4 кол-во:");
-        Label caso4ResultValue = new Label();
-        grid.add(caso4ResultLabel, 0, 10);
-        grid.add(caso4ResultValue, 1, 10);
 
         // Calculate Liquid
         calculateLiquidButton.setOnAction(event -> {
             try {
                 BigDecimal q = new BigDecimal(qInput.getText());
-                BigDecimal h2oPercentage = new BigDecimal(h2oInput.getText());
-                BigDecimal kclPercentage = new BigDecimal(kclInput.getText());
-                BigDecimal naclPercentage = new BigDecimal(naclInput.getText());
-                BigDecimal caso4Percentage = new BigDecimal(caso4Input.getText());
 
-                BigDecimal totalPercentage = h2oPercentage.add(kclPercentage).add(naclPercentage).add(caso4Percentage);
-                if (totalPercentage.compareTo(BigDecimal.valueOf(100)) != 0) {
-                    throw new IllegalArgumentException("Сумма не равна 100%");
-                }
-
-                BigDecimal h2oAmount = q.multiply(h2oPercentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
-                BigDecimal kclAmount = q.multiply(kclPercentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
-                BigDecimal naclAmount = q.multiply(naclPercentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
-                BigDecimal caso4Amount = q.multiply(caso4Percentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
+                BigDecimal h2oAmount = q.multiply(BigDecimal.valueOf(1));
 
                 liquid.setH2O(h2oAmount);
-                liquid.setKCl(kclAmount);
-                liquid.setNaCl(naclAmount);
-                liquid.setCaSO4(caso4Amount);
                 liquid.setQ(q);
 
                 h2oResultValue.setText(h2oAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                kclResultValue.setText(kclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                naclResultValue.setText(naclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                caso4ResultValue.setText(caso4Amount.setScale(2, RoundingMode.HALF_UP).toString());
             } catch (Exception e) {
                 showError(e.getMessage());
             }
@@ -156,58 +105,39 @@ public class App extends Application {
         grid.setVgap(10);
 
         // Input Section for Solid Material
-        Label qLabel = new Label("Руда кол-во (Q):");
+        Label qLabel = new Label("Кол-во всего (Q):");
         TextField qInput = new TextField();
         grid.add(qLabel, 0, 0);
         grid.add(qInput, 1, 0);
 
-        Label kclLabel = new Label("KCl (%):");
-        TextField kclInput = new TextField();
-        grid.add(kclLabel, 0, 1);
-        grid.add(kclInput, 1, 1);
-
-        Label naclLabel = new Label("NaCl (%):");
-        TextField naclInput = new TextField();
-        grid.add(naclLabel, 0, 2);
-        grid.add(naclInput, 1, 2);
-
-        Label caso4Label = new Label("CaSO4 (%):");
-        TextField caso4Input = new TextField();
-        grid.add(caso4Label, 0, 3);
-        grid.add(caso4Input, 1, 3);
-
-        Label wasteLabel = new Label("Н.О. (%):");
-        TextField wasteInput = new TextField();
-        grid.add(wasteLabel, 0, 4);
-        grid.add(wasteInput, 1, 4);
 
         // Button to calculate solid material
         Button calculateSolidButton = new Button("Расчитать состав руды");
-        grid.add(calculateSolidButton, 1, 5);
+        grid.add(calculateSolidButton, 1, 1);
 
         // Results Section for Solid Material
         Label resultsLabel = new Label("Результат:");
-        grid.add(resultsLabel, 0, 6, 2, 1);
+        grid.add(resultsLabel, 0, 2, 2, 1);
 
         Label kclResultLabel = new Label("KCl кол-во:");
         Label kclResultValue = new Label();
-        grid.add(kclResultLabel, 0, 7);
-        grid.add(kclResultValue, 1, 7);
+        grid.add(kclResultLabel, 0, 3);
+        grid.add(kclResultValue, 1, 3);
 
         Label naclResultLabel = new Label("NaCl кол-во:");
         Label naclResultValue = new Label();
-        grid.add(naclResultLabel, 0, 8);
-        grid.add(naclResultValue, 1, 8);
+        grid.add(naclResultLabel, 0, 4);
+        grid.add(naclResultValue, 1, 4);
 
         Label caso4ResultLabel = new Label("CaSO4 кол-во:");
         Label caso4ResultValue = new Label();
-        grid.add(caso4ResultLabel, 0, 9);
-        grid.add(caso4ResultValue, 1, 9);
+        grid.add(caso4ResultLabel, 0, 5);
+        grid.add(caso4ResultValue, 1, 5);
 
         Label wasteResultLabel = new Label("Н.О. кол-во:");
         Label wasteResultValue = new Label();
-        grid.add(wasteResultLabel, 0, 10);
-        grid.add(wasteResultValue, 1, 10);
+        grid.add(wasteResultLabel, 0, 6);
+        grid.add(wasteResultValue, 1, 6);
 
 
 
@@ -216,20 +146,12 @@ public class App extends Application {
         calculateSolidButton.setOnAction(event -> {
             try {
                 BigDecimal q = new BigDecimal(qInput.getText());
-                BigDecimal kclPercentage = new BigDecimal(kclInput.getText());
-                BigDecimal naclPercentage = new BigDecimal(naclInput.getText());
-                BigDecimal caso4Percentage = new BigDecimal(caso4Input.getText());
-                BigDecimal wastePercentage = new BigDecimal(wasteInput.getText());
 
-                BigDecimal totalPercentage = kclPercentage.add(naclPercentage).add(caso4Percentage).add(wastePercentage);
-                if (totalPercentage.compareTo(BigDecimal.valueOf(100)) != 0) {
-                    throw new IllegalArgumentException("Сумма не равна 100%");
-                }
 
-                BigDecimal kclAmount = q.multiply(kclPercentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
-                BigDecimal naclAmount = q.multiply(naclPercentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
-                BigDecimal caso4Amount = q.multiply(caso4Percentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
-                BigDecimal wasteAmount = q.multiply(wastePercentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
+                BigDecimal kclAmount = q.multiply(BigDecimal.valueOf(0.91));
+                BigDecimal naclAmount = q.multiply(BigDecimal.valueOf(0.061));
+                BigDecimal caso4Amount = q.multiply(BigDecimal.valueOf(0.036));
+                BigDecimal wasteAmount = q.multiply(BigDecimal.valueOf(0.02));
 
                 solidMaterial.setSolidKCl(kclAmount);
                 solidMaterial.setSolidNaCl(naclAmount);
@@ -259,58 +181,38 @@ public class App extends Application {
         grid.add(liqSolRatLabel, 0, 0);
         grid.add(liqSolRatInput, 1, 0);
 
-        Label h2OLabel = new Label("H2O (%):");
-        TextField h2OInput = new TextField();
-        grid.add(h2OLabel, 0, 1);
-        grid.add(h2OInput, 1, 1);
-
-        Label kclLabel = new Label("KCl (%):");
-        TextField kclInput = new TextField();
-        grid.add(kclLabel, 0, 2);
-        grid.add(kclInput, 1, 2);
-
-        Label naclLabel = new Label("NaCl (%):");
-        TextField naclInput = new TextField();
-        grid.add(naclLabel, 0, 3);
-        grid.add(naclInput, 1, 3);
-
-        Label caso4Label = new Label("CaSO4 (%):");
-        TextField caso4Input = new TextField();
-        grid.add(caso4Label, 0, 4);
-        grid.add(caso4Input, 1, 4);
-
         // Button to calculate liquid material
         Button calculateLiquidButton = new Button("Расчитать маточник");
-        grid.add(calculateLiquidButton, 1, 5);
+        grid.add(calculateLiquidButton, 1, 1);
 
         // Results Section for Liquid Material
         Label resultsLabel = new Label("Результат:");
-        grid.add(resultsLabel, 0, 6, 2, 1);
+        grid.add(resultsLabel, 0, 2, 2, 1);
 
         Label liquidQResultLabel = new Label("Маточник кол-во (Q):");
         Label liquidQResultValue = new Label();
-        grid.add(liquidQResultLabel, 0, 7);
-        grid.add(liquidQResultValue, 1, 7);
+        grid.add(liquidQResultLabel, 0, 3);
+        grid.add(liquidQResultValue, 1, 3);
 
         Label wasteResultLabel = new Label("H2O кол-во:");
         Label wasteResultValue = new Label();
-        grid.add(wasteResultLabel, 0, 8);
-        grid.add(wasteResultValue, 1, 8);
+        grid.add(wasteResultLabel, 0, 4);
+        grid.add(wasteResultValue, 1, 4);
 
         Label kclResultLabel = new Label("KCl кол-во:");
         Label kclResultValue = new Label();
-        grid.add(kclResultLabel, 0, 9);
-        grid.add(kclResultValue, 1, 9);
+        grid.add(kclResultLabel, 0, 5);
+        grid.add(kclResultValue, 1, 5);
 
         Label naclResultLabel = new Label("NaCl кол-во:");
         Label naclResultValue = new Label();
-        grid.add(naclResultLabel, 0, 10);
-        grid.add(naclResultValue, 1, 10);
+        grid.add(naclResultLabel, 0, 6);
+        grid.add(naclResultValue, 1, 6);
 
         Label caso4ResultLabel = new Label("CaSO4 кол-во:");
         Label caso4ResultValue = new Label();
-        grid.add(caso4ResultLabel, 0, 11);
-        grid.add(caso4ResultValue, 1, 11);
+        grid.add(caso4ResultLabel, 0, 7);
+        grid.add(caso4ResultValue, 1, 7);
 
         // Calculate Liquid Material Logic
         calculateLiquidButton.setOnAction(event -> {
@@ -319,20 +221,20 @@ public class App extends Application {
                 BigDecimal solidMaterialQ = SolidMaterial.getS_Q();
                 BigDecimal q = solidMaterialQ.multiply(liqSolRat);
 
-                BigDecimal h2OPercentage = new BigDecimal(h2OInput.getText());
-                BigDecimal kclPercentage = new BigDecimal(kclInput.getText());
-                BigDecimal naclPercentage = new BigDecimal(naclInput.getText());
-                BigDecimal caso4Percentage = new BigDecimal(caso4Input.getText());
+                BigDecimal h2OPercentage = BigDecimal.valueOf(0.678);
+                BigDecimal kclPercentage = BigDecimal.valueOf(0.121);
+                BigDecimal naclPercentage = BigDecimal.valueOf(0.197);
+                BigDecimal caso4Percentage = BigDecimal.valueOf(0.04);
 
                 BigDecimal totalPercentage = h2OPercentage.add(kclPercentage).add(naclPercentage).add(caso4Percentage);
                 if (totalPercentage.compareTo(BigDecimal.valueOf(100)) != 0) {
                     throw new IllegalArgumentException("Сумма не равна 100%");
                 }
 
-                BigDecimal h2OAmount = q.multiply(h2OPercentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
-                BigDecimal kclAmount = q.multiply(kclPercentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
-                BigDecimal naclAmount = q.multiply(naclPercentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
-                BigDecimal caso4Amount = q.multiply(caso4Percentage).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
+                BigDecimal h2OAmount = q.multiply(h2OPercentage);
+                BigDecimal kclAmount = q.multiply(kclPercentage);
+                BigDecimal naclAmount = q.multiply(naclPercentage);
+                BigDecimal caso4Amount = q.multiply(caso4Percentage);
                 BigDecimal liquidQ = liqSolRat.multiply((SolidMaterial.getS_Q())); // Simplified assumption for example purposes
 
                 liquidMaterial.setLiquidH2O(h2OAmount);
