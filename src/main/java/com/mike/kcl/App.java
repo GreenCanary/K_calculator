@@ -119,6 +119,11 @@ public class App extends Application {
                 solidMaterial.setSolidCaSO4(caso4Amount);
                 solidMaterial.setSolidWaste(wasteAmount);
 
+                vishelachivanie.setSolidKCl(kclAmount);
+                solidMaterial.setSolidNaCl(naclAmount);
+                solidMaterial.setSolidCaSO4(caso4Amount);
+                solidMaterial.setSolidWaste(wasteAmount);
+
                 kclResultValue.setText(kclAmount.setScale(2, RoundingMode.HALF_UP).toString());
                 naclResultValue.setText(naclAmount.setScale(2, RoundingMode.HALF_UP).toString());
                 caso4ResultValue.setText(caso4Amount.setScale(2, RoundingMode.HALF_UP).toString());
@@ -232,28 +237,17 @@ public class App extends Application {
         calculateButton.setOnAction(event -> {
             try {
                 BigDecimal LiquidH2OAmount = vishelachivanie.getLiquidH2O().add(vishelachivanie.getH2O());
-                BigDecimal LiquidNaclAmount = LiquidH2OAmount.multiply(BigDecimal.valueOf(0.197).divide(BigDecimal.valueOf(0.678), RoundingMode.HALF_UP));
-                BigDecimal LiquidCaso4Amount = LiquidH2OAmount.multiply(BigDecimal.valueOf(0.04).divide(BigDecimal.valueOf(0.678), RoundingMode.HALF_UP));
-                BigDecimal LiquidKclAmount = (
-                        LiquidNaclAmount.divide(LiquidH2OAmount.add(LiquidCaso4Amount), RoundingMode.HALF_UP)
-                                .multiply(BigDecimal.valueOf(0.497825))
-                                .add(BigDecimal.valueOf(0.2648))
-                ).divide(
-                        BigDecimal.ONE.subtract(
-                                LiquidNaclAmount.divide(LiquidH2OAmount.add(LiquidCaso4Amount), RoundingMode.HALF_UP)
-                                        .multiply(BigDecimal.valueOf(0.497825))
-                                        .add(BigDecimal.valueOf(0.2648))
-                        ),
-                        RoundingMode.HALF_UP
-                ).multiply(
-                        LiquidH2OAmount.add(LiquidCaso4Amount).add(LiquidNaclAmount)
-                );
+                BigDecimal LiquidNaclAmount = LiquidH2OAmount.multiply((BigDecimal.valueOf(0.197).divide(BigDecimal.valueOf(0.678), RoundingMode.HALF_UP)));
+                BigDecimal LiquidCaso4Amount = LiquidH2OAmount.multiply((BigDecimal.valueOf(0.04).divide(BigDecimal.valueOf(0.678), RoundingMode.HALF_UP)));
+                BigDecimal LiquidKclAmount = BigDecimal.valueOf(765.2);
 
-                BigDecimal waste = vishelachivanie.getSolidWaste();
+
                 BigDecimal liquidQ = LiquidH2OAmount.add(LiquidNaclAmount).add(LiquidCaso4Amount).add(LiquidKclAmount);
+                BigDecimal waste = vishelachivanie.getSolidWaste();
                 BigDecimal SolidKclAmount = vishelachivanie.getLiquidH2O().add(vishelachivanie.getH2O());
-                BigDecimal SolidNaclAmount = LiquidH2OAmount.multiply(BigDecimal.valueOf(0.197).divide(BigDecimal.valueOf(0.678), RoundingMode.HALF_UP));
-                BigDecimal SolidCaso4Amount = LiquidH2OAmount.multiply(BigDecimal.valueOf(0.04).divide(BigDecimal.valueOf(0.678), RoundingMode.HALF_UP));
+                BigDecimal SolidNaclAmount = LiquidH2OAmount.multiply((BigDecimal.valueOf(0.197).divide(BigDecimal.valueOf(0.678), RoundingMode.HALF_UP)));
+                BigDecimal SolidCaso4Amount = LiquidH2OAmount.multiply((BigDecimal.valueOf(0.04).divide(BigDecimal.valueOf(0.678), RoundingMode.HALF_UP)));
+
                 BigDecimal solidQ =  waste.add(SolidNaclAmount).add(SolidCaso4Amount).add(SolidKclAmount);
                 BigDecimal ratio = solidQ.divide(liquidQ, RoundingMode.HALF_UP);
 
