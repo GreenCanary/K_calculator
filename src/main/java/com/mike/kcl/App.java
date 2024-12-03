@@ -28,9 +28,9 @@ public class App extends Application {
 
         // Sections
         layout.getChildren().addAll(
-                createSection("Жидкость", createLiquidSection(liquid)),
-                createSection("Руда", createSolidMaterialSection(solidMaterial)),
-                createSection("Маточник", createLiquidMaterialSection(liquidMaterial, solidMaterial)),
+                createSection("Вода/Раствор", createLiquidSection(liquid)),
+                createSection("Руда, т", createSolidMaterialSection(solidMaterial)),
+                createSection("Поток на выщелачивание", createLiquidMaterialSection(liquidMaterial, solidMaterial)),
                 createSection("Выщелачивание", createVishelachivanieSection( liquid, liquidMaterial, solidMaterial,vishelachivanie)),
                 createSection("Пески гидроциклона", createHydrocycloneSolidSection(vishelachivanie, hydrocycloneSolid)),
                 createSection("Слив гидроциклона", createHydrocycloneLiquidSection(vishelachivanie,hydrocycloneSolid, hydrocycloneLiquid))
@@ -44,7 +44,7 @@ public class App extends Application {
         // Scene and Stage setup
         Scene scene = new Scene(scrollPane, 1600, 800);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Расчет");
+        primaryStage.setTitle("К-кальклятор");
         primaryStage.show();
     }
 
@@ -59,9 +59,9 @@ public class App extends Application {
     private GridPane createLiquidSection(Liquid liquid) {
         GridPane grid = createAlignedGridPane();
 
-        Label qLabel = new Label("Кол-во всего (Q):");
+        Label qLabel = new Label("Q, м^3:");
         TextField qInput = new TextField();
-        Button calculateButton = new Button("Ввести кол-во воды");
+        Button calculateButton = new Button("Ввести кол-во");
         Label h2oResultLabel = new Label("H2O кол-во:");
         Label h2oResultValue = new Label();
 
@@ -86,7 +86,7 @@ public class App extends Application {
     private GridPane createSolidMaterialSection(SolidMaterial solidMaterial) {
         GridPane grid = createAlignedGridPane();
 
-        Label qLabel = new Label("Кол-во всего (Q):");
+        Label qLabel = new Label("Q, т:");
         TextField qInput = new TextField();
         Button calculateButton = new Button("Расчитать состав руды");
         Label kclResultLabel = new Label("KCl кол-во:");
@@ -136,8 +136,8 @@ public class App extends Application {
 
         Label ratioLabel = new Label("Ж/Т:");
         TextField ratioInput = new TextField();
-        Button calculateButton = new Button("Расчитать маточник");
-        Label liquidQResultLabel = new Label("Маточник кол-во (Q):");
+        Button calculateButton = new Button("Расчитать Ж/Т на выщелачивание");
+        Label liquidQResultLabel = new Label("Q, т:");
         Label h2oResultLabel = new Label("H2O кол-во:");
         Label kclResultLabel = new Label("KCl кол-во:");
         Label naclResultLabel = new Label("NaCl кол-во:");
