@@ -40,7 +40,7 @@ public class App extends Application {
         scrollPane.setFitToWidth(true);
 
         // Scene and Stage setup
-        Scene scene = new Scene(scrollPane, 800, 600);
+        Scene scene = new Scene(scrollPane, 1600, 800);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Расчет");
         primaryStage.show();
@@ -64,7 +64,7 @@ public class App extends Application {
         Label h2oResultValue = new Label();
 
         grid.addRow(0, qLabel, qInput);
-        grid.add(calculateButton, 0, 1, 2, 1);
+        grid.add(calculateButton, 3, 0, 2, 1);
         grid.addRow(2, h2oResultLabel, h2oResultValue);
 
         calculateButton.setOnAction(event -> {
@@ -96,7 +96,7 @@ public class App extends Application {
         Label combinedResultValue = new Label();
 
         grid.addRow(0, qLabel, qInput);
-        grid.add(calculateButton, 0, 1, 2, 1);
+        grid.add(calculateButton, 3, 0, 2, 1);
         grid.addRow(2, kclResultLabel, kclResultValue);
         grid.addRow(3, naclResultLabel, naclResultValue);
         grid.addRow(4, combinedResultLabel, combinedResultValue);
@@ -148,7 +148,7 @@ public class App extends Application {
         Label caso4ResultValue = new Label();
 
         grid.addRow(0, ratioLabel, ratioInput);
-        grid.add(calculateButton, 0, 1, 2, 1);
+        grid.add(calculateButton, 3, 0, 2, 1);
         grid.addRow(2, liquidQResultLabel, liquidQResultValue);
         grid.addRow(3, h2oResultLabel, h2oResultValue);
         grid.addRow(4, kclResultLabel, kclResultValue);
@@ -188,7 +188,14 @@ public class App extends Application {
     private GridPane createVishelachivanieSection(Liquid liquid, LiquidMaterial liquidMaterial, SolidMaterial solidMaterial, Vishelachivanie vishelachivanie) {
         GridPane grid = createAlignedGridPane();
 
+        grid.setVgap(5); // Set vertical gap to 5 pixels (default is usually larger)
+        grid.setHgap(5);
+
         Button calculateButton = new Button("Расчитать выщелачивание");
+        Label liquidHeader = new Label("Жидкие результаты");
+        Label solidHeader = new Label("Твёрдые результаты");
+
+        // Liquid result labels
         Label liquidQResultLabel = new Label("Маточник кол-во (Q):");
         Label liquidH2oResultLabel = new Label("H2O кол-во:");
         Label liquidKclResultLabel = new Label("KCl кол-во:");
@@ -200,39 +207,61 @@ public class App extends Application {
         Label liquidNaclResultValue = new Label();
         Label liquidCaso4ResultValue = new Label();
 
+        // Solid result labels
         Label solidQResultLabel = new Label("Твёрдый материал кол-во (Q):");
         Label solidKclResultLabel = new Label("KCl кол-во:");
         Label solidNaclResultLabel = new Label("NaCl кол-во:");
-        Label wasteResultLabel = new Label(" Отход кол-во:");
+        Label wasteResultLabel = new Label("Отход кол-во:");
         Label solidQResultValue = new Label();
-        Label wasteResultValue = new Label();
         Label solidKclResultValue = new Label();
         Label solidNaclResultValue = new Label();
-
+        Label wasteResultValue = new Label();
 
         Label ratioResultLabel = new Label("Ж/Т:");
         Label ratioResultValue = new Label();
 
-        grid.add(calculateButton, 0, 1, 2, 1);
-        grid.addRow(2, liquidQResultLabel, liquidQResultValue);
-        grid.addRow(3, liquidH2oResultLabel, liquidH2oResultValue);
-        grid.addRow(4, liquidKclResultLabel, liquidKclResultValue);
-        grid.addRow(5, liquidNaclResultLabel, liquidNaclResultValue);
-        grid.addRow(6, liquidCaso4ResultLabel, liquidCaso4ResultValue);
+        // Add headers
+        grid.add(liquidHeader, 0, 0);
+        grid.add(solidHeader, 2, 0);
 
-        grid.addRow(7, solidQResultLabel, solidQResultValue);
-        grid.addRow(8, solidKclResultLabel, solidKclResultValue);
-        grid.addRow(9, solidNaclResultLabel, solidNaclResultValue);
-        grid.addRow(10, wasteResultLabel, wasteResultValue);
-        grid.addRow(11, ratioResultLabel, ratioResultValue);
+        // Add liquid result labels to the first column
+        grid.add(liquidQResultLabel, 0, 1);
+        grid.add(liquidQResultValue, 1, 1);
+        grid.add(liquidH2oResultLabel, 0, 2);
+        grid.add(liquidH2oResultValue, 1, 2);
+        grid.add(liquidKclResultLabel, 0, 3);
+        grid.add(liquidKclResultValue, 1, 3);
+        grid.add(liquidNaclResultLabel, 0, 4);
+        grid.add(liquidNaclResultValue, 1, 4);
+        grid.add(liquidCaso4ResultLabel, 0, 5);
+        grid.add(liquidCaso4ResultValue, 1, 5);
+
+        // Add solid result labels to the second column
+        grid.add(solidQResultLabel, 2, 1);
+        grid.add(solidQResultValue, 3, 1);
+        grid.add(solidKclResultLabel, 2, 2);
+        grid.add(solidKclResultValue, 3, 2);
+        grid.add(solidNaclResultLabel, 2, 3);
+        grid.add(solidNaclResultValue, 3, 3);
+        grid.add(wasteResultLabel, 2, 4);
+        grid.add(wasteResultValue, 3, 4);
+
+        // Add ratio label spanning both columns
+        grid.add(ratioResultLabel, 0, 6, 2, 1);
+        grid.add(ratioResultValue, 1, 6, 2, 1);
+
+        // Add calculate button spanning both columns
+        grid.add(calculateButton, 0, 7, 2, 1);
 
         calculateButton.setOnAction(event -> {
             try {
+                // Calculation logic here (same as your provided code)
                 BigDecimal LiquidNaClRatio = BigDecimal.valueOf(0.197 / 0.678);
                 BigDecimal LiquidCaso4Ratio = BigDecimal.valueOf(0.004 / 0.678);
                 BigDecimal LiquidH2OAmount = liquidMaterial.getLiquidH2O().add(liquid.getH2O());
                 BigDecimal LiquidNaclAmount = LiquidH2OAmount.multiply(LiquidNaClRatio);
                 BigDecimal LiquidCaso4Amount = LiquidH2OAmount.multiply(LiquidCaso4Ratio);
+
                 BigDecimal LiquidKclAmount = (
                         LiquidNaclAmount.divide(LiquidH2OAmount.add(LiquidCaso4Amount), RoundingMode.HALF_UP)
                                 .multiply(BigDecimal.valueOf(-0.497825381))
@@ -244,37 +273,32 @@ public class App extends Application {
                                         .add(BigDecimal.valueOf(0.2648))
                         ),
                         RoundingMode.HALF_UP
-                ).multiply(
-                        LiquidH2OAmount.add(LiquidCaso4Amount).add(LiquidNaclAmount)
-                );
-
-
+                ).multiply(LiquidH2OAmount.add(LiquidCaso4Amount).add(LiquidNaclAmount));
 
                 BigDecimal waste = solidMaterial.getSolidWaste();
-                BigDecimal SolidKclAmount = solidMaterial.getSolidKCl().add(liquidMaterial.getLiquidKCl()).add(liquid.getKCl()).subtract(LiquidKclAmount).max(BigDecimal.ZERO);
-                BigDecimal SolidNaclAmount = solidMaterial.getSolidNaCl().add(liquidMaterial.getLiquidNaCl()).add(liquid.getNaCl()).subtract(LiquidNaclAmount).max(BigDecimal.ZERO);
-                BigDecimal SolidCaso4Amount = solidMaterial.getSolidCaSO4().add(liquidMaterial.getLiquidCaSO4()).add(liquid.getCaSO4()).subtract(LiquidCaso4Amount).max(BigDecimal.ZERO);
+                BigDecimal SolidKclAmount = solidMaterial.getSolidKCl()
+                        .add(liquidMaterial.getLiquidKCl()).add(liquid.getKCl())
+                        .subtract(LiquidKclAmount).max(BigDecimal.ZERO);
 
-                BigDecimal liquidQ = LiquidH2OAmount.add(LiquidNaclAmount).add(LiquidCaso4Amount).add(LiquidKclAmount);
-                BigDecimal solidQ =  waste.add(SolidNaclAmount).add(SolidCaso4Amount).add(SolidKclAmount);
+                BigDecimal SolidNaclAmount = solidMaterial.getSolidNaCl()
+                        .add(liquidMaterial.getLiquidNaCl()).add(liquid.getNaCl())
+                        .subtract(LiquidNaclAmount).max(BigDecimal.ZERO);
+
+                BigDecimal SolidCaso4Amount = solidMaterial.getSolidCaSO4()
+                        .add(liquidMaterial.getLiquidCaSO4()).add(liquid.getCaSO4())
+                        .subtract(LiquidCaso4Amount).max(BigDecimal.ZERO);
+
+                BigDecimal liquidQ = LiquidH2OAmount.add(LiquidNaclAmount)
+                        .add(LiquidCaso4Amount).add(LiquidKclAmount);
+                BigDecimal solidQ = waste.add(SolidNaclAmount)
+                        .add(SolidCaso4Amount).add(SolidKclAmount);
                 BigDecimal ratio = liquidQ.divide(solidQ, RoundingMode.HALF_UP);
 
                 BigDecimal  WasteCaso4 = waste.add(SolidCaso4Amount);
 
-                // Update Vishelachivanie with calculated values
-                vishelachivanie.setL_Q(liquidQ);
-                vishelachivanie.setLiquidH2O(LiquidH2OAmount);
-                vishelachivanie.setLiquidKCl(LiquidKclAmount);
-                vishelachivanie.setLiquidNaCl(LiquidNaclAmount);
-                vishelachivanie.setLiquidCaSO4(LiquidCaso4Amount);
 
-                vishelachivanie.setS_Q(solidQ);  // Solid values to be set
-                vishelachivanie.setSolidWaste(waste); // Assuming mapping for solid from liquid
-                vishelachivanie.setSolidKCl(SolidKclAmount);
-                vishelachivanie.setSolidNaCl(SolidNaclAmount);
-                vishelachivanie.setSolidCaSO4(SolidCaso4Amount);
 
-                // Update UI labels with calculated values
+                // Update labels with calculated values
                 liquidQResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString());
                 liquidH2oResultValue.setText(LiquidH2OAmount.setScale(2, RoundingMode.HALF_UP).toString());
                 liquidKclResultValue.setText(LiquidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
@@ -295,16 +319,17 @@ public class App extends Application {
     }
 
 
+
     private GridPane createAlignedGridPane() {
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10));
-        grid.setHgap(10);
-        grid.setVgap(10);
+        grid.setPadding(new Insets(5));
+        grid.setHgap(5);
+        grid.setVgap(5);
 
         ColumnConstraints column1 = new ColumnConstraints();
-        column1.setPercentWidth(30); // Adjust the width percentage as needed
+        column1.setPercentWidth(10); // Adjust the width percentage as needed
         ColumnConstraints column2 = new ColumnConstraints();
-        column2.setPercentWidth(70); // Adjust to complement column1
+        column2.setPercentWidth(10); // Adjust to complement column1
 
         grid.getColumnConstraints().addAll(column1, column2);
         return grid;
