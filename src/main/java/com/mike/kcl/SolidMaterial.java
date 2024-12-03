@@ -8,7 +8,7 @@ public class SolidMaterial {
         private BigDecimal solidNaCl = BigDecimal.ZERO;
         private BigDecimal solidCaSO4 = BigDecimal.ZERO;
         private BigDecimal solidWaste = BigDecimal.ZERO;
-        private static BigDecimal s_Q = BigDecimal.ZERO;
+        private BigDecimal s_Q = BigDecimal.ZERO;
 
         // Constructor that takes a BigDecimal for initial quantity
         public SolidMaterial(BigDecimal initialQuantity) {
@@ -53,7 +53,7 @@ public class SolidMaterial {
                 this.solidWaste = solidWaste != null ? solidWaste : BigDecimal.ZERO;
         }
 
-        public static BigDecimal getS_Q() {
+        public BigDecimal getS_Q() {
                 return s_Q;
         }
 

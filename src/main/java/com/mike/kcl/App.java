@@ -2,11 +2,9 @@ package com.mike.kcl;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.math.BigDecimal;
@@ -21,6 +19,7 @@ public class App extends Application {
         SolidMaterial solidMaterial = new SolidMaterial(1000);
         LiquidMaterial liquidMaterial = new LiquidMaterial(0.8);
         Vishelachivanie vishelachivanie = new Vishelachivanie(solidMaterial, liquidMaterial, liquid);
+        HydrocycloneSolid hydrocycloneSolid = new HydrocycloneSolid(vishelachivanie);
 
         // Main Layout
         VBox layout = new VBox(20);
@@ -31,7 +30,8 @@ public class App extends Application {
                 createSection("Жидкость", createLiquidSection(liquid)),
                 createSection("Руда", createSolidMaterialSection(solidMaterial)),
                 createSection("Маточник", createLiquidMaterialSection(liquidMaterial, solidMaterial)),
-                createSection("Выщелачивание", createVishelachivanieSection( liquid, liquidMaterial, solidMaterial,vishelachivanie))
+                createSection("Выщелачивание", createVishelachivanieSection( liquid, liquidMaterial, solidMaterial,vishelachivanie)),
+                createSection("Пески гидроциклона", createHydrocycloneSolidSection(vishelachivanie, hydrocycloneSolid))
 
         );
 
@@ -70,10 +70,9 @@ public class App extends Application {
         calculateButton.setOnAction(event -> {
             try {
                 BigDecimal q = new BigDecimal(qInput.getText());
-                BigDecimal h2oAmount = q; // Assuming all Q is water
-                liquid.setH2O(h2oAmount);
+                liquid.setH2O(q);
                 liquid.setQ(q);
-                h2oResultValue.setText(h2oAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                h2oResultValue.setText(q.setScale(2, RoundingMode.HALF_UP).toString());
             } catch (NumberFormatException e) {
                 showError("Введите корректное значение для Q.");
             }
@@ -296,7 +295,19 @@ public class App extends Application {
 
                 BigDecimal  WasteCaso4 = waste.add(SolidCaso4Amount);
 
+                vishelachivanie.setH2O(liquid.getH2O());
+                vishelachivanie.setL_Q(liquidQ);
+                vishelachivanie.setLiquidH2O(LiquidH2OAmount);
+                vishelachivanie.setLiquidKCl(LiquidKclAmount);
+                vishelachivanie.setLiquidNaCl(LiquidNaclAmount);
+                vishelachivanie.setLiquidCaSO4(LiquidCaso4Amount);
 
+
+                vishelachivanie.setS_Q(solidQ);
+                vishelachivanie.setSolidKCl(SolidKclAmount);
+                vishelachivanie.setSolidNaCl(SolidNaclAmount);
+                vishelachivanie.setSolidCaSO4(SolidCaso4Amount);
+                vishelachivanie.setSolidWaste(waste);
 
                 // Update labels with calculated values
                 liquidQResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString());
@@ -318,6 +329,139 @@ public class App extends Application {
         return grid;
     }
 
+    private GridPane createHydrocycloneSolidSection(Vishelachivanie vishelachivanie, HydrocycloneSolid hydrocycloneSolid) {
+        GridPane grid = createAlignedGridPane();
+
+        grid.setVgap(5); // Set vertical gap to 5 pixels (default is usually larger)
+        grid.setHgap(5);
+
+        Button calculateButton = new Button("Расчитать выщелачивание");
+        Label liquidHeader = new Label("Жидкие результаты");
+        Label solidHeader = new Label("Твёрдые результаты");
+
+        // Liquid result labels
+        Label liquidQResultLabel = new Label("Маточник кол-во (Q):");
+        Label liquidH2oResultLabel = new Label("H2O кол-во:");
+        Label liquidKclResultLabel = new Label("KCl кол-во:");
+        Label liquidNaclResultLabel = new Label("NaCl кол-во:");
+        Label liquidCaso4ResultLabel = new Label("CaSO4 кол-во:");
+        Label liquidQResultValue = new Label();
+        Label liquidH2oResultValue = new Label();
+        Label liquidKclResultValue = new Label();
+        Label liquidNaclResultValue = new Label();
+        Label liquidCaso4ResultValue = new Label();
+
+        // Solid result labels
+        Label solidQResultLabel = new Label("Твёрдый материал кол-во (Q):");
+        Label solidKclResultLabel = new Label("KCl кол-во:");
+        Label solidNaclResultLabel = new Label("NaCl кол-во:");
+        Label wasteResultLabel = new Label("Отход кол-во:");
+        Label solidQResultValue = new Label();
+        Label solidKclResultValue = new Label();
+        Label solidNaclResultValue = new Label();
+        Label wasteResultValue = new Label();
+
+
+        // Add text field for user input of liqRat (Ж/Т)
+        Label liqRatLabel = new Label("Введите Ж/Т:");
+        TextField liqRatTextField = new TextField();
+
+        Label solQuartRatioLabel = new Label("Введите долю твердых менее 0,25мм, %");
+        TextField solQuartRatioTextField = new TextField();
+
+
+        // Add headers
+        grid.add(liquidHeader, 0, 0);
+        grid.add(solidHeader, 2, 0);
+
+        // Add liquid result labels to the first column
+        grid.add(liquidQResultLabel, 0, 1);
+        grid.add(liquidQResultValue, 1, 1);
+        grid.add(liquidH2oResultLabel, 0, 2);
+        grid.add(liquidH2oResultValue, 1, 2);
+        grid.add(liquidKclResultLabel, 0, 3);
+        grid.add(liquidKclResultValue, 1, 3);
+        grid.add(liquidNaclResultLabel, 0, 4);
+        grid.add(liquidNaclResultValue, 1, 4);
+        grid.add(liquidCaso4ResultLabel, 0, 5);
+        grid.add(liquidCaso4ResultValue, 1, 5);
+
+        // Add solid result labels to the second column
+        grid.add(solidQResultLabel, 2, 1);
+        grid.add(solidQResultValue, 3, 1);
+        grid.add(solidKclResultLabel, 2, 2);
+        grid.add(solidKclResultValue, 3, 2);
+        grid.add(solidNaclResultLabel, 2, 3);
+        grid.add(solidNaclResultValue, 3, 3);
+        grid.add(wasteResultLabel, 2, 4);
+        grid.add(wasteResultValue, 3, 4);
+
+        // Add input field for liqRat (Ж/Т)
+        grid.add(liqRatLabel, 0, 6);
+        grid.add(liqRatTextField, 1, 6);
+
+        grid.add(solQuartRatioLabel, 0, 7);
+        grid.add(solQuartRatioLabel, 1, 7);
+
+        // Add calculate button spanning both columns
+        grid.add(calculateButton, 0, 8, 2, 1);
+
+        calculateButton.setOnAction(event -> {
+            try {
+                // Get the value of liqRat from the text field
+                BigDecimal LiqSolRat = new BigDecimal(liqRatTextField.getText());
+                BigDecimal SolQuartRatio = new BigDecimal(solQuartRatioTextField.getText()).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
+
+                BigDecimal solidQ = BigDecimal.ONE.subtract(SolQuartRatio).multiply(vishelachivanie.getS_Q());
+                BigDecimal liquidQ = solidQ.multiply(LiqSolRat);
+
+                // Calculation logic here (use liqRat in the formulas)
+                BigDecimal LiquidH2OAmount = liquidQ.divide(vishelachivanie.getL_Q(), RoundingMode.HALF_UP).multiply(vishelachivanie.getLiquidH2O());
+                BigDecimal LiquidNaclAmount = liquidQ.divide(vishelachivanie.getL_Q(), RoundingMode.HALF_UP).multiply(vishelachivanie.getLiquidKCl());
+                BigDecimal LiquidCaso4Amount = liquidQ.divide(vishelachivanie.getL_Q(), RoundingMode.HALF_UP).multiply(vishelachivanie.getLiquidCaSO4());
+                BigDecimal LiquidKclAmount = liquidQ.divide(vishelachivanie.getL_Q(), RoundingMode.HALF_UP).multiply(vishelachivanie.getLiquidKCl());
+
+                BigDecimal waste = BigDecimal.ONE.subtract(SolQuartRatio).multiply(vishelachivanie.getSolidWaste());
+                BigDecimal SolidKclAmount = BigDecimal.ONE.subtract(SolQuartRatio).multiply(vishelachivanie.getSolidKCl());
+                BigDecimal SolidNaclAmount = BigDecimal.ONE.subtract(SolQuartRatio).multiply(vishelachivanie.getSolidNaCl());
+                BigDecimal SolidCaso4Amount = BigDecimal.ONE.subtract(SolQuartRatio).multiply(vishelachivanie.getSolidCaSO4());
+                BigDecimal WasteCaso4 = waste.add(SolidCaso4Amount);
+
+                hydrocycloneSolid.setH2O(vishelachivanie.getH2O());
+                hydrocycloneSolid.setL_Q(liquidQ);
+                hydrocycloneSolid.setLiquidH2O(LiquidH2OAmount);
+                hydrocycloneSolid.setLiquidKCl(LiquidKclAmount);
+                hydrocycloneSolid.setLiquidNaCl(LiquidNaclAmount);
+                hydrocycloneSolid.setLiquidCaSO4(LiquidCaso4Amount);
+              
+                hydrocycloneSolid.setS_Q(solidQ);
+                hydrocycloneSolid.setSolidKCl(SolidKclAmount);
+                hydrocycloneSolid.setSolidNaCl(SolidNaclAmount);
+                hydrocycloneSolid.setSolidCaSO4(SolidCaso4Amount);
+                hydrocycloneSolid.setSolidWaste(waste);
+
+                hydrocycloneSolid.setSolQuartRatio(SolQuartRatio);
+                hydrocycloneSolid.setLiqSolRat(LiqSolRat);
+
+
+                //Update labels with calculated values
+                liquidQResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString());
+                liquidH2oResultValue.setText(LiquidH2OAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                liquidKclResultValue.setText(LiquidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                liquidNaclResultValue.setText(LiquidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                liquidCaso4ResultValue.setText(LiquidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString());
+
+                solidQResultValue.setText(solidQ.setScale(2, RoundingMode.HALF_UP).toString());
+                solidKclResultValue.setText(SolidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                solidNaclResultValue.setText(SolidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                wasteResultValue.setText(WasteCaso4.setScale(2, RoundingMode.HALF_UP).toString());
+            } catch (NumberFormatException e) {
+                showError("Ошибка");
+            }
+        });
+
+        return grid;
+    }
 
 
     private GridPane createAlignedGridPane() {
@@ -335,11 +479,14 @@ public class App extends Application {
         return grid;
     }
 
-
     private void showError(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Ошибка");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
         alert.showAndWait();
     }
+
 
     public static void main(String[] args) {
         launch(args);

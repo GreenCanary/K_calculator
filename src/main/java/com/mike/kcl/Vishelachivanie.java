@@ -29,7 +29,7 @@ public class Vishelachivanie {
         this.solidNaCl = solidMaterial.getSolidNaCl();
         this.solidCaSO4 = solidMaterial.getSolidCaSO4();
         this.solidWaste = solidMaterial.getSolidWaste();
-        this.s_Q = SolidMaterial.getS_Q();
+        this.s_Q = solidMaterial.getS_Q();
 
         // Extracting values from LiquidMaterial
         this.liquidH2O = liquidMaterial.getLiquidH2O().add(liquid.getH2O());
