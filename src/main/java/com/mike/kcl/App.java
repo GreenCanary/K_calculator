@@ -185,15 +185,10 @@ public class App extends Application {
         return grid;
     }
 
-    private GridPane createVishelachivanieSection(
-            Liquid liquid,
-            LiquidMaterial liquidMaterial,
-            SolidMaterial solidMaterial,
-            Vishelachivanie vishelachivanie
-    ) {
+    private GridPane createVishelachivanieSection(Liquid liquid, LiquidMaterial liquidMaterial, SolidMaterial solidMaterial, Vishelachivanie vishelachivanie) {
         GridPane grid = createAlignedGridPane();
 
-        Button calculateButton = new Button("Рассчитать выщелачивание");
+        Button calculateButton = new Button("Расчитать выщелачивание");
         Label liquidQResultLabel = new Label("Маточник кол-во (Q):");
         Label liquidH2oResultLabel = new Label("H2O кол-во:");
         Label liquidKclResultLabel = new Label("KCl кол-во:");
@@ -208,11 +203,12 @@ public class App extends Application {
         Label solidQResultLabel = new Label("Твёрдый материал кол-во (Q):");
         Label solidKclResultLabel = new Label("KCl кол-во:");
         Label solidNaclResultLabel = new Label("NaCl кол-во:");
-        Label solidCombinedOutputLabel = new Label("Суммарный отход (CaSO4 + H.O.):");
+        Label wasteResultLabel = new Label(" Отход кол-во:");
         Label solidQResultValue = new Label();
+        Label wasteResultValue = new Label();
         Label solidKclResultValue = new Label();
         Label solidNaclResultValue = new Label();
-        Label solidCombinedOutputValue = new Label();
+
 
         Label ratioResultLabel = new Label("Ж/Т:");
         Label ratioResultValue = new Label();
@@ -227,7 +223,7 @@ public class App extends Application {
         grid.addRow(7, solidQResultLabel, solidQResultValue);
         grid.addRow(8, solidKclResultLabel, solidKclResultValue);
         grid.addRow(9, solidNaclResultLabel, solidNaclResultValue);
-        grid.addRow(10, solidCombinedOutputLabel, solidCombinedOutputValue);
+        grid.addRow(10, wasteResultLabel, wasteResultValue);
         grid.addRow(11, ratioResultLabel, ratioResultValue);
 
         calculateButton.setOnAction(event -> {
@@ -252,29 +248,18 @@ public class App extends Application {
                         LiquidH2OAmount.add(LiquidCaso4Amount).add(LiquidNaclAmount)
                 );
 
-                BigDecimal SolidKclAmount = solidMaterial.getSolidKCl()
-                        .add(liquidMaterial.getLiquidKCl())
-                        .add(liquid.getKCl())
-                        .subtract(LiquidKclAmount)
-                        .max(BigDecimal.ZERO);
-                BigDecimal SolidNaclAmount = solidMaterial.getSolidNaCl()
-                        .add(liquidMaterial.getLiquidNaCl())
-                        .add(liquid.getNaCl())
-                        .subtract(LiquidNaclAmount)
-                        .max(BigDecimal.ZERO);
-                BigDecimal SolidCaso4Amount = solidMaterial.getSolidCaSO4()
-                        .add(liquidMaterial.getLiquidCaSO4())
-                        .add(liquid.getCaSO4())
-                        .subtract(LiquidCaso4Amount)
-                        .max(BigDecimal.ZERO);
 
-                // Combine Solid CaSO4 and Waste into one output
+
                 BigDecimal waste = solidMaterial.getSolidWaste();
-                BigDecimal solidCombinedOutput = SolidCaso4Amount.add(waste).max(BigDecimal.ZERO);
+                BigDecimal SolidKclAmount = solidMaterial.getSolidKCl().add(liquidMaterial.getLiquidKCl()).add(liquid.getKCl()).subtract(LiquidKclAmount).max(BigDecimal.ZERO);
+                BigDecimal SolidNaclAmount = solidMaterial.getSolidNaCl().add(liquidMaterial.getLiquidNaCl()).add(liquid.getNaCl()).subtract(LiquidNaclAmount).max(BigDecimal.ZERO);
+                BigDecimal SolidCaso4Amount = solidMaterial.getSolidCaSO4().add(liquidMaterial.getLiquidCaSO4()).add(liquid.getCaSO4()).subtract(LiquidCaso4Amount).max(BigDecimal.ZERO);
 
                 BigDecimal liquidQ = LiquidH2OAmount.add(LiquidNaclAmount).add(LiquidCaso4Amount).add(LiquidKclAmount);
-                BigDecimal solidQ = solidCombinedOutput.add(SolidNaclAmount).add(SolidKclAmount);
+                BigDecimal solidQ =  waste.add(SolidNaclAmount).add(SolidCaso4Amount).add(SolidKclAmount);
                 BigDecimal ratio = liquidQ.divide(solidQ, RoundingMode.HALF_UP);
+
+                BigDecimal  WasteCaso4 = waste.add(SolidCaso4Amount);
 
                 // Update Vishelachivanie with calculated values
                 vishelachivanie.setL_Q(liquidQ);
@@ -283,10 +268,11 @@ public class App extends Application {
                 vishelachivanie.setLiquidNaCl(LiquidNaclAmount);
                 vishelachivanie.setLiquidCaSO4(LiquidCaso4Amount);
 
-                vishelachivanie.setS_Q(solidQ);
-                vishelachivanie.setSolidWaste(solidCombinedOutput); // Combined output
+                vishelachivanie.setS_Q(solidQ);  // Solid values to be set
+                vishelachivanie.setSolidWaste(waste); // Assuming mapping for solid from liquid
                 vishelachivanie.setSolidKCl(SolidKclAmount);
                 vishelachivanie.setSolidNaCl(SolidNaclAmount);
+                vishelachivanie.setSolidCaSO4(SolidCaso4Amount);
 
                 // Update UI labels with calculated values
                 liquidQResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString());
@@ -298,7 +284,7 @@ public class App extends Application {
                 solidQResultValue.setText(solidQ.setScale(2, RoundingMode.HALF_UP).toString());
                 solidKclResultValue.setText(SolidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
                 solidNaclResultValue.setText(SolidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                solidCombinedOutputValue.setText(solidCombinedOutput.setScale(2, RoundingMode.HALF_UP).toString());
+                wasteResultValue.setText(WasteCaso4.setScale(2, RoundingMode.HALF_UP).toString());
                 ratioResultValue.setText(ratio.setScale(2, RoundingMode.HALF_UP).toString());
             } catch (NumberFormatException e) {
                 showError("Ошибка");
@@ -309,20 +295,18 @@ public class App extends Application {
     }
 
 
-
     private GridPane createAlignedGridPane() {
         GridPane grid = new GridPane();
-        grid.setHgap(20);
-        grid.setVgap(10);
         grid.setPadding(new Insets(10));
+        grid.setHgap(10);
+        grid.setVgap(10);
 
-        ColumnConstraints col1 = new ColumnConstraints();
-        col1.setMinWidth(150); // Fixed width for labels
+        ColumnConstraints column1 = new ColumnConstraints();
+        column1.setPercentWidth(30); // Adjust the width percentage as needed
+        ColumnConstraints column2 = new ColumnConstraints();
+        column2.setPercentWidth(70); // Adjust to complement column1
 
-        ColumnConstraints col2 = new ColumnConstraints();
-        col2.setHgrow(Priority.ALWAYS); // Allow TextField to grow
-
-        grid.getColumnConstraints().addAll(col1, col2);
+        grid.getColumnConstraints().addAll(column1, column2);
         return grid;
     }
 
