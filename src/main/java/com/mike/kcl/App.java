@@ -178,6 +178,12 @@ public class App extends Application {
                 liquidMaterial.setLiquidNaCl(naclAmount);
                 liquidMaterial.setLiquidCaSO4(caso4Amount);
 
+                vishelachivanie.setL_Q(liquidQ);
+                vishelachivanie.setLiquidH2O(h2OAmount);
+                vishelachivanie.setLiquidKCl(kclAmount);
+                vishelachivanie.setLiquidNaCl(naclAmount);
+                vishelachivanie.setLiquidCaSO4(caso4Amount);
+
                 liquidQResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString());
                 h2oResultValue.setText(h2OAmount.setScale(2, RoundingMode.HALF_UP).toString());
                 kclResultValue.setText(kclAmount.setScale(2, RoundingMode.HALF_UP).toString());
