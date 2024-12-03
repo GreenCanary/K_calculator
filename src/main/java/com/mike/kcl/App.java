@@ -337,7 +337,7 @@ public class App extends Application {
         grid.setVgap(5); // Set vertical gap to 5 pixels (default is usually larger)
         grid.setHgap(5);
 
-        Button calculateButton = new Button("Расчитать выщелачивание");
+        Button calculateButton = new Button("Расчитать пески гидроциклона");
         Label liquidHeader = new Label("Жидкие результаты");
         Label solidHeader = new Label("Твёрдые результаты");
 
@@ -470,7 +470,7 @@ public class App extends Application {
         grid.setVgap(5); // Set vertical gap to 5 pixels (default is usually larger)
         grid.setHgap(5);
 
-        Button calculateButton = new Button("Расчитать выщелачивание");
+        Button calculateButton = new Button("Расчитать слив гидроциклона");
         Label liquidHeader = new Label("Жидкие результаты");
         Label solidHeader = new Label("Твёрдые результаты");
 
