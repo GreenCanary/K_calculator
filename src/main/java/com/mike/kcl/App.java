@@ -401,7 +401,7 @@ public class App extends Application {
         grid.add(liqRatTextField, 1, 6);
 
         grid.add(solQuartRatioLabel, 0, 7);
-        grid.add(solQuartRatioLabel, 1, 7);
+        grid.add(solQuartRatioTextField, 1, 7);
 
         // Add calculate button spanning both columns
         grid.add(calculateButton, 0, 8, 2, 1);
@@ -480,10 +480,7 @@ public class App extends Application {
     }
 
     private void showError(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Ошибка");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
+        Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
         alert.showAndWait();
     }
 
