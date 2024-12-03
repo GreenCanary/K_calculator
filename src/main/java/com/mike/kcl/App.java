@@ -28,10 +28,10 @@ public class App extends Application {
 
         // Sections
         layout.getChildren().addAll(
-                createSection("Жидкость", createLiquidSection(liquid, vishelachivanie)),
-                createSection("Руда", createSolidMaterialSection(solidMaterial, vishelachivanie)),
-                createSection("Маточник", createLiquidMaterialSection(liquidMaterial, solidMaterial, vishelachivanie)),
-                createSection("Выщелачивание", createVishelachivanieSection(vishelachivanie))
+                createSection("Жидкость", createLiquidSection(liquid)),
+                createSection("Руда", createSolidMaterialSection(solidMaterial)),
+                createSection("Маточник", createLiquidMaterialSection(liquidMaterial, solidMaterial)),
+                createSection("Выщелачивание", createVishelachivanieSection( liquid, liquidMaterial, solidMaterial,vishelachivanie))
 
         );
 
@@ -54,7 +54,7 @@ public class App extends Application {
         return section;
     }
 
-    private GridPane createLiquidSection(Liquid liquid, Vishelachivanie vishelachivanie) {
+    private GridPane createLiquidSection(Liquid liquid) {
         GridPane grid = createAlignedGridPane();
 
         Label qLabel = new Label("Кол-во всего (Q):");
@@ -82,7 +82,7 @@ public class App extends Application {
         return grid;
     }
 
-    private GridPane createSolidMaterialSection(SolidMaterial solidMaterial, Vishelachivanie vishelachivanie) {
+    private GridPane createSolidMaterialSection(SolidMaterial solidMaterial) {
         GridPane grid = createAlignedGridPane();
 
         Label qLabel = new Label("Кол-во всего (Q):");
@@ -90,44 +90,37 @@ public class App extends Application {
         Button calculateButton = new Button("Расчитать состав руды");
         Label kclResultLabel = new Label("KCl кол-во:");
         Label naclResultLabel = new Label("NaCl кол-во:");
-        Label caso4ResultLabel = new Label("CaSO4 кол-во:");
-        Label wasteResultLabel = new Label("Н.О. кол-во:");
+        Label combinedResultLabel = new Label("CaSO4 + H.O. (Общий отход):");
         Label kclResultValue = new Label();
         Label naclResultValue = new Label();
-        Label caso4ResultValue = new Label();
-        Label wasteResultValue = new Label();
+        Label combinedResultValue = new Label();
 
         grid.addRow(0, qLabel, qInput);
         grid.add(calculateButton, 0, 1, 2, 1);
         grid.addRow(2, kclResultLabel, kclResultValue);
         grid.addRow(3, naclResultLabel, naclResultValue);
-        grid.addRow(4, caso4ResultLabel, caso4ResultValue);
-        grid.addRow(5, wasteResultLabel, wasteResultValue);
+        grid.addRow(4, combinedResultLabel, combinedResultValue);
 
         calculateButton.setOnAction(event -> {
             try {
                 BigDecimal q = new BigDecimal(qInput.getText());
                 solidMaterial.setS_Q(q);
 
-                BigDecimal kclAmount = q.multiply(BigDecimal.valueOf(0.91));
+                BigDecimal kclAmount = q.multiply(BigDecimal.valueOf(0.901));
                 BigDecimal naclAmount = q.multiply(BigDecimal.valueOf(0.061));
                 BigDecimal caso4Amount = q.multiply(BigDecimal.valueOf(0.036));
-                BigDecimal wasteAmount = q.multiply(BigDecimal.valueOf(0.02));
+                BigDecimal wasteAmount = q.multiply(BigDecimal.valueOf(0.002));
+                BigDecimal combinedAmount = caso4Amount.add(wasteAmount); // Combined value
 
                 solidMaterial.setSolidKCl(kclAmount);
                 solidMaterial.setSolidNaCl(naclAmount);
                 solidMaterial.setSolidCaSO4(caso4Amount);
                 solidMaterial.setSolidWaste(wasteAmount);
 
-                vishelachivanie.setSolidKCl(kclAmount);
-                vishelachivanie.setSolidNaCl(naclAmount);
-                vishelachivanie.setSolidCaSO4(caso4Amount);
-                vishelachivanie.setSolidWaste(wasteAmount);
 
                 kclResultValue.setText(kclAmount.setScale(2, RoundingMode.HALF_UP).toString());
                 naclResultValue.setText(naclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                caso4ResultValue.setText(caso4Amount.setScale(2, RoundingMode.HALF_UP).toString());
-                wasteResultValue.setText(wasteAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                combinedResultValue.setText(combinedAmount.setScale(2, RoundingMode.HALF_UP).toString());
             } catch (NumberFormatException e) {
                 showError("Введите корректное значение для Q.");
             }
@@ -136,7 +129,8 @@ public class App extends Application {
         return grid;
     }
 
-    private GridPane createLiquidMaterialSection(LiquidMaterial liquidMaterial, SolidMaterial solidMaterial, Vishelachivanie vishelachivanie) {
+
+    private GridPane createLiquidMaterialSection(LiquidMaterial liquidMaterial, SolidMaterial solidMaterial) {
         GridPane grid = createAlignedGridPane();
 
         Label ratioLabel = new Label("Ж/Т:");
@@ -178,12 +172,6 @@ public class App extends Application {
                 liquidMaterial.setLiquidNaCl(naclAmount);
                 liquidMaterial.setLiquidCaSO4(caso4Amount);
 
-                vishelachivanie.setL_Q(liquidQ);
-                vishelachivanie.setLiquidH2O(h2OAmount);
-                vishelachivanie.setLiquidKCl(kclAmount);
-                vishelachivanie.setLiquidNaCl(naclAmount);
-                vishelachivanie.setLiquidCaSO4(caso4Amount);
-
                 liquidQResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString());
                 h2oResultValue.setText(h2OAmount.setScale(2, RoundingMode.HALF_UP).toString());
                 kclResultValue.setText(kclAmount.setScale(2, RoundingMode.HALF_UP).toString());
@@ -197,7 +185,7 @@ public class App extends Application {
         return grid;
     }
 
-    private GridPane createVishelachivanieSection(Vishelachivanie vishelachivanie) {
+    private GridPane createVishelachivanieSection(Liquid liquid, LiquidMaterial liquidMaterial, SolidMaterial solidMaterial, Vishelachivanie vishelachivanie) {
         GridPane grid = createAlignedGridPane();
 
         Button calculateButton = new Button("Расчитать выщелачивание");
@@ -232,8 +220,8 @@ public class App extends Application {
         grid.addRow(4, liquidKclResultLabel, liquidKclResultValue);
         grid.addRow(5, liquidNaclResultLabel, liquidNaclResultValue);
         grid.addRow(6, liquidCaso4ResultLabel, liquidCaso4ResultValue);
-        grid.addRow(7, solidQResultLabel, solidQResultValue);
 
+        grid.addRow(7, solidQResultLabel, solidQResultValue);
         grid.addRow(8, solidKclResultLabel, solidKclResultValue);
         grid.addRow(9, solidNaclResultLabel, solidNaclResultValue);
         grid.addRow(10, solidCaso4ResultLabel, solidCaso4ResultValue);
@@ -242,20 +230,36 @@ public class App extends Application {
 
         calculateButton.setOnAction(event -> {
             try {
-                BigDecimal LiquidH2OAmount = vishelachivanie.getLiquidH2O().add(vishelachivanie.getH2O());
-                BigDecimal LiquidNaclAmount = LiquidH2OAmount.multiply((BigDecimal.valueOf(0.197).divide(BigDecimal.valueOf(0.678), RoundingMode.HALF_UP)));
-                BigDecimal LiquidCaso4Amount = LiquidH2OAmount.multiply((BigDecimal.valueOf(0.04).divide(BigDecimal.valueOf(0.678), RoundingMode.HALF_UP)));
-                BigDecimal LiquidKclAmount = BigDecimal.valueOf(765.2);
+                BigDecimal LiquidNaClRatio = BigDecimal.valueOf(0.197 / 0.678);
+                BigDecimal LiquidCaso4Ratio = BigDecimal.valueOf(0.004 / 0.678);
+                BigDecimal LiquidH2OAmount = liquidMaterial.getLiquidH2O().add(liquid.getH2O());
+                BigDecimal LiquidNaclAmount = LiquidH2OAmount.multiply(LiquidNaClRatio);
+                BigDecimal LiquidCaso4Amount = LiquidH2OAmount.multiply(LiquidCaso4Ratio);
+                BigDecimal LiquidKclAmount = (
+                        LiquidNaclAmount.divide(LiquidH2OAmount.add(LiquidCaso4Amount), RoundingMode.HALF_UP)
+                                .multiply(BigDecimal.valueOf(-0.497825381))
+                                .add(BigDecimal.valueOf(0.2648))
+                ).divide(
+                        BigDecimal.ONE.subtract(
+                                LiquidNaclAmount.divide(LiquidH2OAmount.add(LiquidCaso4Amount), RoundingMode.HALF_UP)
+                                        .multiply(BigDecimal.valueOf(-0.497825381))
+                                        .add(BigDecimal.valueOf(0.2648))
+                        ),
+                        RoundingMode.HALF_UP
+                ).multiply(
+                        LiquidH2OAmount.add(LiquidCaso4Amount).add(LiquidNaclAmount)
+                );
 
+
+
+                BigDecimal waste = solidMaterial.getSolidWaste();
+                BigDecimal SolidKclAmount = solidMaterial.getSolidKCl().add(liquidMaterial.getLiquidKCl()).add(liquid.getKCl()).subtract(LiquidKclAmount).max(BigDecimal.ZERO);
+                BigDecimal SolidNaclAmount = solidMaterial.getSolidNaCl().add(liquidMaterial.getLiquidNaCl()).add(liquid.getNaCl()).subtract(LiquidNaclAmount).max(BigDecimal.ZERO);
+                BigDecimal SolidCaso4Amount = solidMaterial.getSolidCaSO4().add(liquidMaterial.getLiquidCaSO4()).add(liquid.getCaSO4()).subtract(LiquidCaso4Amount).max(BigDecimal.ZERO);
 
                 BigDecimal liquidQ = LiquidH2OAmount.add(LiquidNaclAmount).add(LiquidCaso4Amount).add(LiquidKclAmount);
-                BigDecimal waste = vishelachivanie.getSolidWaste();
-                BigDecimal SolidKclAmount = vishelachivanie.getLiquidH2O().add(vishelachivanie.getH2O());
-                BigDecimal SolidNaclAmount = LiquidH2OAmount.multiply((BigDecimal.valueOf(0.197).divide(BigDecimal.valueOf(0.678), RoundingMode.HALF_UP)));
-                BigDecimal SolidCaso4Amount = LiquidH2OAmount.multiply((BigDecimal.valueOf(0.04).divide(BigDecimal.valueOf(0.678), RoundingMode.HALF_UP)));
-
                 BigDecimal solidQ =  waste.add(SolidNaclAmount).add(SolidCaso4Amount).add(SolidKclAmount);
-                BigDecimal ratio = solidQ.divide(liquidQ, RoundingMode.HALF_UP);
+                BigDecimal ratio = liquidQ.divide(solidQ, RoundingMode.HALF_UP);
 
                 // Update Vishelachivanie with calculated values
                 vishelachivanie.setL_Q(liquidQ);
@@ -266,9 +270,9 @@ public class App extends Application {
 
                 vishelachivanie.setS_Q(solidQ);  // Solid values to be set
                 vishelachivanie.setSolidWaste(waste); // Assuming mapping for solid from liquid
-                vishelachivanie.setSolidKCl(LiquidKclAmount);
-                vishelachivanie.setSolidNaCl(LiquidNaclAmount);
-                vishelachivanie.setSolidCaSO4(LiquidCaso4Amount);
+                vishelachivanie.setSolidKCl(SolidKclAmount);
+                vishelachivanie.setSolidNaCl(SolidNaclAmount);
+                vishelachivanie.setSolidCaSO4(SolidCaso4Amount);
 
                 // Update UI labels with calculated values
                 liquidQResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString());
@@ -278,10 +282,10 @@ public class App extends Application {
                 liquidCaso4ResultValue.setText(LiquidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString());
 
                 solidQResultValue.setText(solidQ.setScale(2, RoundingMode.HALF_UP).toString());
-                wasteResultValue.setText(LiquidH2OAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                solidKclResultValue.setText(LiquidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                solidNaclResultValue.setText(LiquidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                solidCaso4ResultValue.setText(LiquidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString());
+                solidKclResultValue.setText(SolidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                solidNaclResultValue.setText(SolidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                solidCaso4ResultValue.setText(SolidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString());
+                wasteResultValue.setText(waste.setScale(2, RoundingMode.HALF_UP).toString());
                 ratioResultValue.setText(ratio.setScale(2, RoundingMode.HALF_UP).toString());
             } catch (NumberFormatException e) {
                 showError("Ошибка");
