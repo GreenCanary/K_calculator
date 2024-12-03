@@ -28,8 +28,8 @@ public class App extends Application {
 
         // Sections
         layout.getChildren().addAll(
-                createSection("Вода/Раствор", createLiquidSection(liquid)),
-                createSection("Руда, т", createSolidMaterialSection(solidMaterial)),
+                createSection("Вода или раствор", createLiquidSection(liquid)),
+                createSection("Руда", createSolidMaterialSection(solidMaterial)),
                 createSection("Поток на выщелачивание", createLiquidMaterialSection(liquidMaterial, solidMaterial)),
                 createSection("Выщелачивание", createVishelachivanieSection( liquid, liquidMaterial, solidMaterial,vishelachivanie)),
                 createSection("Пески гидроциклона", createHydrocycloneSolidSection(vishelachivanie, hydrocycloneSolid)),
