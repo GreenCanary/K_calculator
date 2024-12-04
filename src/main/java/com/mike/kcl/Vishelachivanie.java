@@ -25,20 +25,7 @@ public class Vishelachivanie {
     // Constructor accepting prerequisite classes
     public Vishelachivanie(SolidMaterial solidMaterial, LiquidMaterial liquidMaterial, Liquid liquid) {
         // Extracting values from SolidMaterial
-        this.solidKCl = solidMaterial.getSolidKCl();
-        this.solidNaCl = solidMaterial.getSolidNaCl();
-        this.solidCaSO4 = solidMaterial.getSolidCaSO4();
-        this.solidWaste = solidMaterial.getSolidWaste();
-        this.s_Q = solidMaterial.getS_Q();
 
-        // Extracting values from LiquidMaterial
-        this.liquidH2O = liquidMaterial.getLiquidH2O().add(liquid.getH2O());
-        this.liquidKCl = liquidMaterial.getLiquidKCl().add(liquid.getKCl());
-        this.liquidNaCl = liquidMaterial.getLiquidNaCl();
-        this.liquidCaSO4 = liquidMaterial.getLiquidCaSO4();
-        this.l_Q = liquidMaterial.getL_Q();
-
-        this.H2O = liquid.getH2O();
     }
 
     // Getters for Liquid Material

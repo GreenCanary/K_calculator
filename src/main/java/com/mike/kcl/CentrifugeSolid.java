@@ -18,7 +18,7 @@ public class CentrifugeSolid {
     private BigDecimal solidCaSO4;
     private BigDecimal solidWaste;
     private BigDecimal s_Q;
-    private BigDecimal LiqSolRat;
+    private BigDecimal LiqSolRat = new BigDecimal(0);
 
     // Solid quantity
 
@@ -26,20 +26,6 @@ public class CentrifugeSolid {
     // Constructor accepting prerequisite classes
     public CentrifugeSolid(HydrocycloneSolid hydrocycloneSolid) {
         // Extracting values from SolidMaterial
-        this.solidKCl = hydrocycloneSolid.getSolidKCl();
-        this.solidNaCl = hydrocycloneSolid.getSolidNaCl();
-        this.solidCaSO4 = hydrocycloneSolid.getSolidCaSO4();
-        this.solidWaste = hydrocycloneSolid.getSolidWaste();
-        this.s_Q = hydrocycloneSolid.getS_Q();
-
-        // Extracting values from LiquidMaterial
-        this.liquidH2O = hydrocycloneSolid.getLiquidH2O().add(hydrocycloneSolid.getH2O());
-        this.liquidKCl = hydrocycloneSolid.getLiquidKCl();
-        this.liquidNaCl = hydrocycloneSolid.getLiquidNaCl();
-        this.liquidCaSO4 = hydrocycloneSolid.getLiquidCaSO4();
-        this.l_Q = hydrocycloneSolid.getL_Q();
-
-        this.H2O = hydrocycloneSolid.getH2O();
     }
 
     // Getters for Liquid Material
@@ -137,7 +123,6 @@ public class CentrifugeSolid {
     public void setLiqSolRat(BigDecimal LiqSolRat) {
         this.LiqSolRat = LiqSolRat;
     }
-
     public void setH2O(BigDecimal H2O) {
         this.H2O = H2O;
     }

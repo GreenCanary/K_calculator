@@ -26,19 +26,7 @@ public class HydrocycloneLiquid {
     // Constructor accepting prerequisite classes
     public HydrocycloneLiquid(Vishelachivanie vishelachivanie, HydrocycloneSolid hydrocycloneSolid) {
         // Extracting values from SolidMaterial
-        this.SolQuartRatio = hydrocycloneSolid.getSolQuartRatio();
-        this.solidKCl = vishelachivanie.getSolidKCl().multiply(SolQuartRatio);
-        this.solidNaCl = vishelachivanie.getSolidNaCl().multiply(SolQuartRatio);
-        this.solidCaSO4 = vishelachivanie.getSolidCaSO4().multiply(SolQuartRatio);
-        this.solidWaste = vishelachivanie.getSolidWaste().multiply(SolQuartRatio);
-        this.s_Q = vishelachivanie.getS_Q().multiply(SolQuartRatio);
 
-        // Extracting values from LiquidMaterial
-        this.liquidH2O = hydrocycloneSolid.getLiquidH2O().add(hydrocycloneSolid.getH2O());
-        this.liquidKCl = hydrocycloneSolid.getLiquidKCl();
-        this.liquidNaCl = hydrocycloneSolid.getLiquidNaCl();
-        this.liquidCaSO4 = hydrocycloneSolid.getLiquidCaSO4();
-        this.l_Q = hydrocycloneSolid.getL_Q();
 
         this.H2O = hydrocycloneSolid.getH2O();
     }

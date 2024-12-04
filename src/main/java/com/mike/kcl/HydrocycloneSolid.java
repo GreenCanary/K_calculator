@@ -16,28 +16,16 @@ public class HydrocycloneSolid {
     private BigDecimal solidKCl;
     private BigDecimal solidNaCl;
     private BigDecimal solidCaSO4;
-    private BigDecimal solidWaste;
+    private BigDecimal solidWaste ;
     private BigDecimal s_Q;
     private BigDecimal LiqSolRat;
-    private BigDecimal SolQuartRatio = new BigDecimal(0);
+    private BigDecimal SolQuartRatio;
     // Solid quantity
 
     private BigDecimal H2O;
     // Constructor accepting prerequisite classes
     public HydrocycloneSolid(Vishelachivanie vishelachivanie) {
         // Extracting values from SolidMaterial
-        this.solidKCl = vishelachivanie.getSolidKCl().multiply(SolQuartRatio);
-        this.solidNaCl = vishelachivanie.getSolidNaCl().multiply(SolQuartRatio);
-        this.solidCaSO4 = vishelachivanie.getSolidCaSO4().multiply(SolQuartRatio);
-        this.solidWaste = vishelachivanie.getSolidWaste().multiply(SolQuartRatio);
-        this.s_Q = vishelachivanie.getS_Q().multiply(SolQuartRatio);
-
-        // Extracting values from LiquidMaterial
-        this.liquidH2O = vishelachivanie.getLiquidH2O().add(vishelachivanie.getH2O());
-        this.liquidKCl = vishelachivanie.getLiquidKCl();
-        this.liquidNaCl = vishelachivanie.getLiquidNaCl();
-        this.liquidCaSO4 = vishelachivanie.getLiquidCaSO4();
-        this.l_Q = vishelachivanie.getL_Q();
 
         this.H2O = vishelachivanie.getH2O();
     }
@@ -68,8 +56,7 @@ public class HydrocycloneSolid {
         return solidKCl;
     }
 
-    public BigDecimal getSolidNaCl() {
-        return solidNaCl;
+    public BigDecimal getSolidNaCl() { return solidNaCl;
     }
 
     public BigDecimal getSolidCaSO4() {
@@ -92,28 +79,22 @@ public class HydrocycloneSolid {
         return SolQuartRatio;
     }
 
-    public BigDecimal getLiqSolRat() {
-        return LiqSolRat;
+    public BigDecimal getLiqSolRat() {return LiqSolRat;
     }
     // Setters for Liquid Material
-    public void setLiquidH2O(BigDecimal liquidH2O) {
-        this.liquidH2O = liquidH2O;
+    public void setLiquidH2O(BigDecimal liquidH2O) { this.liquidH2O = liquidH2O;
     }
 
-    public void setLiquidKCl(BigDecimal liquidKCl) {
-        this.liquidKCl = liquidKCl;
+    public void setLiquidKCl(BigDecimal liquidKCl) {this.liquidKCl = liquidKCl;
     }
 
-    public void setLiquidNaCl(BigDecimal liquidNaCl) {
-        this.liquidNaCl = liquidNaCl;
+    public void setLiquidNaCl(BigDecimal liquidNaCl) {this.liquidNaCl = liquidNaCl;
     }
 
-    public void setLiquidCaSO4(BigDecimal liquidCaSO4) {
-        this.liquidCaSO4 = liquidCaSO4;
+    public void setLiquidCaSO4(BigDecimal liquidCaSO4) {this.liquidCaSO4 = liquidCaSO4;
     }
 
-    public void setL_Q(BigDecimal l_Q) {
-        this.l_Q = l_Q;
+    public void setL_Q(BigDecimal l_Q) {this.l_Q = l_Q;
     }
 
     // Setters for Solid Material

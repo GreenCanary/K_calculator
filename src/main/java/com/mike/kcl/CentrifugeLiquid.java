@@ -11,34 +11,20 @@ public class CentrifugeLiquid {
     private BigDecimal liquidCaSO4;
     private BigDecimal l_Q; // Liquid quantity
 
-    // Fields for Solid Material
-    private BigDecimal solidKCl;
-    private BigDecimal solidNaCl;
-    private BigDecimal solidCaSO4;
-    private BigDecimal solidWaste;
-    private BigDecimal s_Q;
-    private BigDecimal LiqSolRat;
-    private BigDecimal SolQuartRatio;
+
     // Solid quantity
 
-    private BigDecimal H2O;
     // Constructor accepting prerequisite classes
     public CentrifugeLiquid(HydrocycloneSolid hydrocycloneSolid, CentrifugeSolid centrifugeSolid) {
         // Extracting values from SolidMaterial
-        this.solidKCl = hydrocycloneSolid.getSolidKCl();
-        this.solidNaCl = hydrocycloneSolid.getSolidNaCl();
-        this.solidCaSO4 = hydrocycloneSolid.getSolidCaSO4();
-        this.solidWaste = hydrocycloneSolid.getSolidWaste();
-        this.s_Q = hydrocycloneSolid.getS_Q();
 
         // Extracting values from LiquidMaterial
-        this.liquidH2O = hydrocycloneSolid.getLiquidH2O().add(hydrocycloneSolid.getH2O());
-        this.liquidKCl = hydrocycloneSolid.getLiquidKCl();
-        this.liquidNaCl = hydrocycloneSolid.getLiquidNaCl();
-        this.liquidCaSO4 = hydrocycloneSolid.getLiquidCaSO4();
-        this.l_Q = hydrocycloneSolid.getL_Q();
+        this.l_Q = hydrocycloneSolid.getL_Q().subtract(centrifugeSolid.getL_Q());
+        this.liquidH2O = hydrocycloneSolid.getLiquidH2O().subtract(centrifugeSolid.getLiquidH2O());
+        this.liquidKCl = hydrocycloneSolid.getLiquidKCl().subtract(centrifugeSolid.getLiquidKCl());
+        this.liquidNaCl = hydrocycloneSolid.getLiquidNaCl().subtract(centrifugeSolid.getLiquidNaCl());
+        this.liquidCaSO4 = hydrocycloneSolid.getLiquidCaSO4().subtract(centrifugeSolid.getLiquidCaSO4());
 
-        this.H2O = hydrocycloneSolid.getH2O();
     }
 
     // Getters for Liquid Material
@@ -63,37 +49,9 @@ public class CentrifugeLiquid {
     }
 
     // Getters for Solid Material
-    public BigDecimal getSolidKCl() {
-        return solidKCl;
-    }
 
-    public BigDecimal getSolidNaCl() {
-        return solidNaCl;
-    }
 
-    public BigDecimal getSolidCaSO4() {
-        return solidCaSO4;
-    }
 
-    public BigDecimal getSolidWaste() {
-        return solidWaste;
-    }
-
-    public BigDecimal getS_Q() {
-        return s_Q;
-    }
-
-    public BigDecimal getH2O() {
-        return H2O;
-    }
-
-    public BigDecimal getSolQuartRatio() {
-        return SolQuartRatio;
-    }
-
-    public BigDecimal getLiqSolRat() {
-        return LiqSolRat;
-    }
     // Setters for Liquid Material
     public void setLiquidH2O(BigDecimal liquidH2O) {
         this.liquidH2O = liquidH2O;
@@ -115,37 +73,6 @@ public class CentrifugeLiquid {
         this.l_Q = l_Q;
     }
 
-    // Setters for Solid Material
-    public void setSolidKCl(BigDecimal solidKCl) {
-        this.solidKCl = solidKCl;
-    }
 
-    public void setSolidNaCl(BigDecimal solidNaCl) {
-        this.solidNaCl = solidNaCl;
-    }
-
-    public void setSolidCaSO4(BigDecimal solidCaSO4) {
-        this.solidCaSO4 = solidCaSO4;
-    }
-
-    public void setSolidWaste(BigDecimal solidWaste) {
-        this.solidWaste = solidWaste;
-    }
-
-    public void setS_Q(BigDecimal s_Q) {
-        this.s_Q = s_Q;
-    }
-
-    public void setLiqSolRat(BigDecimal LiqSolRat) {
-        this.LiqSolRat = LiqSolRat;
-    }
-    public void setSolQuartRatio(BigDecimal SolQuartRatio) {
-        this.SolQuartRatio = SolQuartRatio;
-    }
-    public void setH2O(BigDecimal H2O) {
-        this.H2O = H2O;
-
-    }
 
 }
-
