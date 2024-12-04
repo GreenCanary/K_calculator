@@ -1,9 +1,8 @@
 package com.mike.kcl;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
-public class HydrocycloneLiquid {
+public class CentrifugeLiquid {
 
     // Fields for Liquid Material
     private BigDecimal liquidH2O;
@@ -19,19 +18,18 @@ public class HydrocycloneLiquid {
     private BigDecimal solidWaste;
     private BigDecimal s_Q;
     private BigDecimal LiqSolRat;
-    private BigDecimal SolQuartRatio = BigDecimal.valueOf(0);
+    private BigDecimal SolQuartRatio;
     // Solid quantity
 
     private BigDecimal H2O;
     // Constructor accepting prerequisite classes
-    public HydrocycloneLiquid(Vishelachivanie vishelachivanie, HydrocycloneSolid hydrocycloneSolid) {
+    public CentrifugeLiquid(HydrocycloneSolid hydrocycloneSolid, CentrifugeSolid centrifugeSolid) {
         // Extracting values from SolidMaterial
-        this.SolQuartRatio = hydrocycloneSolid.getSolQuartRatio();
-        this.solidKCl = vishelachivanie.getSolidKCl().multiply(SolQuartRatio);
-        this.solidNaCl = vishelachivanie.getSolidNaCl().multiply(SolQuartRatio);
-        this.solidCaSO4 = vishelachivanie.getSolidCaSO4().multiply(SolQuartRatio);
-        this.solidWaste = vishelachivanie.getSolidWaste().multiply(SolQuartRatio);
-        this.s_Q = vishelachivanie.getS_Q().multiply(SolQuartRatio);
+        this.solidKCl = hydrocycloneSolid.getSolidKCl();
+        this.solidNaCl = hydrocycloneSolid.getSolidNaCl();
+        this.solidCaSO4 = hydrocycloneSolid.getSolidCaSO4();
+        this.solidWaste = hydrocycloneSolid.getSolidWaste();
+        this.s_Q = hydrocycloneSolid.getS_Q();
 
         // Extracting values from LiquidMaterial
         this.liquidH2O = hydrocycloneSolid.getLiquidH2O().add(hydrocycloneSolid.getH2O());
@@ -146,9 +144,8 @@ public class HydrocycloneLiquid {
     }
     public void setH2O(BigDecimal H2O) {
         this.H2O = H2O;
+
     }
-
-
 
 }
 

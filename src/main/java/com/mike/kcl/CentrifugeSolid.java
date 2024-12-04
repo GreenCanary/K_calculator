@@ -3,7 +3,7 @@ package com.mike.kcl;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class HydrocycloneLiquid {
+public class CentrifugeSolid {
 
     // Fields for Liquid Material
     private BigDecimal liquidH2O;
@@ -19,19 +19,18 @@ public class HydrocycloneLiquid {
     private BigDecimal solidWaste;
     private BigDecimal s_Q;
     private BigDecimal LiqSolRat;
-    private BigDecimal SolQuartRatio = BigDecimal.valueOf(0);
+
     // Solid quantity
 
     private BigDecimal H2O;
     // Constructor accepting prerequisite classes
-    public HydrocycloneLiquid(Vishelachivanie vishelachivanie, HydrocycloneSolid hydrocycloneSolid) {
+    public CentrifugeSolid(HydrocycloneSolid hydrocycloneSolid) {
         // Extracting values from SolidMaterial
-        this.SolQuartRatio = hydrocycloneSolid.getSolQuartRatio();
-        this.solidKCl = vishelachivanie.getSolidKCl().multiply(SolQuartRatio);
-        this.solidNaCl = vishelachivanie.getSolidNaCl().multiply(SolQuartRatio);
-        this.solidCaSO4 = vishelachivanie.getSolidCaSO4().multiply(SolQuartRatio);
-        this.solidWaste = vishelachivanie.getSolidWaste().multiply(SolQuartRatio);
-        this.s_Q = vishelachivanie.getS_Q().multiply(SolQuartRatio);
+        this.solidKCl = hydrocycloneSolid.getSolidKCl();
+        this.solidNaCl = hydrocycloneSolid.getSolidNaCl();
+        this.solidCaSO4 = hydrocycloneSolid.getSolidCaSO4();
+        this.solidWaste = hydrocycloneSolid.getSolidWaste();
+        this.s_Q = hydrocycloneSolid.getS_Q();
 
         // Extracting values from LiquidMaterial
         this.liquidH2O = hydrocycloneSolid.getLiquidH2O().add(hydrocycloneSolid.getH2O());
@@ -89,9 +88,6 @@ public class HydrocycloneLiquid {
         return H2O;
     }
 
-    public BigDecimal getSolQuartRatio() {
-        return SolQuartRatio;
-    }
 
     public BigDecimal getLiqSolRat() {
         return LiqSolRat;
@@ -141,9 +137,7 @@ public class HydrocycloneLiquid {
     public void setLiqSolRat(BigDecimal LiqSolRat) {
         this.LiqSolRat = LiqSolRat;
     }
-    public void setSolQuartRatio(BigDecimal SolQuartRatio) {
-        this.SolQuartRatio = SolQuartRatio;
-    }
+
     public void setH2O(BigDecimal H2O) {
         this.H2O = H2O;
     }
@@ -151,4 +145,3 @@ public class HydrocycloneLiquid {
 
 
 }
-

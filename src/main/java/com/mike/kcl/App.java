@@ -20,7 +20,8 @@ public class App extends Application {
         LiquidMaterial liquidMaterial = new LiquidMaterial(0.8);
         Vishelachivanie vishelachivanie = new Vishelachivanie(solidMaterial, liquidMaterial, liquid);
         HydrocycloneSolid hydrocycloneSolid = new HydrocycloneSolid(vishelachivanie);
-        HydrocycloneLiquid hydrocycloneLiquid = new HydrocycloneLiquid(hydrocycloneSolid);
+        HydrocycloneLiquid hydrocycloneLiquid = new HydrocycloneLiquid(vishelachivanie, hydrocycloneSolid);
+
 
         // Main Layout
         VBox layout = new VBox(20);
@@ -33,7 +34,7 @@ public class App extends Application {
                 createSection("Поток на выщелачивание", createLiquidMaterialSection(liquidMaterial, solidMaterial)),
                 createSection("Выщелачивание", createVishelachivanieSection( liquid, liquidMaterial, solidMaterial,vishelachivanie)),
                 createSection("Пески гидроциклона", createHydrocycloneSolidSection(vishelachivanie, hydrocycloneSolid)),
-                createSection("Слив гидроциклона", createHydrocycloneLiquidSection(vishelachivanie,hydrocycloneSolid, hydrocycloneLiquid))
+                createSection("Слив гидроциклона", createHydrocycloneLiquidSection(vishelachivanie, hydrocycloneSolid, hydrocycloneLiquid))
 
         );
 
@@ -62,7 +63,7 @@ public class App extends Application {
 
         Label qLabel = new Label("Q, т/ч:");
         TextField qInput = new TextField();
-        Button calculateButton = new Button("Ввести");
+        Button calculateButton = new Button("Ввести жидкость");
         Label h2oResultLabel = new Label("H2O, т/ч:");
         Label h2oResultValue = new Label();
 
@@ -369,7 +370,7 @@ public class App extends Application {
         Label liqRatLabel = new Label("Введите Ж/Т:");
         TextField liqRatTextField = new TextField();
 
-        Label solQuartRatioLabel = new Label("Введите долю твердых менее 0,25мм, %:");
+        Label solQuartRatioLabel = new Label("Твердые менее 0,25мм, %:");
         TextField solQuartRatioTextField = new TextField();
 
 
@@ -413,7 +414,9 @@ public class App extends Application {
             try {
                 // Get the value of liqRat from the text field
                 BigDecimal LiqSolRat = new BigDecimal(liqRatTextField.getText());
-                BigDecimal SolQuartRatio = new BigDecimal(solQuartRatioTextField.getText()).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
+                BigDecimal SolQuartRatio = new BigDecimal(solQuartRatioTextField.getText()).divide(BigDecimal.valueOf(100));
+                hydrocycloneSolid.setSolQuartRatio(SolQuartRatio);
+                hydrocycloneSolid.setLiqSolRat(LiqSolRat);
 
                 BigDecimal solidQ = BigDecimal.ONE.subtract(SolQuartRatio).multiply(vishelachivanie.getS_Q());
                 BigDecimal liquidQ = solidQ.multiply(LiqSolRat);
@@ -443,8 +446,6 @@ public class App extends Application {
                 hydrocycloneSolid.setSolidCaSO4(SolidCaso4Amount);
                 hydrocycloneSolid.setSolidWaste(waste);
 
-                hydrocycloneSolid.setSolQuartRatio(SolQuartRatio);
-                hydrocycloneSolid.setLiqSolRat(LiqSolRat);
 
 
                 //Update labels with calculated values
@@ -533,6 +534,8 @@ public class App extends Application {
                 // Get the value of liqRat from the text field
                 BigDecimal LiqSolRat = hydrocycloneSolid.getLiqSolRat();
                 BigDecimal SolQuartRatio = hydrocycloneSolid.getSolQuartRatio();
+                hydrocycloneLiquid.setSolQuartRatio(SolQuartRatio);
+                hydrocycloneLiquid.setLiqSolRat(LiqSolRat);
 
                 BigDecimal solidQ = vishelachivanie.getS_Q().multiply(SolQuartRatio);
                 BigDecimal liquidQ = vishelachivanie.getL_Q().subtract(hydrocycloneSolid.getL_Q());
@@ -563,8 +566,7 @@ public class App extends Application {
                 hydrocycloneLiquid.setSolidCaSO4(SolidCaso4Amount);
                 hydrocycloneLiquid.setSolidWaste(waste);
 
-                hydrocycloneLiquid.setSolQuartRatio(SolQuartRatio);
-                hydrocycloneLiquid.setLiqSolRat(LiqSolRat);
+
 
 
                 //Update labels with calculated values
@@ -595,9 +597,9 @@ public class App extends Application {
         grid.setVgap(5);
 
         ColumnConstraints column1 = new ColumnConstraints();
-        column1.setPercentWidth(10); // Adjust the width percentage as needed
+        column1.setPercentWidth(12); // Adjust the width percentage as needed
         ColumnConstraints column2 = new ColumnConstraints();
-        column2.setPercentWidth(10); // Adjust to complement column1
+        column2.setPercentWidth(12); // Adjust to complement column1
 
         grid.getColumnConstraints().addAll(column1, column2);
         return grid;

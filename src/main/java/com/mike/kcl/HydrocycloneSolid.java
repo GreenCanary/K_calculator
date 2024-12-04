@@ -19,18 +19,18 @@ public class HydrocycloneSolid {
     private BigDecimal solidWaste;
     private BigDecimal s_Q;
     private BigDecimal LiqSolRat;
-    private BigDecimal SolQuartRatio;
+    private BigDecimal SolQuartRatio = new BigDecimal(0);
     // Solid quantity
 
     private BigDecimal H2O;
     // Constructor accepting prerequisite classes
     public HydrocycloneSolid(Vishelachivanie vishelachivanie) {
         // Extracting values from SolidMaterial
-        this.solidKCl = vishelachivanie.getSolidKCl();
-        this.solidNaCl = vishelachivanie.getSolidNaCl();
-        this.solidCaSO4 = vishelachivanie.getSolidCaSO4();
-        this.solidWaste = vishelachivanie.getSolidWaste();
-        this.s_Q = vishelachivanie.getS_Q();
+        this.solidKCl = vishelachivanie.getSolidKCl().multiply(SolQuartRatio);
+        this.solidNaCl = vishelachivanie.getSolidNaCl().multiply(SolQuartRatio);
+        this.solidCaSO4 = vishelachivanie.getSolidCaSO4().multiply(SolQuartRatio);
+        this.solidWaste = vishelachivanie.getSolidWaste().multiply(SolQuartRatio);
+        this.s_Q = vishelachivanie.getS_Q().multiply(SolQuartRatio);
 
         // Extracting values from LiquidMaterial
         this.liquidH2O = vishelachivanie.getLiquidH2O().add(vishelachivanie.getH2O());
@@ -140,8 +140,8 @@ public class HydrocycloneSolid {
     public void setLiqSolRat(BigDecimal LiqSolRat) {
         this.LiqSolRat = LiqSolRat;
     }
-    public void setSolQuartRatio(BigDecimal SolQuartRatio) {
-        this.SolQuartRatio = SolQuartRatio;
+    public void setSolQuartRatio(BigDecimal SolQuartRat) {
+        this.SolQuartRatio = SolQuartRat;
     }
     public void setH2O(BigDecimal H2O) {
         this.H2O = H2O;
