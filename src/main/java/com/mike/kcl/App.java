@@ -59,10 +59,11 @@ public class App extends Application {
     private GridPane createLiquidSection(Liquid liquid) {
         GridPane grid = createAlignedGridPane();
 
-        Label qLabel = new Label("Q, м^3:");
+
+        Label qLabel = new Label("Q, т/ч:");
         TextField qInput = new TextField();
-        Button calculateButton = new Button("Ввести кол-во");
-        Label h2oResultLabel = new Label("H2O кол-во:");
+        Button calculateButton = new Button("Ввести, т/ч");
+        Label h2oResultLabel = new Label("H2O, т/ч:");
         Label h2oResultValue = new Label();
 
         grid.addRow(0, qLabel, qInput);
@@ -86,12 +87,12 @@ public class App extends Application {
     private GridPane createSolidMaterialSection(SolidMaterial solidMaterial) {
         GridPane grid = createAlignedGridPane();
 
-        Label qLabel = new Label("Q, т:");
+        Label qLabel = new Label("Q, т/ч:");
         TextField qInput = new TextField();
         Button calculateButton = new Button("Расчитать состав руды");
-        Label kclResultLabel = new Label("KCl кол-во:");
-        Label naclResultLabel = new Label("NaCl кол-во:");
-        Label combinedResultLabel = new Label("CaSO4 + H.O. (Общий отход):");
+        Label kclResultLabel = new Label("KCl, т/ч:");
+        Label naclResultLabel = new Label("NaCl, т/ч:");
+        Label combinedResultLabel = new Label("Отход, т/ч:");
         Label kclResultValue = new Label();
         Label naclResultValue = new Label();
         Label combinedResultValue = new Label();
@@ -137,11 +138,11 @@ public class App extends Application {
         Label ratioLabel = new Label("Ж/Т:");
         TextField ratioInput = new TextField();
         Button calculateButton = new Button("Расчитать Ж/Т на выщелачивание");
-        Label liquidQResultLabel = new Label("Q, т:");
-        Label h2oResultLabel = new Label("H2O кол-во:");
-        Label kclResultLabel = new Label("KCl кол-во:");
-        Label naclResultLabel = new Label("NaCl кол-во:");
-        Label caso4ResultLabel = new Label("CaSO4 кол-во:");
+        Label liquidQResultLabel = new Label("Q, т/ч:");
+        Label h2oResultLabel = new Label("H2O, т/ч:");
+        Label kclResultLabel = new Label("KCl, т/ч:");
+        Label naclResultLabel = new Label("NaCl, т/ч:");
+        Label caso4ResultLabel = new Label("CaSO4, т/ч:");
         Label liquidQResultValue = new Label();
         Label h2oResultValue = new Label();
         Label kclResultValue = new Label();
@@ -193,15 +194,15 @@ public class App extends Application {
         grid.setHgap(5);
 
         Button calculateButton = new Button("Расчитать выщелачивание");
-        Label liquidHeader = new Label("Жидкие результаты");
-        Label solidHeader = new Label("Твёрдые результаты");
+        Label liquidHeader = new Label("Жидкость");
+        Label solidHeader = new Label("Твёрдое");
 
         // Liquid result labels
-        Label liquidQResultLabel = new Label("Маточник кол-во (Q):");
-        Label liquidH2oResultLabel = new Label("H2O кол-во:");
-        Label liquidKclResultLabel = new Label("KCl кол-во:");
-        Label liquidNaclResultLabel = new Label("NaCl кол-во:");
-        Label liquidCaso4ResultLabel = new Label("CaSO4 кол-во:");
+        Label liquidQResultLabel = new Label("Q, т/ч:");
+        Label liquidH2oResultLabel = new Label("H2O, т/ч:");
+        Label liquidKclResultLabel = new Label("KCl, т/ч:");
+        Label liquidNaclResultLabel = new Label("NaCl, т/ч:");
+        Label liquidCaso4ResultLabel = new Label("CaSO4, т/ч:");
         Label liquidQResultValue = new Label();
         Label liquidH2oResultValue = new Label();
         Label liquidKclResultValue = new Label();
@@ -209,10 +210,10 @@ public class App extends Application {
         Label liquidCaso4ResultValue = new Label();
 
         // Solid result labels
-        Label solidQResultLabel = new Label("Твёрдый материал кол-во (Q):");
-        Label solidKclResultLabel = new Label("KCl кол-во:");
-        Label solidNaclResultLabel = new Label("NaCl кол-во:");
-        Label wasteResultLabel = new Label("Отход кол-во:");
+        Label solidQResultLabel = new Label("Q, т/ч:");
+        Label solidKclResultLabel = new Label("KCl, т/ч:");
+        Label solidNaclResultLabel = new Label("NaCl, т/ч:");
+        Label wasteResultLabel = new Label("Отход, т/ч:");
         Label solidQResultValue = new Label();
         Label solidKclResultValue = new Label();
         Label solidNaclResultValue = new Label();
@@ -338,15 +339,15 @@ public class App extends Application {
         grid.setHgap(5);
 
         Button calculateButton = new Button("Расчитать пески гидроциклона");
-        Label liquidHeader = new Label("Жидкие результаты");
-        Label solidHeader = new Label("Твёрдые результаты");
+        Label liquidHeader = new Label("Жидкость");
+        Label solidHeader = new Label("Твёрдое");
 
         // Liquid result labels
-        Label liquidQResultLabel = new Label("Маточник кол-во (Q):");
-        Label liquidH2oResultLabel = new Label("H2O кол-во:");
-        Label liquidKclResultLabel = new Label("KCl кол-во:");
-        Label liquidNaclResultLabel = new Label("NaCl кол-во:");
-        Label liquidCaso4ResultLabel = new Label("CaSO4 кол-во:");
+        Label liquidQResultLabel = new Label("Q, т/ч:");
+        Label liquidH2oResultLabel = new Label("H2O, т/ч:");
+        Label liquidKclResultLabel = new Label("KCl, т/ч:");
+        Label liquidNaclResultLabel = new Label("NaCl, т/ч:");
+        Label liquidCaso4ResultLabel = new Label("CaSO4, т/ч:");
         Label liquidQResultValue = new Label();
         Label liquidH2oResultValue = new Label();
         Label liquidKclResultValue = new Label();
@@ -354,10 +355,10 @@ public class App extends Application {
         Label liquidCaso4ResultValue = new Label();
 
         // Solid result labels
-        Label solidQResultLabel = new Label("Твёрдый материал кол-во (Q):");
-        Label solidKclResultLabel = new Label("KCl кол-во:");
-        Label solidNaclResultLabel = new Label("NaCl кол-во:");
-        Label wasteResultLabel = new Label("Отход кол-во:");
+        Label solidQResultLabel = new Label("Q, т/ч:");
+        Label solidKclResultLabel = new Label("KCl, т/ч:");
+        Label solidNaclResultLabel = new Label("NaCl, т/ч:");
+        Label wasteResultLabel = new Label("Отход, т/ч:");
         Label solidQResultValue = new Label();
         Label solidKclResultValue = new Label();
         Label solidNaclResultValue = new Label();
@@ -368,7 +369,7 @@ public class App extends Application {
         Label liqRatLabel = new Label("Введите Ж/Т:");
         TextField liqRatTextField = new TextField();
 
-        Label solQuartRatioLabel = new Label("Введите долю твердых менее 0,25мм, %");
+        Label solQuartRatioLabel = new Label("Введите долю твердых менее 0,25мм, %:");
         TextField solQuartRatioTextField = new TextField();
 
 
@@ -471,15 +472,15 @@ public class App extends Application {
         grid.setHgap(5);
 
         Button calculateButton = new Button("Расчитать слив гидроциклона");
-        Label liquidHeader = new Label("Жидкие результаты");
-        Label solidHeader = new Label("Твёрдые результаты");
+        Label liquidHeader = new Label("Жидкость");
+        Label solidHeader = new Label("Твёрдое");
 
         // Liquid result labels
-        Label liquidQResultLabel = new Label("Маточник кол-во (Q):");
-        Label liquidH2oResultLabel = new Label("H2O кол-во:");
-        Label liquidKclResultLabel = new Label("KCl кол-во:");
-        Label liquidNaclResultLabel = new Label("NaCl кол-во:");
-        Label liquidCaso4ResultLabel = new Label("CaSO4 кол-во:");
+        Label liquidQResultLabel = new Label("Q, т/ч:");
+        Label liquidH2oResultLabel = new Label("H2O, т/ч:");
+        Label liquidKclResultLabel = new Label("KCl, т/ч:");
+        Label liquidNaclResultLabel = new Label("NaCl, т/ч:");
+        Label liquidCaso4ResultLabel = new Label("CaSO4, т/ч:");
         Label liquidQResultValue = new Label();
         Label liquidH2oResultValue = new Label();
         Label liquidKclResultValue = new Label();
@@ -487,10 +488,10 @@ public class App extends Application {
         Label liquidCaso4ResultValue = new Label();
 
         // Solid result labels
-        Label solidQResultLabel = new Label("Твёрдый материал кол-во (Q):");
-        Label solidKclResultLabel = new Label("KCl кол-во:");
-        Label solidNaclResultLabel = new Label("NaCl кол-во:");
-        Label wasteResultLabel = new Label("Отход кол-во:");
+        Label solidQResultLabel = new Label("Q, т/ч:");
+        Label solidKclResultLabel = new Label("KCl, т/ч:");
+        Label solidNaclResultLabel = new Label("NaCl, т/ч:");
+        Label wasteResultLabel = new Label("Отход, т/ч:");
         Label solidQResultValue = new Label();
         Label solidKclResultValue = new Label();
         Label solidNaclResultValue = new Label();
