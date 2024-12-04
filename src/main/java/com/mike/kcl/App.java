@@ -62,7 +62,7 @@ public class App extends Application {
 
         Label qLabel = new Label("Q, т/ч:");
         TextField qInput = new TextField();
-        Button calculateButton = new Button("Ввести, т/ч");
+        Button calculateButton = new Button("Ввести");
         Label h2oResultLabel = new Label("H2O, т/ч:");
         Label h2oResultValue = new Label();
 
