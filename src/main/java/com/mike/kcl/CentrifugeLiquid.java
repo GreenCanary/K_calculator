@@ -15,15 +15,10 @@ public class CentrifugeLiquid {
     // Solid quantity
 
     // Constructor accepting prerequisite classes
-    public CentrifugeLiquid(HydrocycloneSolid hydrocycloneSolid, CentrifugeSolid centrifugeSolid) {
+    public CentrifugeLiquid() {
         // Extracting values from SolidMaterial
 
-        // Extracting values from LiquidMaterial
-        this.l_Q = hydrocycloneSolid.getL_Q().subtract(centrifugeSolid.getL_Q());
-        this.liquidH2O = hydrocycloneSolid.getLiquidH2O().subtract(centrifugeSolid.getLiquidH2O());
-        this.liquidKCl = hydrocycloneSolid.getLiquidKCl().subtract(centrifugeSolid.getLiquidKCl());
-        this.liquidNaCl = hydrocycloneSolid.getLiquidNaCl().subtract(centrifugeSolid.getLiquidNaCl());
-        this.liquidCaSO4 = hydrocycloneSolid.getLiquidCaSO4().subtract(centrifugeSolid.getLiquidCaSO4());
+
 
     }
 
