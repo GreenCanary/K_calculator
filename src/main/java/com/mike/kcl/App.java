@@ -73,7 +73,7 @@ public class App extends Application {
     }
 
     private GridPane createCombinedSection(Liquid liquid, SolidMaterial solidMaterial, LiquidMaterial liquidMaterial) {
-        GridPane grid = createAlignedGridPane(6);
+        GridPane grid = createAlignedGridPane(8);
         // Layout
         grid.setHgap(5); // Horizontal spacing
         grid.setVgap(5); // Vertical spacing
@@ -210,12 +210,13 @@ public class App extends Application {
 
 
     private GridPane createVishelachivanieSection(Liquid liquid, LiquidMaterial liquidMaterial, SolidMaterial solidMaterial, Vishelachivanie vishelachivanie) {
-        GridPane grid = createAlignedGridPane(4);
+        GridPane grid = createAlignedGridPane(8);
 
         grid.setVgap(5); // Set vertical gap to 5 pixels (default is usually larger)
         grid.setHgap(5);
+        grid.setPadding(new Insets(5));
 
-        Button calculateButton = new Button("Расчитать выщелачивание");
+        Button calculateButton = new Button("Рассчитать выщелачивание");
         Label liquidHeader = new Label("Жидкость");
         Label solidHeader = new Label("Твёрдое");
 
@@ -369,6 +370,7 @@ public class App extends Application {
 
         grid.setVgap(5); // Set vertical gap to 5 pixels
         grid.setHgap(5);
+        grid.setPadding(new Insets(5));
 
         Button calculateButton = new Button("Рассчитать работу гидроциклона");
 
@@ -610,12 +612,13 @@ public class App extends Application {
     }
 
     private GridPane createCentrifugeLiquidSection(HydrocycloneSolid hydrocycloneSolid, CentrifugeSolid centrifugeSolid, CentrifugeLiquid centrifugeLiquid) {
-        GridPane grid = createAlignedGridPane(2);
+        GridPane grid = createAlignedGridPane(8);
 
         grid.setVgap(5); // Set vertical gap to 5 pixels (default is usually larger)
         grid.setHgap(5);
+        grid.setPadding(new Insets(5));
 
-        Button calculateButton = new Button("Расчитать фугат центрифуги");
+        Button calculateButton = new Button("Рассчитать фугат центрифуги");
         Label liquidHeader = new Label("Жидкость");
 
         // Liquid result labels
@@ -687,16 +690,17 @@ public class App extends Application {
     }
 
     private GridPane createCentrifugeSolidSection(HydrocycloneSolid hydrocycloneSolid, CentrifugeSolid centrifugeSolid) {
-        GridPane grid = createAlignedGridPane(4);
+        GridPane grid = createAlignedGridPane(8);
 
         grid.setVgap(5); // Set vertical gap to 5 pixels (default is usually larger)
         grid.setHgap(5);
+        grid.setPadding(new Insets(5));
 
-        Button calculateButton = new Button("Расчитать кек центрифуги");
+        Button calculateButton = new Button("Рассчитать кек центрифуги");
         Label liquidHeader = new Label("Жидкость");
         Label solidHeader = new Label("Твёрдое");
 
-        // Liquid result labels
+// Liquid result labels
         Label liquidQResultLabel = new Label("Q, т/ч:");
         Label liquidH2oResultLabel = new Label("H2O, т/ч:");
         Label liquidKclResultLabel = new Label("KCl, т/ч:");
@@ -708,7 +712,7 @@ public class App extends Application {
         Label liquidNaclResultValue = new Label();
         Label liquidCaso4ResultValue = new Label();
 
-        // Solid result labels
+// Solid result labels
         Label solidQResultLabel = new Label("Q, т/ч:");
         Label solidKclResultLabel = new Label("KCl, т/ч:");
         Label solidNaclResultLabel = new Label("NaCl, т/ч:");
@@ -718,17 +722,15 @@ public class App extends Application {
         Label solidNaclResultValue = new Label();
         Label wasteResultValue = new Label();
 
-
-        // Add text field for user input of liqRat (Ж/Т)
-        Label liqRatLabel = new Label("Введите Ж/Т:");
+// Add text field for user input of liqRat (Ж/Т)
         TextField liqRatTextField = new TextField();
+        liqRatTextField.setPromptText("Введите Ж/Т:"); // Hint for the input field
 
-
-        // Add headers
+// Add headers
         grid.add(liquidHeader, 0, 0);
         grid.add(solidHeader, 2, 0);
 
-        // Add liquid result labels to the first column
+// Add liquid result labels to the first column
         grid.add(liquidQResultLabel, 0, 1);
         grid.add(liquidQResultValue, 1, 1);
         grid.add(liquidH2oResultLabel, 0, 2);
@@ -740,7 +742,7 @@ public class App extends Application {
         grid.add(liquidCaso4ResultLabel, 0, 5);
         grid.add(liquidCaso4ResultValue, 1, 5);
 
-        // Add solid result labels to the second column
+// Add solid result labels to the second column
         grid.add(solidQResultLabel, 2, 1);
         grid.add(solidQResultValue, 3, 1);
         grid.add(solidKclResultLabel, 2, 2);
@@ -750,11 +752,10 @@ public class App extends Application {
         grid.add(wasteResultLabel, 2, 4);
         grid.add(wasteResultValue, 3, 4);
 
-        // Add input field for liqRat (Ж/Т)
-        grid.add(liqRatLabel, 0, 6);
-        grid.add(liqRatTextField, 1, 6);
+// Add input field for liqRat (Ж/Т)
+        grid.add(liqRatTextField, 0, 6);
 
-        // Add calculate button spanning both columns
+// Add calculate button spanning both columns
         grid.add(calculateButton, 0, 7, 2, 1);
 
         calculateButton.setOnAction(event -> {
@@ -804,11 +805,13 @@ public class App extends Application {
     }
 
     private GridPane createSushkaSection(CentrifugeSolid centrifugeSolid, Sushka sushka) {
-        GridPane grid = createAlignedGridPane(2);
+        GridPane grid = createAlignedGridPane(8);
+        grid.setHgap(5); // Horizontal spacing
+        grid.setVgap(5); // Vertical spacing
+        grid.setPadding(new Insets(5));
 
 
-
-        Button calculateButton = new Button("Расчитать");
+        Button calculateButton = new Button("Рассчитать результат");
         Label solidQResultLabel = new Label("Q, т/ч:");
         Label solidKclResultLabel = new Label("KCl, т/ч:");
         Label solidNaclResultLabel = new Label("NaCl, т/ч:");
@@ -822,16 +825,16 @@ public class App extends Application {
 
 
 
-        grid.add(calculateButton, 0, 0, 2, 1);
-        grid.add(solidQResultLabel, 0, 1);
-        grid.add(solidQResultValue, 1, 1);
-        grid.add(solidKclResultLabel, 0, 2);
-        grid.add(solidKclResultValue, 1, 2);
-        grid.add(solidNaclResultLabel, 0, 3);
-        grid.add(solidNaclResultValue, 1, 3);
-        grid.add(wasteResultLabel, 0, 4);
-        grid.add(wasteResultValue, 1, 4);
-        grid.addRow(5, h2oResultLabel, h2oResultValue);
+        grid.add(calculateButton, 0, 5, 2, 1);
+        grid.add(solidQResultLabel, 0, 0);
+        grid.add(solidQResultValue, 1, 0);
+        grid.add(solidKclResultLabel, 0, 1);
+        grid.add(solidKclResultValue, 1, 1);
+        grid.add(solidNaclResultLabel, 0, 2);
+        grid.add(solidNaclResultValue, 1, 2);
+        grid.add(wasteResultLabel, 0, 3);
+        grid.add(wasteResultValue, 1, 3);
+        grid.addRow(4, h2oResultLabel, h2oResultValue);
 
         calculateButton.setOnAction(event -> {
             try {
