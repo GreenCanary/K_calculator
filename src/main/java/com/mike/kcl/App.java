@@ -40,8 +40,7 @@ public class App extends Application {
         layout.getChildren().addAll(
                 createSection("Входные данные", createCombinedSection(liquid,solidMaterial, liquidMaterial)),
                 createSection("Выщелачивание", createVishelachivanieSection(liquid, liquidMaterial, solidMaterial, vishelachivanie)),
-                createSection("Пески гидроциклона", createHydrocycloneSolidSection(vishelachivanie, hydrocycloneSolid)),
-                createSection("Слив гидроциклона", createHydrocycloneLiquidSection(vishelachivanie, hydrocycloneSolid, hydrocycloneLiquid)),
+                createSection("Гидроциклон", createHydrocycloneSection(vishelachivanie, hydrocycloneSolid, hydrocycloneLiquid)),
                 createSection("Кек центрифуги", createCentrifugeSolidSection(hydrocycloneSolid, centrifugeSolid)),
                 createSection("Фугат центрифуги", createCentrifugeLiquidSection(hydrocycloneSolid, centrifugeSolid, centrifugeLiquid)),
                 createSection("Сушка и получение готового продукта", createSushkaSection(centrifugeSolid, sushka))
@@ -365,258 +364,247 @@ public class App extends Application {
         return grid;
     }
 
-    private GridPane createHydrocycloneSolidSection(Vishelachivanie vishelachivanie, HydrocycloneSolid hydrocycloneSolid) {
-        GridPane grid = createAlignedGridPane(4);
+    private GridPane createHydrocycloneSection(Vishelachivanie vishelachivanie, HydrocycloneSolid hydrocycloneSolid, HydrocycloneLiquid hydrocycloneLiquid) {
+        GridPane grid = createAlignedGridPane(8);
 
-        grid.setVgap(5); // Set vertical gap to 5 pixels (default is usually larger)
+        grid.setVgap(5); // Set vertical gap to 5 pixels
         grid.setHgap(5);
 
-        Button calculateButton = new Button("Расчитать пески гидроциклона");
-        Label liquidHeader = new Label("Жидкость");
-        Label solidHeader = new Label("Твёрдое");
+        Button calculateButton = new Button("Рассчитать работу гидроциклона");
 
-        // Liquid result labels
-        Label liquidQResultLabel = new Label("Q, т/ч:");
-        Label liquidH2oResultLabel = new Label("H2O, т/ч:");
-        Label liquidKclResultLabel = new Label("KCl, т/ч:");
-        Label liquidNaclResultLabel = new Label("NaCl, т/ч:");
-        Label liquidCaso4ResultLabel = new Label("CaSO4, т/ч:");
-        Label liquidQResultValue = new Label();
-        Label liquidH2oResultValue = new Label();
-        Label liquidKclResultValue = new Label();
-        Label liquidNaclResultValue = new Label();
-        Label liquidCaso4ResultValue = new Label();
+// Headers for each section
+        Label solidHeader = new Label("Пески гидроциклона");
+        Label liquidHeader = new Label("Слив гидроциклона");
 
-        // Solid result labels
-        Label solidQResultLabel = new Label("Q, т/ч:");
-        Label solidKclResultLabel = new Label("KCl, т/ч:");
-        Label solidNaclResultLabel = new Label("NaCl, т/ч:");
-        Label wasteResultLabel = new Label("Отход, т/ч:");
-        Label solidQResultValue = new Label();
-        Label solidKclResultValue = new Label();
-        Label solidNaclResultValue = new Label();
-        Label wasteResultValue = new Label();
+// --------------------- Solid Section ---------------------
+        Label solidLiquidHeader = new Label("Жидкость");
+        Label solidSolidHeader = new Label("Твёрдое");
 
+// Liquid result labels for Solid Section
+        Label solidLiquidQResultLabel = new Label("Q, т/ч:");
+        Label solidLiquidH2oResultLabel = new Label("H2O, т/ч:");
+        Label solidLiquidKclResultLabel = new Label("KCl, т/ч:");
+        Label solidLiquidNaclResultLabel = new Label("NaCl, т/ч:");
+        Label solidLiquidCaso4ResultLabel = new Label("CaSO4, т/ч:");
+        Label solidLiquidQResultValue = new Label();
+        Label solidLiquidH2oResultValue = new Label();
+        Label solidLiquidKclResultValue = new Label();
+        Label solidLiquidNaclResultValue = new Label();
+        Label solidLiquidCaso4ResultValue = new Label();
 
-        // Add text field for user input of liqRat (Ж/Т)
-        Label liqRatLabel = new Label("Введите Ж/Т:");
+// Solid result labels for Solid Section
+        Label solidSolidQResultLabel = new Label("Q, т/ч:");
+        Label solidSolidKclResultLabel = new Label("KCl, т/ч:");
+        Label solidSolidNaclResultLabel = new Label("NaCl, т/ч:");
+        Label solidWasteResultLabel = new Label("Отход, т/ч:");
+        Label solidSolidQResultValue = new Label();
+        Label solidSolidKclResultValue = new Label();
+        Label solidSolidNaclResultValue = new Label();
+        Label solidWasteResultValue = new Label();
+
+// --------------------- Liquid Section ---------------------
+        Label liquidLiquidHeader = new Label("Жидкость");
+        Label liquidSolidHeader = new Label("Твёрдое");
+
+// Liquid result labels for Liquid Section
+        Label liquidLiquidQResultLabel = new Label("Q, т/ч:");
+        Label liquidLiquidH2oResultLabel = new Label("H2O, т/ч:");
+        Label liquidLiquidKclResultLabel = new Label("KCl, т/ч:");
+        Label liquidLiquidNaclResultLabel = new Label("NaCl, т/ч:");
+        Label liquidLiquidCaso4ResultLabel = new Label("CaSO4, т/ч:");
+        Label liquidLiquidQResultValue = new Label();
+        Label liquidLiquidH2oResultValue = new Label();
+        Label liquidLiquidKclResultValue = new Label();
+        Label liquidLiquidNaclResultValue = new Label();
+        Label liquidLiquidCaso4ResultValue = new Label();
+
+// Solid result labels for Liquid Section
+        Label liquidSolidQResultLabel = new Label("Q, т/ч:");
+        Label liquidSolidKclResultLabel = new Label("KCl, т/ч:");
+        Label liquidSolidNaclResultLabel = new Label("NaCl, т/ч:");
+        Label liquidWasteResultLabel = new Label("Отход, т/ч:");
+        Label liquidSolidQResultValue = new Label();
+        Label liquidSolidKclResultValue = new Label();
+        Label liquidSolidNaclResultValue = new Label();
+        Label liquidWasteResultValue = new Label();
+
+// Input fields for Solid Section with hints (placeholder text)
         TextField liqRatTextField = new TextField();
+        liqRatTextField.setPromptText("Введите Ж/Т");
 
-        Label solQuartRatioLabel = new Label("Твердые менее 0,25мм, %:");
         TextField solQuartRatioTextField = new TextField();
+        solQuartRatioTextField.setPromptText("Твердые менее 0,25мм, %");
+
+// --------------------- Adding UI Elements ---------------------
+// Solid Section
+        grid.add(solidHeader, 0, 0, 4, 1);
+        grid.add(solidLiquidHeader, 0, 1);
+        grid.add(solidSolidHeader, 2, 1);
+
+// Solid Section - Liquid Results
+        grid.add(solidLiquidQResultLabel, 0, 2);
+        grid.add(solidLiquidQResultValue, 1, 2);
+        grid.add(solidLiquidH2oResultLabel, 0, 3);
+        grid.add(solidLiquidH2oResultValue, 1, 3);
+        grid.add(solidLiquidKclResultLabel, 0, 4);
+        grid.add(solidLiquidKclResultValue, 1, 4);
+        grid.add(solidLiquidNaclResultLabel, 0, 5);
+        grid.add(solidLiquidNaclResultValue, 1, 5);
+        grid.add(solidLiquidCaso4ResultLabel, 0, 6);
+        grid.add(solidLiquidCaso4ResultValue, 1, 6);
+
+// Solid Section - Solid Results
+        grid.add(solidSolidQResultLabel, 2, 2);
+        grid.add(solidSolidQResultValue, 3, 2);
+        grid.add(solidSolidKclResultLabel, 2, 3);
+        grid.add(solidSolidKclResultValue, 3, 3);
+        grid.add(solidSolidNaclResultLabel, 2, 4);
+        grid.add(solidSolidNaclResultValue, 3, 4);
+        grid.add(solidWasteResultLabel, 2, 5);
+        grid.add(solidWasteResultValue, 3, 5);
 
 
-        // Add headers
-        grid.add(liquidHeader, 0, 0);
-        grid.add(solidHeader, 2, 0);
+// Liquid Section
+        grid.add(liquidHeader, 0, 17, 4, 1);
+        grid.add(liquidLiquidHeader, 0, 18);
+        grid.add(liquidSolidHeader, 2, 18);
 
-        // Add liquid result labels to the first column
-        grid.add(liquidQResultLabel, 0, 1);
-        grid.add(liquidQResultValue, 1, 1);
-        grid.add(liquidH2oResultLabel, 0, 2);
-        grid.add(liquidH2oResultValue, 1, 2);
-        grid.add(liquidKclResultLabel, 0, 3);
-        grid.add(liquidKclResultValue, 1, 3);
-        grid.add(liquidNaclResultLabel, 0, 4);
-        grid.add(liquidNaclResultValue, 1, 4);
-        grid.add(liquidCaso4ResultLabel, 0, 5);
-        grid.add(liquidCaso4ResultValue, 1, 5);
+// Liquid Section - Liquid Results
+        grid.add(liquidLiquidQResultLabel, 0, 19);
+        grid.add(liquidLiquidQResultValue, 1, 19);
+        grid.add(liquidLiquidH2oResultLabel, 0, 20);
+        grid.add(liquidLiquidH2oResultValue, 1, 20);
+        grid.add(liquidLiquidKclResultLabel, 0, 21);
+        grid.add(liquidLiquidKclResultValue, 1, 21);
+        grid.add(liquidLiquidNaclResultLabel, 0, 22);
+        grid.add(liquidLiquidNaclResultValue, 1, 22);
+        grid.add(liquidLiquidCaso4ResultLabel, 0, 23);
+        grid.add(liquidLiquidCaso4ResultValue, 1, 23);
 
-        // Add solid result labels to the second column
-        grid.add(solidQResultLabel, 2, 1);
-        grid.add(solidQResultValue, 3, 1);
-        grid.add(solidKclResultLabel, 2, 2);
-        grid.add(solidKclResultValue, 3, 2);
-        grid.add(solidNaclResultLabel, 2, 3);
-        grid.add(solidNaclResultValue, 3, 3);
-        grid.add(wasteResultLabel, 2, 4);
-        grid.add(wasteResultValue, 3, 4);
+// Liquid Section - Solid Results
+        grid.add(liquidSolidQResultLabel, 2, 19);
+        grid.add(liquidSolidQResultValue, 3, 19);
+        grid.add(liquidSolidKclResultLabel, 2, 20);
+        grid.add(liquidSolidKclResultValue, 3, 20);
+        grid.add(liquidSolidNaclResultLabel, 2, 21);
+        grid.add(liquidSolidNaclResultValue, 3, 21);
+        grid.add(liquidWasteResultLabel, 2, 22);
+        grid.add(liquidWasteResultValue, 3, 22);
 
-        // Add input field for liqRat (Ж/Т)
-        grid.add(liqRatLabel, 0, 6);
-        grid.add(liqRatTextField, 1, 6);
+        grid.add(liqRatTextField, 0, 24);
+        grid.add(solQuartRatioTextField, 0, 25);
+// Single Calculate Button
+        grid.add(calculateButton, 0, 26, 2, 1);
 
-        grid.add(solQuartRatioLabel, 0, 7);
-        grid.add(solQuartRatioTextField, 1, 7);
 
-        // Add calculate button spanning both columns
-        grid.add(calculateButton, 0, 8, 2, 1);
-
+        // --------------------- Event Handlers ---------------------
         calculateButton.setOnAction(event -> {
-            try {
-                // Get the value of liqRat from the text field
-                BigDecimal LiqSolRat = new BigDecimal(liqRatTextField.getText());
-                BigDecimal SolQuartRatio = new BigDecimal(solQuartRatioTextField.getText()).divide(BigDecimal.valueOf(100));
-                hydrocycloneSolid.setSolQuartRatio(SolQuartRatio);
-                hydrocycloneSolid.setLiqSolRat(LiqSolRat);
-
-                BigDecimal solidQ = BigDecimal.ONE.subtract(SolQuartRatio).multiply(vishelachivanie.getS_Q());
-                BigDecimal liquidQ = solidQ.multiply(LiqSolRat);
-
-                // Calculation logic here (use liqRat in the formulas)
-                BigDecimal LiquidH2OAmount = liquidQ.divide(vishelachivanie.getL_Q(), RoundingMode.HALF_UP).multiply(vishelachivanie.getLiquidH2O());
-                BigDecimal LiquidNaclAmount = liquidQ.divide(vishelachivanie.getL_Q(), RoundingMode.HALF_UP).multiply(vishelachivanie.getLiquidNaCl());
-                BigDecimal LiquidCaso4Amount = liquidQ.divide(vishelachivanie.getL_Q(), RoundingMode.HALF_UP).multiply(vishelachivanie.getLiquidCaSO4());
-                BigDecimal LiquidKclAmount = liquidQ.divide(vishelachivanie.getL_Q(), RoundingMode.HALF_UP).multiply(vishelachivanie.getLiquidKCl());
-
-                BigDecimal waste = BigDecimal.ONE.subtract(SolQuartRatio).multiply(vishelachivanie.getSolidWaste());
-                BigDecimal SolidKclAmount = BigDecimal.ONE.subtract(SolQuartRatio).multiply(vishelachivanie.getSolidKCl());
-                BigDecimal SolidNaclAmount = BigDecimal.ONE.subtract(SolQuartRatio).multiply(vishelachivanie.getSolidNaCl());
-                BigDecimal SolidCaso4Amount = BigDecimal.ONE.subtract(SolQuartRatio).multiply(vishelachivanie.getSolidCaSO4());
-                BigDecimal WasteCaso4 = waste.add(SolidCaso4Amount);
-
-                
-                hydrocycloneSolid.setH2O(vishelachivanie.getH2O());
-                hydrocycloneSolid.setL_Q(liquidQ);
-                hydrocycloneSolid.setLiquidH2O(LiquidH2OAmount);
-                hydrocycloneSolid.setLiquidKCl(LiquidKclAmount);
-                hydrocycloneSolid.setLiquidNaCl(LiquidNaclAmount);
-                hydrocycloneSolid.setLiquidCaSO4(LiquidCaso4Amount);
-              
-                hydrocycloneSolid.setS_Q(solidQ);
-                hydrocycloneSolid.setSolidKCl(SolidKclAmount);
-                hydrocycloneSolid.setSolidNaCl(SolidNaclAmount);
-                hydrocycloneSolid.setSolidCaSO4(SolidCaso4Amount);
-                hydrocycloneSolid.setSolidWaste(waste);
+                        try {
+                            // Get the value of liqRat from the text field
+                            BigDecimal LiqSolRat = new BigDecimal(liqRatTextField.getText());
+                            BigDecimal SolQuartRatio = new BigDecimal(solQuartRatioTextField.getText()).divide(BigDecimal.valueOf(100));
+                            hydrocycloneSolid.setSolQuartRatio(SolQuartRatio);
+                            hydrocycloneSolid.setLiqSolRat(LiqSolRat);
 
 
+                            BigDecimal ssolidQ = BigDecimal.ONE.subtract(SolQuartRatio).multiply(vishelachivanie.getS_Q());
+                            BigDecimal sliquidQ = ssolidQ.multiply(LiqSolRat);
 
-                //Update labels with calculated values
-                liquidQResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidH2oResultValue.setText(LiquidH2OAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidKclResultValue.setText(LiquidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidNaclResultValue.setText(LiquidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidCaso4ResultValue.setText(LiquidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString());
+                            // Calculation logic here (use liqRat in the formulas)
+                            BigDecimal sLiquidH2OAmount = sliquidQ.divide(vishelachivanie.getL_Q(), RoundingMode.HALF_UP).multiply(vishelachivanie.getLiquidH2O());
+                            BigDecimal sLiquidNaclAmount = sliquidQ.divide(vishelachivanie.getL_Q(), RoundingMode.HALF_UP).multiply(vishelachivanie.getLiquidNaCl());
+                            BigDecimal sLiquidCaso4Amount = sliquidQ.divide(vishelachivanie.getL_Q(), RoundingMode.HALF_UP).multiply(vishelachivanie.getLiquidCaSO4());
+                            BigDecimal sLiquidKclAmount = sliquidQ.divide(vishelachivanie.getL_Q(), RoundingMode.HALF_UP).multiply(vishelachivanie.getLiquidKCl());
 
-                solidQResultValue.setText(solidQ.setScale(2, RoundingMode.HALF_UP).toString());
-                solidKclResultValue.setText(SolidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                solidNaclResultValue.setText(SolidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                wasteResultValue.setText(WasteCaso4.setScale(2, RoundingMode.HALF_UP).toString());
-            } catch (NumberFormatException e) {
-                showError("Ошибка");
-            }
-        });
-
-        return grid;
-    }
-    private GridPane createHydrocycloneLiquidSection(Vishelachivanie vishelachivanie, HydrocycloneSolid hydrocycloneSolid, HydrocycloneLiquid hydrocycloneLiquid) {
-        GridPane grid = createAlignedGridPane(4);
-
-        grid.setVgap(5); // Set vertical gap to 5 pixels (default is usually larger)
-        grid.setHgap(5);
-
-        Button calculateButton = new Button("Расчитать слив гидроциклона");
-        Label liquidHeader = new Label("Жидкость");
-        Label solidHeader = new Label("Твёрдое");
-
-        // Liquid result labels
-        Label liquidQResultLabel = new Label("Q, т/ч:");
-        Label liquidH2oResultLabel = new Label("H2O, т/ч:");
-        Label liquidKclResultLabel = new Label("KCl, т/ч:");
-        Label liquidNaclResultLabel = new Label("NaCl, т/ч:");
-        Label liquidCaso4ResultLabel = new Label("CaSO4, т/ч:");
-        Label liquidQResultValue = new Label();
-        Label liquidH2oResultValue = new Label();
-        Label liquidKclResultValue = new Label();
-        Label liquidNaclResultValue = new Label();
-        Label liquidCaso4ResultValue = new Label();
-
-        // Solid result labels
-        Label solidQResultLabel = new Label("Q, т/ч:");
-        Label solidKclResultLabel = new Label("KCl, т/ч:");
-        Label solidNaclResultLabel = new Label("NaCl, т/ч:");
-        Label wasteResultLabel = new Label("Отход, т/ч:");
-        Label solidQResultValue = new Label();
-        Label solidKclResultValue = new Label();
-        Label solidNaclResultValue = new Label();
-        Label wasteResultValue = new Label();
+                            BigDecimal swaste = BigDecimal.ONE.subtract(SolQuartRatio).multiply(vishelachivanie.getSolidWaste());
+                            BigDecimal sSolidKclAmount = BigDecimal.ONE.subtract(SolQuartRatio).multiply(vishelachivanie.getSolidKCl());
+                            BigDecimal sSolidNaclAmount = BigDecimal.ONE.subtract(SolQuartRatio).multiply(vishelachivanie.getSolidNaCl());
+                            BigDecimal sSolidCaso4Amount = BigDecimal.ONE.subtract(SolQuartRatio).multiply(vishelachivanie.getSolidCaSO4());
+                            BigDecimal sWasteCaso4 = swaste.add(sSolidCaso4Amount);
 
 
-        // Add headers
-        grid.add(liquidHeader, 0, 0);
-        grid.add(solidHeader, 2, 0);
+                            hydrocycloneSolid.setH2O(vishelachivanie.getH2O());
+                            hydrocycloneSolid.setL_Q(sliquidQ);
+                            hydrocycloneSolid.setLiquidH2O(sLiquidH2OAmount);
+                            hydrocycloneSolid.setLiquidKCl(sLiquidKclAmount);
+                            hydrocycloneSolid.setLiquidNaCl(sLiquidNaclAmount);
+                            hydrocycloneSolid.setLiquidCaSO4(sLiquidCaso4Amount);
 
-        // Add liquid result labels to the first column
-        grid.add(liquidQResultLabel, 0, 1);
-        grid.add(liquidQResultValue, 1, 1);
-        grid.add(liquidH2oResultLabel, 0, 2);
-        grid.add(liquidH2oResultValue, 1, 2);
-        grid.add(liquidKclResultLabel, 0, 3);
-        grid.add(liquidKclResultValue, 1, 3);
-        grid.add(liquidNaclResultLabel, 0, 4);
-        grid.add(liquidNaclResultValue, 1, 4);
-        grid.add(liquidCaso4ResultLabel, 0, 5);
-        grid.add(liquidCaso4ResultValue, 1, 5);
-
-        // Add solid result labels to the second column
-        grid.add(solidQResultLabel, 2, 1);
-        grid.add(solidQResultValue, 3, 1);
-        grid.add(solidKclResultLabel, 2, 2);
-        grid.add(solidKclResultValue, 3, 2);
-        grid.add(solidNaclResultLabel, 2, 3);
-        grid.add(solidNaclResultValue, 3, 3);
-        grid.add(wasteResultLabel, 2, 4);
-        grid.add(wasteResultValue, 3, 4);
+                            hydrocycloneSolid.setS_Q(ssolidQ);
+                            hydrocycloneSolid.setSolidKCl(sSolidKclAmount);
+                            hydrocycloneSolid.setSolidNaCl(sSolidNaclAmount);
+                            hydrocycloneSolid.setSolidCaSO4(sSolidCaso4Amount);
+                            hydrocycloneSolid.setSolidWaste(swaste);
 
 
-        // Add calculate button spanning both columns
-        grid.add(calculateButton, 0, 6, 2, 1);
 
-        calculateButton.setOnAction(event -> {
-            try {
-                // Get the value of liqRat from the text field
-                BigDecimal LiqSolRat = hydrocycloneSolid.getLiqSolRat();
-                BigDecimal SolQuartRatio = hydrocycloneSolid.getSolQuartRatio();
-                hydrocycloneLiquid.setSolQuartRatio(SolQuartRatio);
-                hydrocycloneLiquid.setLiqSolRat(LiqSolRat);
+                            //Update labels with calculated values
+                            solidLiquidQResultValue.setText(sliquidQ.setScale(2, RoundingMode.HALF_UP).toString());
+                            solidLiquidH2oResultValue.setText(sLiquidH2OAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                            solidLiquidKclResultValue.setText(sLiquidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                            solidLiquidNaclResultValue.setText(sLiquidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                            solidLiquidCaso4ResultValue.setText(sLiquidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString());
 
-                BigDecimal solidQ = vishelachivanie.getS_Q().multiply(SolQuartRatio);
-                BigDecimal liquidQ = vishelachivanie.getL_Q().subtract(hydrocycloneSolid.getL_Q());
-
-
-                BigDecimal waste = vishelachivanie.getSolidWaste().multiply(SolQuartRatio);
-
-                BigDecimal SolidKclAmount = vishelachivanie.getSolidKCl().multiply(SolQuartRatio);
-                BigDecimal SolidNaclAmount = vishelachivanie.getSolidNaCl().multiply(SolQuartRatio);
-                BigDecimal SolidCaso4Amount = vishelachivanie.getSolidCaSO4().multiply(SolQuartRatio);
-                BigDecimal WasteCaso4 = waste.add(SolidCaso4Amount);
-
-                BigDecimal LiquidH2OAmount = vishelachivanie.getLiquidH2O().subtract(hydrocycloneSolid.getLiquidH2O());
-                BigDecimal LiquidNaclAmount = vishelachivanie.getLiquidNaCl().subtract(hydrocycloneSolid.getLiquidNaCl());
-                BigDecimal LiquidCaso4Amount = vishelachivanie.getLiquidCaSO4().subtract(hydrocycloneSolid.getLiquidCaSO4());
-                BigDecimal LiquidKclAmount = vishelachivanie.getLiquidKCl().subtract(hydrocycloneSolid.getLiquidKCl());
-
-                hydrocycloneLiquid.setH2O(hydrocycloneSolid.getH2O());
-                hydrocycloneLiquid.setL_Q(liquidQ);
-                hydrocycloneLiquid.setLiquidH2O(LiquidH2OAmount);
-                hydrocycloneLiquid.setLiquidKCl(LiquidKclAmount);
-                hydrocycloneLiquid.setLiquidNaCl(LiquidNaclAmount);
-                hydrocycloneLiquid.setLiquidCaSO4(LiquidCaso4Amount);
-
-                hydrocycloneLiquid.setS_Q(solidQ);
-                hydrocycloneLiquid.setSolidKCl(SolidKclAmount);
-                hydrocycloneLiquid.setSolidNaCl(SolidNaclAmount);
-                hydrocycloneLiquid.setSolidCaSO4(SolidCaso4Amount);
-                hydrocycloneLiquid.setSolidWaste(waste);
+                            solidSolidQResultValue.setText(ssolidQ.setScale(2, RoundingMode.HALF_UP).toString());
+                            solidSolidKclResultValue.setText(sSolidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                            solidSolidNaclResultValue.setText(sSolidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                            solidWasteResultValue.setText(sWasteCaso4.setScale(2, RoundingMode.HALF_UP).toString());
 
 
 
 
-                //Update labels with calculated values
-                liquidQResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidH2oResultValue.setText(LiquidH2OAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidKclResultValue.setText(LiquidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidNaclResultValue.setText(LiquidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidCaso4ResultValue.setText(LiquidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString());
 
-                solidQResultValue.setText(solidQ.setScale(2, RoundingMode.HALF_UP).toString());
-                solidKclResultValue.setText(SolidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                solidNaclResultValue.setText(SolidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                wasteResultValue.setText(WasteCaso4.setScale(2, RoundingMode.HALF_UP).toString());
-            } catch (NumberFormatException e) {
-                showError("Ошибка");
-            }
-        });
+
+                        hydrocycloneLiquid.setSolQuartRatio(SolQuartRatio);
+                        hydrocycloneLiquid.setLiqSolRat(LiqSolRat);
+
+                        BigDecimal solidQ = vishelachivanie.getS_Q().multiply(SolQuartRatio);
+                        BigDecimal liquidQ = vishelachivanie.getL_Q().subtract(hydrocycloneSolid.getL_Q());
+
+
+                        BigDecimal waste = vishelachivanie.getSolidWaste().multiply(SolQuartRatio);
+
+                        BigDecimal SolidKclAmount = vishelachivanie.getSolidKCl().multiply(SolQuartRatio);
+                        BigDecimal SolidNaclAmount = vishelachivanie.getSolidNaCl().multiply(SolQuartRatio);
+                        BigDecimal SolidCaso4Amount = vishelachivanie.getSolidCaSO4().multiply(SolQuartRatio);
+                        BigDecimal WasteCaso4 = waste.add(SolidCaso4Amount);
+
+                        BigDecimal LiquidH2OAmount = vishelachivanie.getLiquidH2O().subtract(hydrocycloneSolid.getLiquidH2O());
+                        BigDecimal LiquidNaclAmount = vishelachivanie.getLiquidNaCl().subtract(hydrocycloneSolid.getLiquidNaCl());
+                        BigDecimal LiquidCaso4Amount = vishelachivanie.getLiquidCaSO4().subtract(hydrocycloneSolid.getLiquidCaSO4());
+                        BigDecimal LiquidKclAmount = vishelachivanie.getLiquidKCl().subtract(hydrocycloneSolid.getLiquidKCl());
+
+                        hydrocycloneLiquid.setH2O(hydrocycloneSolid.getH2O());
+                        hydrocycloneLiquid.setL_Q(liquidQ);
+                        hydrocycloneLiquid.setLiquidH2O(LiquidH2OAmount);
+                        hydrocycloneLiquid.setLiquidKCl(LiquidKclAmount);
+                        hydrocycloneLiquid.setLiquidNaCl(LiquidNaclAmount);
+                        hydrocycloneLiquid.setLiquidCaSO4(LiquidCaso4Amount);
+
+                        hydrocycloneLiquid.setS_Q(solidQ);
+                        hydrocycloneLiquid.setSolidKCl(SolidKclAmount);
+                        hydrocycloneLiquid.setSolidNaCl(SolidNaclAmount);
+                        hydrocycloneLiquid.setSolidCaSO4(SolidCaso4Amount);
+                        hydrocycloneLiquid.setSolidWaste(waste);
+
+
+
+
+                        //Update labels with calculated values
+                        liquidLiquidQResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString());
+                        liquidLiquidH2oResultValue.setText(LiquidH2OAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                        liquidLiquidKclResultValue.setText(LiquidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                        liquidLiquidNaclResultValue.setText(LiquidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                        liquidLiquidCaso4ResultValue.setText(LiquidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString());
+
+                        liquidSolidQResultValue.setText(solidQ.setScale(2, RoundingMode.HALF_UP).toString());
+                        liquidSolidKclResultValue.setText(SolidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                        liquidSolidNaclResultValue.setText(SolidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                        liquidWasteResultValue.setText(WasteCaso4.setScale(2, RoundingMode.HALF_UP).toString());
+                    } catch (NumberFormatException e) {
+                        showError("Ошибка");
+                    }
+                });
 
         return grid;
     }
