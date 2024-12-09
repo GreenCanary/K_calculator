@@ -8,25 +8,54 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import javafx.geometry.Pos;
 
 public class App extends Application {
+    private static final String SAVE_FILE = "app_data.json";
 
+    private Liquid liquid;
+    private SolidMaterial solidMaterial;
+    private LiquidMaterial liquidMaterial;
+    private Vishelachivanie vishelachivanie;
+    private HydrocycloneSolid hydrocycloneSolid;
+    private HydrocycloneLiquid hydrocycloneLiquid;
+    private CentrifugeSolid centrifugeSolid;
+    private CentrifugeLiquid centrifugeLiquid;
+    private Sushka sushka;
 
     @Override
     public void start(Stage primaryStage) {
         // Create material objects
-        Liquid liquid = new Liquid();
-        SolidMaterial solidMaterial = new SolidMaterial(1000);
-        LiquidMaterial liquidMaterial = new LiquidMaterial(0.8);
-        Vishelachivanie vishelachivanie = new Vishelachivanie(solidMaterial, liquidMaterial, liquid);
-        HydrocycloneSolid hydrocycloneSolid = new HydrocycloneSolid(vishelachivanie);
-        HydrocycloneLiquid hydrocycloneLiquid = new HydrocycloneLiquid(vishelachivanie, hydrocycloneSolid);
-        CentrifugeSolid centrifugeSolid = new CentrifugeSolid(hydrocycloneSolid);
-        CentrifugeLiquid centrifugeLiquid = new CentrifugeLiquid();
-        Sushka sushka = new Sushka();
+        try {
+            AppState savedState = AutoSaveUtil.loadData(SAVE_FILE, AppState.class);
+            if (savedState != null) {
+                this.liquid = savedState.getLiquid();
+                this.solidMaterial = savedState.getSolidMaterial();
+                this.liquidMaterial = savedState.getLiquidMaterial();
+                this.vishelachivanie = savedState.getVishelachivanie();
+                this.hydrocycloneSolid = savedState.getHydrocycloneSolid();
+                this.hydrocycloneLiquid = savedState.getHydrocycloneLiquid();
+                this.centrifugeSolid = savedState.getCentrifugeSolid();
+                this.centrifugeLiquid = savedState.getCentrifugeLiquid();
+                this.sushka = savedState.getSushka();
+            } else {
+                // Initialize new data if no saved state exists
+                this.liquid = new Liquid();
+                this.solidMaterial = new SolidMaterial(1000);
+                this.liquidMaterial = new LiquidMaterial(0.8);
+                this.vishelachivanie = new Vishelachivanie(solidMaterial, liquidMaterial, liquid);
+                this.hydrocycloneSolid = new HydrocycloneSolid(vishelachivanie);
+                this.hydrocycloneLiquid = new HydrocycloneLiquid(vishelachivanie, hydrocycloneSolid);
+                this.centrifugeSolid = new CentrifugeSolid(hydrocycloneSolid);
+                this.centrifugeLiquid = new CentrifugeLiquid();
+                this.sushka = new Sushka();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();}
+
 
         // Main Layout
         VBox layout = new VBox(20); // Vertical spacing between sections
@@ -769,37 +798,16 @@ public class App extends Application {
 
 
 
-                BigDecimal LliquidQ = hydrocycloneSolid.getL_Q().subtract(centrifugeSolid.getL_Q());
-                BigDecimal LLiquidH2OAmount = hydrocycloneSolid.getLiquidH2O().subtract(centrifugeSolid.getLiquidH2O());
-                BigDecimal LLiquidNaclAmount = hydrocycloneSolid.getLiquidNaCl().subtract(centrifugeSolid.getLiquidNaCl());
-                BigDecimal LLiquidCaso4Amount = hydrocycloneSolid.getLiquidCaSO4().subtract(centrifugeSolid.getLiquidCaSO4());
-                BigDecimal LLiquidKclAmount = hydrocycloneSolid.getLiquidKCl().subtract(centrifugeSolid.getLiquidKCl());
-
-
-                centrifugeLiquid.setL_Q(LliquidQ);
-                centrifugeLiquid.setLiquidH2O(LLiquidH2OAmount);
-                centrifugeLiquid.setLiquidKCl(LLiquidKclAmount);
-                centrifugeLiquid.setLiquidNaCl(LLiquidNaclAmount);
-                centrifugeLiquid.setLiquidCaSO4(LLiquidCaso4Amount);
-
-                //Update labels with calculated values
-                liquidQResultValue.setText(LliquidQ.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidH2oResultValue.setText(LLiquidH2OAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidKclResultValue.setText(LLiquidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidNaclResultValue.setText(LLiquidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidCaso4ResultValue.setText(LLiquidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString());
-
-
                 BigDecimal LiqSolRat = new BigDecimal(liqRatTextField.getText());
                 centrifugeSolid.setLiqSolRat(LiqSolRat);
 
                 BigDecimal solidQ = hydrocycloneSolid.getS_Q();
 
                 BigDecimal liquidQ = solidQ.multiply(LiqSolRat);
-                BigDecimal LiquidH2OAmount = liquidQ.divide(hydrocycloneSolid.getL_Q(), RoundingMode.HALF_UP).multiply(hydrocycloneSolid.getLiquidH2O());
-                BigDecimal LiquidNaclAmount = liquidQ.divide(hydrocycloneSolid.getL_Q(), RoundingMode.HALF_UP).multiply(hydrocycloneSolid.getLiquidNaCl());
-                BigDecimal LiquidCaso4Amount = liquidQ.divide(hydrocycloneSolid.getL_Q(), RoundingMode.HALF_UP).multiply(hydrocycloneSolid.getLiquidCaSO4());
-                BigDecimal LiquidKclAmount = liquidQ.divide(hydrocycloneSolid.getL_Q(), RoundingMode.HALF_UP).multiply(hydrocycloneSolid.getLiquidKCl());
+                BigDecimal LiquidH2OAmount = liquidQ.divide(hydrocycloneSolid.getL_Q()).multiply(hydrocycloneSolid.getLiquidH2O());
+                BigDecimal LiquidNaclAmount = liquidQ.divide(hydrocycloneSolid.getL_Q()).multiply(hydrocycloneSolid.getLiquidNaCl());
+                BigDecimal LiquidCaso4Amount = liquidQ.divide(hydrocycloneSolid.getL_Q()).multiply(hydrocycloneSolid.getLiquidCaSO4());
+                BigDecimal LiquidKclAmount = liquidQ.divide(hydrocycloneSolid.getL_Q()).multiply(hydrocycloneSolid.getLiquidKCl());
 
                 BigDecimal waste = hydrocycloneSolid.getSolidWaste();
                 BigDecimal SolidKclAmount = hydrocycloneSolid.getSolidKCl();
@@ -825,6 +833,9 @@ public class App extends Application {
                 solidKclResultValue.setText(SolidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
                 solidNaclResultValue.setText(SolidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
                 wasteResultValue.setText(WasteCaso4.setScale(2, RoundingMode.HALF_UP).toString());
+
+
+
             } catch (NumberFormatException e) {
                 showError("Ошибка");
             }
@@ -907,6 +918,7 @@ public class App extends Application {
         grid.setHgap(5);
         grid.setVgap(5);
 
+
         // Define consistent column constraints for all columns
         for (int i = 0; i < numColumns; i++) {
             ColumnConstraints column = new ColumnConstraints();
@@ -927,6 +939,7 @@ public class App extends Application {
         Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
         alert.showAndWait();
     }
+
 
 
     public static void main(String[] args) {
