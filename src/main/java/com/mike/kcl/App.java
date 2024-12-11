@@ -69,7 +69,7 @@ public class App extends Application {
                 createSection("Выщелачивание", createVishelachivanieSection(liquid, liquidMaterial, solidMaterial, vishelachivanie)),
                 createSection("Гидроциклон", createHydrocycloneSection(vishelachivanie, hydrocycloneSolid, hydrocycloneLiquid)),
                 createSection("Центрифуга", createCentrifugeSection(hydrocycloneSolid, centrifugeSolid, centrifugeLiquid)),
-                createSection("Сушка и получение готового продукта", createSushkaSection(centrifugeSolid, sushka))
+                createSection("Сушка и получение готового продукта", createSushkaSection(liquidMaterial,solidMaterial, centrifugeSolid, sushka))
         );
 
         // ScrollPane for better navigation
@@ -108,15 +108,15 @@ public class App extends Application {
         // Section 1: Liquid Section
         Label liquidTitleLabel = new Label("Вода");
         TextField liquidQInput = new TextField();
-        Label h2oResultLabel = new Label("H2O, т/ч:");
+        Label h2oResultLabel = new Label("H2O:");
         Label h2oResultValue = new Label();
 
 // Section 2: Solid Material Section
         Label solidMaterialTitleLabel = new Label("Руда");
         TextField solidQInput = new TextField();
-        Label kclResultLabel = new Label("KCl, т/ч:");
-        Label naclResultLabel = new Label("NaCl, т/ч:");
-        Label combinedResultLabel = new Label("Отход, т/ч:");
+        Label kclResultLabel = new Label("KCl:");
+        Label naclResultLabel = new Label("NaCl:");
+        Label combinedResultLabel = new Label("Отход:");
         Label kclResultValue = new Label();
         Label naclResultValue = new Label();
         Label combinedResultValue = new Label();
@@ -124,11 +124,11 @@ public class App extends Application {
 // Section 3: Liquid Material Section
         Label liquidMaterialTitleLabel = new Label("Поток на выщелачивание");
         TextField ratioInput = new TextField();
-        Label liquidQResultLabel = new Label("Q, т/ч:");
-        Label liquidH2OResultLabel = new Label("H2O, т/ч:");
-        Label liquidKclResultLabel = new Label("KCl, т/ч:");
-        Label liquidNaclResultLabel = new Label("NaCl, т/ч:");
-        Label liquidCaso4ResultLabel = new Label("CaSO4, т/ч:");
+        Label liquidQResultLabel = new Label("Q:");
+        Label liquidH2OResultLabel = new Label("H2O:");
+        Label liquidKclResultLabel = new Label("KCl:");
+        Label liquidNaclResultLabel = new Label("NaCl:");
+        Label liquidCaso4ResultLabel = new Label("CaSO4:");
         Label liquidQResultValue = new Label();
         Label liquidH2OResultValue = new Label();
         Label liquidKclResultValue = new Label();
@@ -197,7 +197,7 @@ public class App extends Application {
                 BigDecimal liquidQ = new BigDecimal(liquidQInput.getText());
                 liquid.setH2O(liquidQ);
                 liquid.setQ(liquidQ);
-                h2oResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString());
+                h2oResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
 
                 // Solid Section
                 BigDecimal solidQ = new BigDecimal(solidQInput.getText());
@@ -209,9 +209,9 @@ public class App extends Application {
                 solidMaterial.setSolidNaCl(naclAmount);
                 solidMaterial.setSolidCaSO4(solidQ.multiply(BigDecimal.valueOf(0.036)));
                 solidMaterial.setSolidWaste(solidQ.multiply(BigDecimal.valueOf(0.002)));
-                kclResultValue.setText(kclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                naclResultValue.setText(naclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                combinedResultValue.setText(combinedAmount.setScale(2, RoundingMode.HALF_UP).toString());
+                kclResultValue.setText(kclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                naclResultValue.setText(naclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                combinedResultValue.setText(combinedAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
 
                 // Liquid Material Section
                 BigDecimal ratio = new BigDecimal(ratioInput.getText());
@@ -221,11 +221,12 @@ public class App extends Application {
                 liquidMaterial.setLiquidKCl(liquidMaterialQ.multiply(BigDecimal.valueOf(0.121)));
                 liquidMaterial.setLiquidNaCl(liquidMaterialQ.multiply(BigDecimal.valueOf(0.197)));
                 liquidMaterial.setLiquidCaSO4(liquidMaterialQ.multiply(BigDecimal.valueOf(0.004)));
-                liquidQResultValue.setText(liquidMaterialQ.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidH2OResultValue.setText(liquidMaterial.getLiquidH2O().setScale(2, RoundingMode.HALF_UP).toString());
-                liquidKclResultValue.setText(liquidMaterial.getLiquidKCl().setScale(2, RoundingMode.HALF_UP).toString());
-                liquidNaclResultValue.setText(liquidMaterial.getLiquidNaCl().setScale(2, RoundingMode.HALF_UP).toString());
-                liquidCaso4ResultValue.setText(liquidMaterial.getLiquidCaSO4().setScale(2, RoundingMode.HALF_UP).toString());
+
+                liquidQResultValue.setText(liquidMaterialQ.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                liquidH2OResultValue.setText(liquidMaterial.getLiquidH2O().setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                liquidKclResultValue.setText(liquidMaterial.getLiquidKCl().setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                liquidNaclResultValue.setText(liquidMaterial.getLiquidNaCl().setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                liquidCaso4ResultValue.setText(liquidMaterial.getLiquidCaSO4().setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
             } catch (NumberFormatException e) {
                 showError("Введите корректные значения, Ж/Т это десятичная дробь через точку.");
             }
@@ -257,11 +258,11 @@ public class App extends Application {
         solidPieChart.setTitle("Твёрдое");
 
         // Liquid result labels
-        Label liquidQResultLabel = new Label("Q, т/ч:");
-        Label liquidH2oResultLabel = new Label("H2O, т/ч:");
-        Label liquidKclResultLabel = new Label("KCl, т/ч:");
-        Label liquidNaclResultLabel = new Label("NaCl, т/ч:");
-        Label liquidCaso4ResultLabel = new Label("CaSO4, т/ч:");
+        Label liquidQResultLabel = new Label("Q:");
+        Label liquidH2oResultLabel = new Label("H2O:");
+        Label liquidKclResultLabel = new Label("KCl:");
+        Label liquidNaclResultLabel = new Label("NaCl:");
+        Label liquidCaso4ResultLabel = new Label("CaSO4:");
         Label liquidQResultValue = new Label();
         Label liquidH2oResultValue = new Label();
         Label liquidKclResultValue = new Label();
@@ -269,10 +270,10 @@ public class App extends Application {
         Label liquidCaso4ResultValue = new Label();
 
         // Solid result labels
-        Label solidQResultLabel = new Label("Q, т/ч:");
-        Label solidKclResultLabel = new Label("KCl, т/ч:");
-        Label solidNaclResultLabel = new Label("NaCl, т/ч:");
-        Label wasteResultLabel = new Label("Отход, т/ч:");
+        Label solidQResultLabel = new Label("Q:");
+        Label solidKclResultLabel = new Label("KCl:");
+        Label solidNaclResultLabel = new Label("NaCl:");
+        Label wasteResultLabel = new Label("Отход:");
         Label solidQResultValue = new Label();
         Label solidKclResultValue = new Label();
         Label solidNaclResultValue = new Label();
@@ -403,16 +404,16 @@ public class App extends Application {
                 vishelachivanie.setSolidWaste(waste);
 
                 // Update labels with calculated values
-                liquidQResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidH2oResultValue.setText(LiquidH2OAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidKclResultValue.setText(LiquidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidNaclResultValue.setText(LiquidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidCaso4ResultValue.setText(LiquidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString());
+                liquidQResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                liquidH2oResultValue.setText(LiquidH2OAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                liquidKclResultValue.setText(LiquidKclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                liquidNaclResultValue.setText(LiquidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                liquidCaso4ResultValue.setText(LiquidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
 
-                solidQResultValue.setText(solidQ.setScale(2, RoundingMode.HALF_UP).toString());
-                solidKclResultValue.setText(SolidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                solidNaclResultValue.setText(SolidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                wasteResultValue.setText(WasteCaso4.setScale(2, RoundingMode.HALF_UP).toString());
+                solidQResultValue.setText(solidQ.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                solidKclResultValue.setText(SolidKclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                solidNaclResultValue.setText(SolidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                wasteResultValue.setText(WasteCaso4.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
                 ratioResultValue.setText(ratio.setScale(2, RoundingMode.HALF_UP).toString());
 
 
@@ -458,11 +459,11 @@ public class App extends Application {
         Label solidSolidHeader = new Label("Твёрдое");
 
 // Liquid result labels for Solid Section
-        Label solidLiquidQResultLabel = new Label("Q, т/ч:");
-        Label solidLiquidH2oResultLabel = new Label("H2O, т/ч:");
-        Label solidLiquidKclResultLabel = new Label("KCl, т/ч:");
-        Label solidLiquidNaclResultLabel = new Label("NaCl, т/ч:");
-        Label solidLiquidCaso4ResultLabel = new Label("CaSO4, т/ч:");
+        Label solidLiquidQResultLabel = new Label("Q:");
+        Label solidLiquidH2oResultLabel = new Label("H2O:");
+        Label solidLiquidKclResultLabel = new Label("KCl:");
+        Label solidLiquidNaclResultLabel = new Label("NaCl:");
+        Label solidLiquidCaso4ResultLabel = new Label("CaSO4:");
         Label solidLiquidQResultValue = new Label();
         Label solidLiquidH2oResultValue = new Label();
         Label solidLiquidKclResultValue = new Label();
@@ -470,10 +471,10 @@ public class App extends Application {
         Label solidLiquidCaso4ResultValue = new Label();
 
 // Solid result labels for Solid Section
-        Label solidSolidQResultLabel = new Label("Q, т/ч:");
-        Label solidSolidKclResultLabel = new Label("KCl, т/ч:");
-        Label solidSolidNaclResultLabel = new Label("NaCl, т/ч:");
-        Label solidWasteResultLabel = new Label("Отход, т/ч:");
+        Label solidSolidQResultLabel = new Label("Q:");
+        Label solidSolidKclResultLabel = new Label("KCl:");
+        Label solidSolidNaclResultLabel = new Label("NaCl:");
+        Label solidWasteResultLabel = new Label("Отход:");
         Label solidSolidQResultValue = new Label();
         Label solidSolidKclResultValue = new Label();
         Label solidSolidNaclResultValue = new Label();
@@ -484,11 +485,11 @@ public class App extends Application {
         Label liquidSolidHeader = new Label("Твёрдое");
 
 // Liquid result labels for Liquid Section
-        Label liquidLiquidQResultLabel = new Label("Q, т/ч:");
-        Label liquidLiquidH2oResultLabel = new Label("H2O, т/ч:");
-        Label liquidLiquidKclResultLabel = new Label("KCl, т/ч:");
-        Label liquidLiquidNaclResultLabel = new Label("NaCl, т/ч:");
-        Label liquidLiquidCaso4ResultLabel = new Label("CaSO4, т/ч:");
+        Label liquidLiquidQResultLabel = new Label("Q:");
+        Label liquidLiquidH2oResultLabel = new Label("H2O:");
+        Label liquidLiquidKclResultLabel = new Label("KCl:");
+        Label liquidLiquidNaclResultLabel = new Label("NaCl:");
+        Label liquidLiquidCaso4ResultLabel = new Label("CaSO4:");
         Label liquidLiquidQResultValue = new Label();
         Label liquidLiquidH2oResultValue = new Label();
         Label liquidLiquidKclResultValue = new Label();
@@ -496,10 +497,10 @@ public class App extends Application {
         Label liquidLiquidCaso4ResultValue = new Label();
 
 // Solid result labels for Liquid Section
-        Label liquidSolidQResultLabel = new Label("Q, т/ч:");
-        Label liquidSolidKclResultLabel = new Label("KCl, т/ч:");
-        Label liquidSolidNaclResultLabel = new Label("NaCl, т/ч:");
-        Label liquidWasteResultLabel = new Label("Отход, т/ч:");
+        Label liquidSolidQResultLabel = new Label("Q:");
+        Label liquidSolidKclResultLabel = new Label("KCl:");
+        Label liquidSolidNaclResultLabel = new Label("NaCl:");
+        Label liquidWasteResultLabel = new Label("Отход:");
         Label liquidSolidQResultValue = new Label();
         Label liquidSolidKclResultValue = new Label();
         Label liquidSolidNaclResultValue = new Label();
@@ -616,16 +617,16 @@ public class App extends Application {
 
 
                             //Update labels with calculated values
-                            solidLiquidQResultValue.setText(sliquidQ.setScale(2, RoundingMode.HALF_UP).toString());
-                            solidLiquidH2oResultValue.setText(sLiquidH2OAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                            solidLiquidKclResultValue.setText(sLiquidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                            solidLiquidNaclResultValue.setText(sLiquidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                            solidLiquidCaso4ResultValue.setText(sLiquidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString());
+                            solidLiquidQResultValue.setText(sliquidQ.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                            solidLiquidH2oResultValue.setText(sLiquidH2OAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                            solidLiquidKclResultValue.setText(sLiquidKclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                            solidLiquidNaclResultValue.setText(sLiquidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                            solidLiquidCaso4ResultValue.setText(sLiquidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
 
-                            solidSolidQResultValue.setText(ssolidQ.setScale(2, RoundingMode.HALF_UP).toString());
-                            solidSolidKclResultValue.setText(sSolidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                            solidSolidNaclResultValue.setText(sSolidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                            solidWasteResultValue.setText(sWasteCaso4.setScale(2, RoundingMode.HALF_UP).toString());
+                            solidSolidQResultValue.setText(ssolidQ.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                            solidSolidKclResultValue.setText(sSolidKclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                            solidSolidNaclResultValue.setText(sSolidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                            solidWasteResultValue.setText(sWasteCaso4.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
 
 
 
@@ -668,16 +669,16 @@ public class App extends Application {
 
 
                         //Update labels with calculated values
-                        liquidLiquidQResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString());
-                        liquidLiquidH2oResultValue.setText(LiquidH2OAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                        liquidLiquidKclResultValue.setText(LiquidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                        liquidLiquidNaclResultValue.setText(LiquidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                        liquidLiquidCaso4ResultValue.setText(LiquidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString());
+                        liquidLiquidQResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                        liquidLiquidH2oResultValue.setText(LiquidH2OAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                        liquidLiquidKclResultValue.setText(LiquidKclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                        liquidLiquidNaclResultValue.setText(LiquidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                        liquidLiquidCaso4ResultValue.setText(LiquidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
 
-                        liquidSolidQResultValue.setText(solidQ.setScale(2, RoundingMode.HALF_UP).toString());
-                        liquidSolidKclResultValue.setText(SolidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                        liquidSolidNaclResultValue.setText(SolidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                        liquidWasteResultValue.setText(WasteCaso4.setScale(2, RoundingMode.HALF_UP).toString());
+                        liquidSolidQResultValue.setText(solidQ.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                        liquidSolidKclResultValue.setText(SolidKclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                        liquidSolidNaclResultValue.setText(SolidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                        liquidWasteResultValue.setText(WasteCaso4.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
                     } catch (NumberFormatException e) {
                         showError("Ошибка");
                     }
@@ -699,11 +700,11 @@ public class App extends Application {
         Label solidHeader = new Label("Твёрдое");
 
 // Liquid result labels
-        Label liquidQResultLabel = new Label("Q, т/ч:");
-        Label liquidH2oResultLabel = new Label("H2O, т/ч:");
-        Label liquidKclResultLabel = new Label("KCl, т/ч:");
-        Label liquidNaclResultLabel = new Label("NaCl, т/ч:");
-        Label liquidCaso4ResultLabel = new Label("CaSO4, т/ч:");
+        Label liquidQResultLabel = new Label("Q:");
+        Label liquidH2oResultLabel = new Label("H2O:");
+        Label liquidKclResultLabel = new Label("KCl:");
+        Label liquidNaclResultLabel = new Label("NaCl:");
+        Label liquidCaso4ResultLabel = new Label("CaSO4:");
         Label liquidQResultValue = new Label();
         Label liquidH2oResultValue = new Label();
         Label liquidKclResultValue = new Label();
@@ -711,10 +712,10 @@ public class App extends Application {
         Label liquidCaso4ResultValue = new Label();
 
 // Solid result labels
-        Label solidQResultLabel = new Label("Q, т/ч:");
-        Label solidKclResultLabel = new Label("KCl, т/ч:");
-        Label solidNaclResultLabel = new Label("NaCl, т/ч:");
-        Label wasteResultLabel = new Label("Отход, т/ч:");
+        Label solidQResultLabel = new Label("Q:");
+        Label solidKclResultLabel = new Label("KCl:");
+        Label solidNaclResultLabel = new Label("NaCl:");
+        Label wasteResultLabel = new Label("Отход:");
         Label solidQResultValue = new Label();
         Label solidKclResultValue = new Label();
         Label solidNaclResultValue = new Label();
@@ -759,11 +760,11 @@ public class App extends Application {
         Label LliquidHeader = new Label("Жидкость");
 
         // Liquid result labels
-        Label LliquidQResultLabel = new Label("Q, т/ч:");
-        Label LliquidH2oResultLabel = new Label("H2O, т/ч:");
-        Label LliquidKclResultLabel = new Label("KCl, т/ч:");
-        Label LliquidNaclResultLabel = new Label("NaCl, т/ч:");
-        Label LliquidCaso4ResultLabel = new Label("CaSO4, т/ч:");
+        Label LliquidQResultLabel = new Label("Q:");
+        Label LliquidH2oResultLabel = new Label("H2O:");
+        Label LliquidKclResultLabel = new Label("KCl:");
+        Label LliquidNaclResultLabel = new Label("NaCl:");
+        Label LliquidCaso4ResultLabel = new Label("CaSO4:");
         Label LliquidQResultValue = new Label();
         Label LliquidH2oResultValue = new Label();
         Label LliquidKclResultValue = new Label();
@@ -804,16 +805,30 @@ public class App extends Application {
                 BigDecimal solidQ = hydrocycloneSolid.getS_Q();
 
                 BigDecimal liquidQ = solidQ.multiply(LiqSolRat);
-                BigDecimal LiquidH2OAmount = liquidQ.divide(hydrocycloneSolid.getL_Q()).multiply(hydrocycloneSolid.getLiquidH2O());
-                BigDecimal LiquidNaclAmount = liquidQ.divide(hydrocycloneSolid.getL_Q()).multiply(hydrocycloneSolid.getLiquidNaCl());
-                BigDecimal LiquidCaso4Amount = liquidQ.divide(hydrocycloneSolid.getL_Q()).multiply(hydrocycloneSolid.getLiquidCaSO4());
-                BigDecimal LiquidKclAmount = liquidQ.divide(hydrocycloneSolid.getL_Q()).multiply(hydrocycloneSolid.getLiquidKCl());
+                BigDecimal LiquidH2OAmount = liquidQ.divide(hydrocycloneSolid.getL_Q(), RoundingMode.HALF_UP).multiply(hydrocycloneSolid.getLiquidH2O());
+                BigDecimal LiquidNaclAmount = liquidQ.divide(hydrocycloneSolid.getL_Q(), RoundingMode.HALF_UP).multiply(hydrocycloneSolid.getLiquidNaCl());
+                BigDecimal LiquidCaso4Amount = liquidQ.divide(hydrocycloneSolid.getL_Q(), RoundingMode.HALF_UP).multiply(hydrocycloneSolid.getLiquidCaSO4());
+                BigDecimal LiquidKclAmount = liquidQ.divide(hydrocycloneSolid.getL_Q(), RoundingMode.HALF_UP).multiply(hydrocycloneSolid.getLiquidKCl());
 
                 BigDecimal waste = hydrocycloneSolid.getSolidWaste();
                 BigDecimal SolidKclAmount = hydrocycloneSolid.getSolidKCl();
                 BigDecimal SolidNaclAmount = hydrocycloneSolid.getSolidNaCl();
                 BigDecimal SolidCaso4Amount = hydrocycloneSolid.getSolidCaSO4();
                 BigDecimal WasteCaso4 = waste.add(SolidCaso4Amount);
+
+                BigDecimal  lliquidQ = hydrocycloneSolid.getL_Q().subtract(liquidQ);
+                BigDecimal lLiquidH2OAmount = hydrocycloneSolid.getLiquidH2O().subtract(LiquidH2OAmount);
+                BigDecimal lLiquidNaclAmount = hydrocycloneSolid.getLiquidNaCl().subtract(LiquidNaclAmount);
+                BigDecimal lLiquidCaso4Amount = hydrocycloneSolid.getLiquidCaSO4().subtract(LiquidCaso4Amount);
+                BigDecimal lLiquidKclAmount = hydrocycloneSolid.getLiquidKCl().subtract(LiquidKclAmount);
+
+
+                centrifugeLiquid.setL_Q(lliquidQ);
+                centrifugeLiquid.setLiquidH2O(lLiquidH2OAmount);
+                centrifugeLiquid.setLiquidKCl(lLiquidKclAmount);
+                centrifugeLiquid.setLiquidNaCl(lLiquidNaclAmount);
+                centrifugeLiquid.setLiquidCaSO4(lLiquidCaso4Amount);
+
 
                 centrifugeSolid.setLiqSolRat(LiqSolRat);
                 centrifugeSolid.setL_Q(liquidQ);
@@ -822,17 +837,31 @@ public class App extends Application {
                 centrifugeSolid.setLiquidNaCl(LiquidNaclAmount);
                 centrifugeSolid.setLiquidCaSO4(LiquidCaso4Amount);
 
-                //Update labels with calculated values
-                liquidQResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidH2oResultValue.setText(LiquidH2OAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidKclResultValue.setText(LiquidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidNaclResultValue.setText(LiquidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                liquidCaso4ResultValue.setText(LiquidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString());
 
-                solidQResultValue.setText(solidQ.setScale(2, RoundingMode.HALF_UP).toString());
-                solidKclResultValue.setText(SolidKclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                solidNaclResultValue.setText(SolidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString());
-                wasteResultValue.setText(WasteCaso4.setScale(2, RoundingMode.HALF_UP).toString());
+                centrifugeSolid.setS_Q(solidQ);
+                centrifugeSolid.setSolidKCl(SolidKclAmount);
+                centrifugeSolid.setSolidNaCl(SolidNaclAmount);
+                centrifugeSolid.setSolidCaSO4(SolidCaso4Amount);
+                centrifugeSolid.setSolidWaste(waste);
+
+                liquidQResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+                liquidH2oResultValue.setText(LiquidH2OAmount.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+                liquidNaclResultValue.setText(LiquidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+                liquidKclResultValue.setText(LiquidKclAmount.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+                liquidCaso4ResultValue.setText(LiquidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+
+
+                LliquidQResultValue.setText(lliquidQ.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+                LliquidH2oResultValue.setText(lLiquidH2OAmount.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+                LliquidKclResultValue.setText(lLiquidKclAmount.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");      //Update labels with calculated values
+                LliquidNaclResultValue.setText(lLiquidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+                LliquidCaso4ResultValue.setText(lLiquidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+
+
+                solidQResultValue.setText(solidQ.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+                solidKclResultValue.setText(SolidKclAmount.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+                solidNaclResultValue.setText(SolidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+                wasteResultValue.setText(WasteCaso4.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
 
 
 
@@ -845,28 +874,30 @@ public class App extends Application {
     }
 
 
-    private GridPane createSushkaSection(CentrifugeSolid centrifugeSolid, Sushka sushka) {
+    private GridPane createSushkaSection(LiquidMaterial liquidMaterial, SolidMaterial solidMaterial, CentrifugeSolid centrifugeSolid, Sushka sushka) {
         GridPane grid = createAlignedGridPane(8);
         grid.setHgap(5); // Horizontal spacing
         grid.setVgap(5); // Vertical spacing
         grid.setPadding(new Insets(5));
 
 
-        Button calculateButton = new Button("Рассчитать результат");
-        Label solidQResultLabel = new Label("Q, т/ч:");
-        Label solidKclResultLabel = new Label("KCl, т/ч:");
-        Label solidNaclResultLabel = new Label("NaCl, т/ч:");
-        Label wasteResultLabel = new Label("Отход, т/ч:");
-        Label h2oResultLabel = new Label("H20, т/ч:");
+        Button calculateButton = new Button("Рассчитать готовый продукт");
+        Label solidQResultLabel = new Label("Q:");
+        Label solidKclResultLabel = new Label("KCl:");
+        Label solidNaclResultLabel = new Label("NaCl:");
+        Label wasteResultLabel = new Label("Отход:");
+        Label h2oResultLabel = new Label("H20:");
+        Label ExtractionResultLabel = new Label("Извлечение узла:");
         Label solidQResultValue = new Label();
         Label solidKclResultValue = new Label();
         Label solidNaclResultValue = new Label();
         Label wasteResultValue = new Label();
         Label h2oResultValue = new Label();
+        Label ExtractionResultValue = new Label();
 
 
 
-        grid.add(calculateButton, 0, 5, 2, 1);
+        grid.add(calculateButton, 0, 6, 2, 1);
         grid.add(solidQResultLabel, 0, 0);
         grid.add(solidQResultValue, 1, 0);
         grid.add(solidKclResultLabel, 0, 1);
@@ -876,7 +907,8 @@ public class App extends Application {
         grid.add(wasteResultLabel, 0, 3);
         grid.add(wasteResultValue, 1, 3);
         grid.addRow(4, h2oResultLabel, h2oResultValue);
-
+        grid.add(ExtractionResultLabel, 0, 5);
+        grid.add(ExtractionResultValue, 1, 5);
         calculateButton.setOnAction(event -> {
             try {
                 BigDecimal gp = BigDecimal.valueOf(0.005);
@@ -885,9 +917,12 @@ public class App extends Application {
                 BigDecimal caso4 = centrifugeSolid.getSolidCaSO4().add(centrifugeSolid.getLiquidCaSO4());
                 BigDecimal waste = centrifugeSolid.getSolidWaste();
                 BigDecimal Sum = kcl.add(nacl).add(caso4).add(waste);
-                BigDecimal h2o1 = BigDecimal.ONE.subtract(gp).multiply(gp);
-                BigDecimal h2o = Sum.divide(h2o1, RoundingMode.HALF_UP);
+                BigDecimal h2o1 = BigDecimal.ONE.subtract(gp);
+                BigDecimal h2o2 = Sum.divide(h2o1, RoundingMode.HALF_UP);;
+                BigDecimal h2o = h2o2.multiply(gp);
                 BigDecimal Q = Sum.add(h2o);
+                BigDecimal ExtractionSum = liquidMaterial.getLiquidKCl().add(solidMaterial.getSolidKCl());
+                BigDecimal Extration = kcl.divide(ExtractionSum, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
 
 
 
@@ -898,11 +933,12 @@ public class App extends Application {
                 sushka.setWaste(waste);
                 sushka.setH2O(h2o);
 
-                solidQResultValue.setText(Q.setScale(2, RoundingMode.HALF_UP).toString());
-                solidKclResultValue.setText(kcl.setScale(2, RoundingMode.HALF_UP).toString());
-                solidNaclResultValue.setText(nacl.setScale(2, RoundingMode.HALF_UP).toString());
-                wasteResultValue.setText(waste.add(caso4).setScale(2, RoundingMode.HALF_UP).toString());
-                h2oResultValue.setText(h2o.setScale(2, RoundingMode.HALF_UP).toString());
+                ExtractionResultValue.setText(Extration.setScale(2, RoundingMode.HALF_UP).toString()+ " %");
+                solidQResultValue.setText(Q.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+                solidKclResultValue.setText(kcl.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+                solidNaclResultValue.setText(nacl.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+                wasteResultValue.setText(waste.add(caso4).setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+                h2oResultValue.setText(h2o.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
 
             } catch (NumberFormatException e) {
                 showError("Введите корректное значение для влажности готового продукта, например 0.5");
