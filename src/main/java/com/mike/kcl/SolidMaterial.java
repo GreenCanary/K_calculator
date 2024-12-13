@@ -56,7 +56,7 @@ public class SolidMaterial {
         public BigDecimal getS_Q() {
                 return s_Q;
         }
-
+        //
         public void setS_Q(BigDecimal s_Q) {
                 this.s_Q = s_Q != null ? s_Q : BigDecimal.ZERO;
         }
