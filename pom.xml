@@ -11,54 +11,97 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-<junit.version>5.10.0</junit.version>  </properties>
-
+    <junit.version>5.10.0</junit.version>
+    <java.version>23</java.version> <!-- Add Java 23 version here -->
+  </properties>
 
   <dependencies>
+      <!-- Jackson Databind -->
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.15.2</version> <!-- Use the latest stable version -->
+      </dependency>
+
+      <!-- Jackson Core (for basic JSON processing) -->
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>2.15.2</version>
+      </dependency>
+
+      <!-- Jackson Annotations (for JSON annotations like @JsonProperty) -->
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <version>2.15.2</version>
+      </dependency>
+
+    <!-- JavaFX Base -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-base</artifactId>
-      <version>21</version>
+      <version>23</version>
     </dependency>
+
+    <!-- JavaFX Controls -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
-      <version>21</version>
+      <version>23</version>
     </dependency>
+
+    <!-- JavaFX FXML -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
-      <version>21</version>
+      <version>23</version>
     </dependency>
-<dependency>
+
+    <!-- ControlsFX -->
+    <dependency>
       <groupId>org.controlsfx</groupId>
       <artifactId>controlsfx</artifactId>
       <version>11.1.2</version>
     </dependency>
-<dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>  </dependencies>
+
+
+  </dependencies>
+  <repositories>
+    <repository>
+      <id>openjfx-repo</id>
+      <url>https://maven.java.net/content/repositories/openjfx/</url>
+    </repository>
+  </repositories>
 
   <build>
     <plugins>
+      <!-- JAR plugin to set main class -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.0</version>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Main-Class>com.mike.kcl.Application</Main-Class> <!-- Replace with your main class -->
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+      <!-- Compiler plugin to use Java 23 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.11.0</version>
         <configuration>
-          <source>21</source>
-          <target>21</target>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+
         </configuration>
       </plugin>
+
+      <!-- JavaFX Maven plugin -->
       <plugin>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
@@ -68,7 +111,7 @@
             <!-- Default configuration for running with: mvn clean javafx:run -->
             <id>default-cli</id>
             <configuration>
-              <mainClass>com.mike.kcl/com.mike.kcl.Application</mainClass>
+              <mainClass>com.mike.kcl.Application</mainClass> <!-- Fully qualified main class -->
               <launcher>app</launcher>
               <jlinkZipName>app</jlinkZipName>
               <jlinkImageName>app</jlinkImageName>
@@ -81,4 +124,5 @@
       </plugin>
     </plugins>
   </build>
+
 </project>

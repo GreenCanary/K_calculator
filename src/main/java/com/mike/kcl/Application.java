@@ -1,6 +1,5 @@
 package com.mike.kcl;
 
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
@@ -14,8 +13,7 @@ import java.math.RoundingMode;
 import javafx.geometry.Pos;
 
 
-public class App extends Application {
-    private static final String SAVE_FILE = "app_data.json";
+public class Application extends javafx.application.Application {
 
     private Liquid liquid;
     private SolidMaterial solidMaterial;
@@ -27,27 +25,11 @@ public class App extends Application {
     private CentrifugeLiquid centrifugeLiquid;
     private Sushka sushka;
 
-    private boolean dataModified = false;
-
 
     @Override
     public void start(Stage primaryStage) {
         // Create material objects
-        try {
-            AppState savedState = AutoSaveUtil.loadData(SAVE_FILE, AppState.class);
-            if (savedState != null) {
-                // Check each object in the savedState and assign it, or create a new one if null
-                this.liquid = (savedState.getLiquid() != null) ? savedState.getLiquid() : new Liquid();
-                this.solidMaterial = (savedState.getSolidMaterial() != null) ? savedState.getSolidMaterial() : new SolidMaterial(1000);
-                this.liquidMaterial = (savedState.getLiquidMaterial() != null) ? savedState.getLiquidMaterial() : new LiquidMaterial(0.8);
-                this.vishelachivanie = (savedState.getVishelachivanie() != null) ? savedState.getVishelachivanie() : new Vishelachivanie(solidMaterial, liquidMaterial, liquid);
-                this.hydrocycloneSolid = (savedState.getHydrocycloneSolid() != null) ? savedState.getHydrocycloneSolid() : new HydrocycloneSolid(vishelachivanie);
-                this.hydrocycloneLiquid = (savedState.getHydrocycloneLiquid() != null) ? savedState.getHydrocycloneLiquid() : new HydrocycloneLiquid(vishelachivanie, hydrocycloneSolid);
-                this.centrifugeSolid = (savedState.getCentrifugeSolid() != null) ? savedState.getCentrifugeSolid() : new CentrifugeSolid(hydrocycloneSolid);
-                this.centrifugeLiquid = (savedState.getCentrifugeLiquid() != null) ? savedState.getCentrifugeLiquid() : new CentrifugeLiquid();
-                this.sushka = (savedState.getSushka() != null) ? savedState.getSushka() : new Sushka();
-            } else {
-                // Initialize new data if no saved state exists
+
                 this.liquid = new Liquid();
                 this.solidMaterial = new SolidMaterial(1000);
                 this.liquidMaterial = new LiquidMaterial(0.8);
@@ -57,11 +39,6 @@ public class App extends Application {
                 this.centrifugeSolid = new CentrifugeSolid(hydrocycloneSolid);
                 this.centrifugeLiquid = new CentrifugeLiquid();
                 this.sushka = new Sushka();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
 
 
         // Main Layout
@@ -92,25 +69,6 @@ public class App extends Application {
         // Responsiveness: Adjust VBox size to window size
         layout.prefWidthProperty().bind(scene.widthProperty().multiply(0.95)); // Dynamic width
         layout.prefHeightProperty().bind(scene.heightProperty().multiply(0.95)); // Dynamic height
-
-        primaryStage.setOnCloseRequest(event -> {
-            if (dataModified) {
-                try {
-                    AppState currentState = new AppState(
-                            liquid, solidMaterial, liquidMaterial, vishelachivanie,
-                            hydrocycloneSolid, hydrocycloneLiquid, centrifugeSolid,
-                            centrifugeLiquid, sushka
-                    );
-                    AutoSaveUtil.saveData(currentState, SAVE_FILE);
-                    System.out.println("Data saved successfully.");
-                    dataModified = false;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                System.out.println("No changes detected. Skipping save.");
-            }
-        });
 
 
         primaryStage.show();
@@ -254,7 +212,6 @@ public class App extends Application {
                 liquidKclResultValue.setText(liquidMaterial.getLiquidKCl().setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
                 liquidNaclResultValue.setText(liquidMaterial.getLiquidNaCl().setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
                 liquidCaso4ResultValue.setText(liquidMaterial.getLiquidCaSO4().setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-                dataModified = true;
             } catch (NumberFormatException e) {
                 showError("Введите корректные значения, Ж/Т это десятичная дробь через точку.");
             }
@@ -462,7 +419,6 @@ public class App extends Application {
                         new PieChart.Data("KCl, " + formatPercent(SolidKclPercent), SolidKclPercent.doubleValue()),
                         new PieChart.Data("NaCl, " + formatPercent(SolidNaclPercent), SolidNaclPercent.doubleValue())
                 );
-                dataModified = true;
 
             } catch (NumberFormatException e) {
                 showError("Ошибка");
@@ -755,8 +711,7 @@ public class App extends Application {
                                     new PieChart.Data("KCl, " + formatPercent(SolidKclPercent), SolidKclPercent.doubleValue()),
                                     new PieChart.Data("NaCl, " + formatPercent(SolidNaclPercent), SolidNaclPercent.doubleValue())
                             );
-                            dataModified = true;
-                    } catch (NumberFormatException e) {
+                        } catch (NumberFormatException e) {
                         showError("Ошибка");
                     }
                 });
@@ -985,9 +940,6 @@ public class App extends Application {
                 solidNaclResultValue.setText(SolidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
                 wasteResultValue.setText(WasteCaso4.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
 
-                dataModified = true;
-
-
 
             } catch (NumberFormatException e) {
                 showError("Ошибка");
@@ -1086,8 +1038,6 @@ public class App extends Application {
                 solidNaclResultValue.setText(nacl.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
                 wasteResultValue.setText(waste.add(caso4).setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
                 h2oResultValue.setText(h2o.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
-
-                dataModified = true;
 
             } catch (NumberFormatException e) {
                 showError("Введите корректное значение для влажности готового продукта, например 0.5");
