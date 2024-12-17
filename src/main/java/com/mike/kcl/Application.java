@@ -7,7 +7,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import javafx.geometry.Pos;
@@ -24,6 +23,12 @@ public class Application extends javafx.application.Application {
     private CentrifugeSolid centrifugeSolid;
     private CentrifugeLiquid centrifugeLiquid;
     private Sushka sushka;
+
+    private boolean combinedSectionButtonPress = false;
+    private boolean vishelachivanieButtonPress = false;
+    private boolean hydrocycloneButtonPress = false;
+    private boolean centrifugeButtonPress = false;
+    private boolean sushkaButtonPress = false;
 
 
     @Override
@@ -74,6 +79,52 @@ public class Application extends javafx.application.Application {
         primaryStage.show();
     }
 
+    private void calculateCombinedSection() {
+
+        System.out.println("Combined Section calculations performed.");
+    }
+
+    private void calculateVishelachivanieSection() {
+        // Add Vishelachivanie Section calculations and label updates here
+        System.out.println("Vishelachivanie Section calculations performed.");
+        triggerHydrocycloneCalculations();
+    }
+
+    private void calculateHydrocycloneSection() {
+        // Add Hydrocyclone Section calculations and label updates here
+        System.out.println("Hydrocyclone Section calculations performed.");
+        triggerCentrifugeCalculations();
+    }
+
+    private void calculateCentrifugeSection() {
+        // Add Centrifuge Section calculations and label updates here
+        System.out.println("Centrifuge Section calculations performed.");
+        triggerSushkaCalculations();
+    }
+
+    private void calculateSushkaSection() {
+        // Add Sushka Section calculations and label updates here
+        System.out.println("Sushka Section calculations performed.");
+    }
+
+    // Trigger next calculations if the button was pressed before
+    private void triggerHydrocycloneCalculations() {
+        if (vishelachivanieButtonPress && hydrocycloneButtonPress) {
+            calculateHydrocycloneSection();
+        }
+    }
+
+    private void triggerCentrifugeCalculations() {
+        if (hydrocycloneButtonPress && centrifugeButtonPress) {
+            calculateCentrifugeSection();
+        }
+    }
+
+    private void triggerSushkaCalculations() {
+        if (centrifugeButtonPress && sushkaButtonPress) {
+            calculateSushkaSection();
+        }
+    }
 
     private TitledPane createSection(String title, GridPane content) {
         TitledPane section = new TitledPane();
@@ -178,6 +229,7 @@ public class Application extends javafx.application.Application {
         // Event Handling
         calculateButton.setOnAction(event -> {
             try {
+                combinedSectionButtonPress = true;
                 // Liquid Section
                 BigDecimal liquidQ = new BigDecimal(liquidQInput.getText());
                 liquid.setH2O(liquidQ);
@@ -306,6 +358,7 @@ public class Application extends javafx.application.Application {
 
         calculateButton.setOnAction(event -> {
             try {
+                vishelachivanieButtonPress = true;
                 // Calculation logic here (same as your provided code)
                 BigDecimal LiquidNaClRatio = BigDecimal.valueOf(0.197 / 0.678);
                 BigDecimal LiquidCaso4Ratio = BigDecimal.valueOf(0.004 / 0.678);
@@ -583,6 +636,7 @@ public class Application extends javafx.application.Application {
         // --------------------- Event Handlers ---------------------
         calculateButton.setOnAction(event -> {
                         try {
+                            hydrocycloneButtonPress = true;
                             // Get the value of liqRat from the text field
                             BigDecimal LiqSolRat = new BigDecimal(liqRatTextField.getText());
                             BigDecimal SolQuartRatio = new BigDecimal(solQuartRatioTextField.getText()).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
@@ -876,8 +930,7 @@ public class Application extends javafx.application.Application {
             try {
                 // Get the value of liqRat from the text field
 
-
-
+                centrifugeButtonPress = true;
                 BigDecimal LiqSolRat = new BigDecimal(liqRatTextField.getText());
                 LiqSolRat = LiqSolRat.divide(BigDecimal.valueOf(100));
                 centrifugeSolid.setLiqSolRat(LiqSolRat);
@@ -1045,6 +1098,7 @@ public class Application extends javafx.application.Application {
         grid.add(finalPieChart, 0, 7, 2, 2);
         calculateButton.setOnAction(event -> {
             try {
+                sushkaButtonPress = true;
                 BigDecimal gp = BigDecimal.valueOf(0.005);
                 BigDecimal kcl = centrifugeSolid.getSolidKCl().add(centrifugeSolid.getLiquidKCl());
                 BigDecimal nacl = centrifugeSolid.getSolidNaCl().add(centrifugeSolid.getLiquidNaCl());
