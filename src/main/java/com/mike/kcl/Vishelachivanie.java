@@ -1,9 +1,13 @@
 package com.mike.kcl;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class Vishelachivanie {
+public class Vishelachivanie implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 9;
 
     // Fields for Liquid Material
     private BigDecimal liquidH2O;

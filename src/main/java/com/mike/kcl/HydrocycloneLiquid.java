@@ -1,9 +1,13 @@
 package com.mike.kcl;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class HydrocycloneLiquid {
+public class HydrocycloneLiquid implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 3;
 
     // Fields for Liquid Material
     private BigDecimal liquidH2O;

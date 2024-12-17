@@ -1,8 +1,12 @@
 package com.mike.kcl;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class SolidMaterial {
+public class SolidMaterial implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 7;
 
         private BigDecimal solidKCl = BigDecimal.ZERO;
         private BigDecimal solidNaCl = BigDecimal.ZERO;

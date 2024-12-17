@@ -1,5 +1,6 @@
 package com.mike.kcl;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
@@ -7,9 +8,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import javafx.geometry.Pos;
+import javafx.stage.WindowEvent;
 
 
 public class Application extends javafx.application.Application {
@@ -24,16 +28,11 @@ public class Application extends javafx.application.Application {
     private CentrifugeLiquid centrifugeLiquid;
     private Sushka sushka;
 
-    private boolean combinedSectionButtonPress = false;
-    private boolean vishelachivanieButtonPress = false;
-    private boolean hydrocycloneButtonPress = false;
-    private boolean centrifugeButtonPress = false;
-    private boolean sushkaButtonPress = false;
-
 
     @Override
     public void start(Stage primaryStage) {
         // Create material objects
+        loadState();
 
                 this.liquid = new Liquid();
                 this.solidMaterial = new SolidMaterial(1000);
@@ -75,56 +74,51 @@ public class Application extends javafx.application.Application {
         layout.prefWidthProperty().bind(scene.widthProperty().multiply(0.95)); // Dynamic width
         layout.prefHeightProperty().bind(scene.heightProperty().multiply(0.95)); // Dynamic height
 
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                saveState();
+            }
+        });
 
         primaryStage.show();
     }
-
-    private void calculateCombinedSection() {
-
-        System.out.println("Combined Section calculations performed.");
-    }
-
-    private void calculateVishelachivanieSection() {
-        // Add Vishelachivanie Section calculations and label updates here
-        System.out.println("Vishelachivanie Section calculations performed.");
-        triggerHydrocycloneCalculations();
-    }
-
-    private void calculateHydrocycloneSection() {
-        // Add Hydrocyclone Section calculations and label updates here
-        System.out.println("Hydrocyclone Section calculations performed.");
-        triggerCentrifugeCalculations();
-    }
-
-    private void calculateCentrifugeSection() {
-        // Add Centrifuge Section calculations and label updates here
-        System.out.println("Centrifuge Section calculations performed.");
-        triggerSushkaCalculations();
-    }
-
-    private void calculateSushkaSection() {
-        // Add Sushka Section calculations and label updates here
-        System.out.println("Sushka Section calculations performed.");
-    }
-
-    // Trigger next calculations if the button was pressed before
-    private void triggerHydrocycloneCalculations() {
-        if (vishelachivanieButtonPress && hydrocycloneButtonPress) {
-            calculateHydrocycloneSection();
+    private void saveState() {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("appState.dat"))) {
+            out.writeObject(this.liquid);
+            out.writeObject(this.solidMaterial);
+            out.writeObject(this.liquidMaterial);
+            out.writeObject(this.vishelachivanie);
+            out.writeObject(this.hydrocycloneSolid);
+            out.writeObject(this.hydrocycloneLiquid);
+            out.writeObject(this.centrifugeSolid);
+            out.writeObject(this.centrifugeLiquid);
+            out.writeObject(this.sushka);
+            System.out.println("State saved.");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    private void triggerCentrifugeCalculations() {
-        if (hydrocycloneButtonPress && centrifugeButtonPress) {
-            calculateCentrifugeSection();
+    private void loadState() {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("appState.dat"))) {
+            this.liquid = (Liquid) in.readObject();
+            this.solidMaterial = (SolidMaterial) in.readObject();
+            this.liquidMaterial = (LiquidMaterial) in.readObject();
+            this.vishelachivanie = (Vishelachivanie) in.readObject();
+            this.hydrocycloneSolid = (HydrocycloneSolid) in.readObject();
+            this.hydrocycloneLiquid = (HydrocycloneLiquid) in.readObject();
+            this.centrifugeSolid = (CentrifugeSolid) in.readObject();
+            this.centrifugeLiquid = (CentrifugeLiquid) in.readObject();
+            this.sushka = (Sushka) in.readObject();
+            System.out.println("State loaded.");
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("No previous state found, starting with new state.");
         }
     }
 
-    private void triggerSushkaCalculations() {
-        if (centrifugeButtonPress && sushkaButtonPress) {
-            calculateSushkaSection();
-        }
-    }
+
+
 
     private TitledPane createSection(String title, GridPane content) {
         TitledPane section = new TitledPane();
@@ -229,7 +223,7 @@ public class Application extends javafx.application.Application {
         // Event Handling
         calculateButton.setOnAction(event -> {
             try {
-                combinedSectionButtonPress = true;
+
                 // Liquid Section
                 BigDecimal liquidQ = new BigDecimal(liquidQInput.getText());
                 liquid.setH2O(liquidQ);
@@ -358,7 +352,7 @@ public class Application extends javafx.application.Application {
 
         calculateButton.setOnAction(event -> {
             try {
-                vishelachivanieButtonPress = true;
+
                 // Calculation logic here (same as your provided code)
                 BigDecimal LiquidNaClRatio = BigDecimal.valueOf(0.197 / 0.678);
                 BigDecimal LiquidCaso4Ratio = BigDecimal.valueOf(0.004 / 0.678);
@@ -636,7 +630,7 @@ public class Application extends javafx.application.Application {
         // --------------------- Event Handlers ---------------------
         calculateButton.setOnAction(event -> {
                         try {
-                            hydrocycloneButtonPress = true;
+
                             // Get the value of liqRat from the text field
                             BigDecimal LiqSolRat = new BigDecimal(liqRatTextField.getText());
                             BigDecimal SolQuartRatio = new BigDecimal(solQuartRatioTextField.getText()).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
@@ -930,7 +924,7 @@ public class Application extends javafx.application.Application {
             try {
                 // Get the value of liqRat from the text field
 
-                centrifugeButtonPress = true;
+
                 BigDecimal LiqSolRat = new BigDecimal(liqRatTextField.getText());
                 LiqSolRat = LiqSolRat.divide(BigDecimal.valueOf(100));
                 centrifugeSolid.setLiqSolRat(LiqSolRat);
@@ -1098,7 +1092,7 @@ public class Application extends javafx.application.Application {
         grid.add(finalPieChart, 0, 7, 2, 2);
         calculateButton.setOnAction(event -> {
             try {
-                sushkaButtonPress = true;
+
                 BigDecimal gp = BigDecimal.valueOf(0.005);
                 BigDecimal kcl = centrifugeSolid.getSolidKCl().add(centrifugeSolid.getLiquidKCl());
                 BigDecimal nacl = centrifugeSolid.getSolidNaCl().add(centrifugeSolid.getLiquidNaCl());

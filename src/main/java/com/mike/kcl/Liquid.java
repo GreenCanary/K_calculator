@@ -1,8 +1,12 @@
 package com.mike.kcl;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class Liquid {
+public class Liquid implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 5;
     private BigDecimal H2O = BigDecimal.ZERO;
     private BigDecimal KCl = BigDecimal.ZERO;
     private BigDecimal NaCl = BigDecimal.ZERO;

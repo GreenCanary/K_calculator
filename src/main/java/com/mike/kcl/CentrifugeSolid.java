@@ -1,9 +1,13 @@
 package com.mike.kcl;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class CentrifugeSolid {
+public class CentrifugeSolid implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 2;
 
     // Fields for Liquid Material
     private BigDecimal liquidH2O;

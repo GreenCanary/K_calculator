@@ -1,8 +1,12 @@
 package com.mike.kcl;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class LiquidMaterial {
+public class LiquidMaterial implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 6;
 
     private BigDecimal l_Q = BigDecimal.ZERO;
     private BigDecimal liquidH2O = BigDecimal.ZERO;
@@ -53,5 +57,13 @@ public class LiquidMaterial {
 
     public void setL_Q(BigDecimal l_Q) {
         this.l_Q = l_Q;
+    }
+
+    public BigDecimal getLiqSolRat() {
+        return liqSolRat;
+    }
+
+    public void setLiqSolRat(BigDecimal liqSolRat) {
+        this.liqSolRat = liqSolRat;
     }
 }

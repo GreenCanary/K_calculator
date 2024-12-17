@@ -1,8 +1,12 @@
 package com.mike.kcl;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class Sushka {
+public class Sushka implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 8;
 
     // Fields for Liquid Material
     private BigDecimal H2O;
