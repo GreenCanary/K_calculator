@@ -1,6 +1,7 @@
 package com.mike.kcl;
 
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
@@ -79,15 +80,8 @@ public class Application extends javafx.application.Application {
         primaryStage.show();
     }
 
-    private void calculateCombinedSection() {
-
-        System.out.println("Combined Section calculations performed.");
-    }
-
-    private void calculateVishelachivanieSection() {
-        // Add Vishelachivanie Section calculations and label updates here
-        System.out.println("Vishelachivanie Section calculations performed.");
-        triggerHydrocycloneCalculations();
+    String formatPercent(BigDecimal value) {
+        return String.format("%.2f%%", value.doubleValue());
     }
 
     private void calculateHydrocycloneSection() {
@@ -108,6 +102,8 @@ public class Application extends javafx.application.Application {
     }
 
     // Trigger next calculations if the button was pressed before
+
+
     private void triggerHydrocycloneCalculations() {
         if (vishelachivanieButtonPress && hydrocycloneButtonPress) {
             calculateHydrocycloneSection();
@@ -220,61 +216,83 @@ public class Application extends javafx.application.Application {
         grid.add(liquidCaso4ResultLabel, liquidMaterialColumn, rowIndex);
         grid.add(liquidCaso4ResultValue, liquidMaterialColumn + 1, rowIndex++);
 
-// Add Combined Button (span across all columns)
-        grid.add(calculateButton, 0, ++rowIndex, 6, 1);
-
-
-
-
-        // Event Handling
+        // Event handler for calculate button
         calculateButton.setOnAction(event -> {
-            try {
-                combinedSectionButtonPress = true;
-                // Liquid Section
-                BigDecimal liquidQ = new BigDecimal(liquidQInput.getText());
-                liquid.setH2O(liquidQ);
-                liquid.setQ(liquidQ);
-                h2oResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-
-                // Solid Section
-                BigDecimal solidQ = new BigDecimal(solidQInput.getText());
-                solidMaterial.setS_Q(solidQ);
-                BigDecimal kclAmount = solidQ.multiply(BigDecimal.valueOf(0.901));
-                BigDecimal naclAmount = solidQ.multiply(BigDecimal.valueOf(0.061));
-                BigDecimal combinedAmount = solidQ.multiply(BigDecimal.valueOf(0.036)).add(solidQ.multiply(BigDecimal.valueOf(0.002)));
-                solidMaterial.setSolidKCl(kclAmount);
-                solidMaterial.setSolidNaCl(naclAmount);
-                solidMaterial.setSolidCaSO4(solidQ.multiply(BigDecimal.valueOf(0.036)));
-                solidMaterial.setSolidWaste(solidQ.multiply(BigDecimal.valueOf(0.002)));
-                kclResultValue.setText(kclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-                naclResultValue.setText(naclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-                combinedResultValue.setText(combinedAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-
-                // Liquid Material Section
-                BigDecimal ratio = new BigDecimal(ratioInput.getText());
-                BigDecimal liquidMaterialQ = solidQ.multiply(ratio);
-                liquidMaterial.setL_Q(liquidMaterialQ);
-                liquidMaterial.setLiquidH2O(liquidMaterialQ.multiply(BigDecimal.valueOf(0.678)));
-                liquidMaterial.setLiquidKCl(liquidMaterialQ.multiply(BigDecimal.valueOf(0.121)));
-                liquidMaterial.setLiquidNaCl(liquidMaterialQ.multiply(BigDecimal.valueOf(0.197)));
-                liquidMaterial.setLiquidCaSO4(liquidMaterialQ.multiply(BigDecimal.valueOf(0.004)));
-
-                liquidQResultValue.setText(liquidMaterialQ.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-                liquidH2OResultValue.setText(liquidMaterial.getLiquidH2O().setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-                liquidKclResultValue.setText(liquidMaterial.getLiquidKCl().setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-                liquidNaclResultValue.setText(liquidMaterial.getLiquidNaCl().setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-                liquidCaso4ResultValue.setText(liquidMaterial.getLiquidCaSO4().setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-            } catch (NumberFormatException e) {
-                showError("Введите корректные значения, Ж/Т это десятичная дробь через точку.");
-            }
+            calculateCombinedSection(liquid, solidMaterial, liquidMaterial, grid);
         });
 
+        grid.add(calculateButton, 0, rowIndex); // Adding the calculate button at the end
         return grid;
     }
 
-    String formatPercent(BigDecimal value) {
-        return String.format("%.2f%%", value.doubleValue());
+    // Helper method to perform calculations and update labels
+    private void calculateCombinedSection(Liquid liquid, SolidMaterial solidMaterial, LiquidMaterial liquidMaterial, GridPane grid) {
+        try {
+            // Retrieve input fields from the grid
+            TextField liquidQInputField = (TextField) getNodeByRowColumnIndex(1, 0, grid);  // Liquid Q input
+            TextField solidQInputField = (TextField) getNodeByRowColumnIndex(1, 2, grid);   // Solid Q input
+            TextField ratioInputField = (TextField) getNodeByRowColumnIndex(1, 4, grid);    // Ratio input
+
+            // Liquid Section Calculations
+            BigDecimal liquidQ = new BigDecimal(liquidQInputField.getText());
+            liquid.setH2O(liquidQ);
+            liquid.setQ(liquidQ);
+            updateLabel(grid, 2, 1, liquidQ.setScale(2, RoundingMode.HALF_UP).toString() + " т/ч"); // Update H2O label
+
+            // Solid Section Calculations
+            BigDecimal solidQ = new BigDecimal(solidQInputField.getText());
+            solidMaterial.setS_Q(solidQ);
+            BigDecimal kclAmount = solidQ.multiply(BigDecimal.valueOf(0.901));
+            BigDecimal naclAmount = solidQ.multiply(BigDecimal.valueOf(0.061));
+            BigDecimal combinedAmount = solidQ.multiply(BigDecimal.valueOf(0.036)).add(solidQ.multiply(BigDecimal.valueOf(0.002)));
+            solidMaterial.setSolidKCl(kclAmount);
+            solidMaterial.setSolidNaCl(naclAmount);
+            solidMaterial.setSolidCaSO4(solidQ.multiply(BigDecimal.valueOf(0.036)));
+            solidMaterial.setSolidWaste(solidQ.multiply(BigDecimal.valueOf(0.002)));
+            updateLabel(grid, 2, 3, kclAmount.setScale(2, RoundingMode.HALF_UP).toString() + " т/ч");  // Update KCl label
+            updateLabel(grid, 3, 3, naclAmount.setScale(2, RoundingMode.HALF_UP).toString() + " т/ч");  // Update NaCl label
+            updateLabel(grid, 4, 3, combinedAmount.setScale(2, RoundingMode.HALF_UP).toString() + " т/ч");  // Update Combined label
+
+            // Liquid Material Section Calculations
+            BigDecimal ratio = new BigDecimal(ratioInputField.getText());
+            BigDecimal liquidMaterialQ = solidQ.multiply(ratio);
+            liquidMaterial.setL_Q(liquidMaterialQ);
+            liquidMaterial.setLiquidH2O(liquidMaterialQ.multiply(BigDecimal.valueOf(0.678)));
+            liquidMaterial.setLiquidKCl(liquidMaterialQ.multiply(BigDecimal.valueOf(0.121)));
+            liquidMaterial.setLiquidNaCl(liquidMaterialQ.multiply(BigDecimal.valueOf(0.197)));
+            liquidMaterial.setLiquidCaSO4(liquidMaterialQ.multiply(BigDecimal.valueOf(0.004)));
+
+            updateLabel(grid, 2, 5, liquidMaterialQ.setScale(2, RoundingMode.HALF_UP).toString() + " т/ч");
+            updateLabel(grid, 3, 5, liquidMaterial.getLiquidH2O().setScale(2, RoundingMode.HALF_UP).toString() + " т/ч");
+            updateLabel(grid, 4, 5, liquidMaterial.getLiquidKCl().setScale(2, RoundingMode.HALF_UP).toString() + " т/ч");
+            updateLabel(grid, 5, 5, liquidMaterial.getLiquidNaCl().setScale(2, RoundingMode.HALF_UP).toString() + " т/ч");
+            updateLabel(grid, 6, 5, liquidMaterial.getLiquidCaSO4().setScale(2, RoundingMode.HALF_UP).toString() + " т/ч");
+
+        } catch (NumberFormatException e) {
+            showError("Введите корректные значения, Ж/Т это десятичная дробь через точку.");
+        }
     }
+
+    // Helper method to update labels dynamically
+    private void updateLabel(GridPane grid, int row, int column, String text) {
+        Label label = (Label) getNodeByRowColumnIndex(row, column, grid);
+        if (label != null) {
+            label.setText(text);
+        }
+    }
+
+    // Helper method to get nodes by row and column index
+    private Node getNodeByRowColumnIndex(int row, int column, GridPane grid) {
+        for (Node node : grid.getChildren()) {
+            if (GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column) {
+                return node;
+            }
+        }
+        return null; // If no matching node is found
+    }
+
+
+
     private GridPane createVishelachivanieSection(Liquid liquid, LiquidMaterial liquidMaterial, SolidMaterial solidMaterial, Vishelachivanie vishelachivanie) {
         GridPane grid = createAlignedGridPane(8);
 
@@ -358,120 +376,7 @@ public class Application extends javafx.application.Application {
 
         calculateButton.setOnAction(event -> {
             try {
-                vishelachivanieButtonPress = true;
-                // Calculation logic here (same as your provided code)
-                BigDecimal LiquidNaClRatio = BigDecimal.valueOf(0.197 / 0.678);
-                BigDecimal LiquidCaso4Ratio = BigDecimal.valueOf(0.004 / 0.678);
-                BigDecimal LiquidH2OAmount = liquidMaterial.getLiquidH2O().add(liquid.getH2O());
-
-                BigDecimal LiquidNaclAmount1 = LiquidH2OAmount.multiply(LiquidNaClRatio);
-                BigDecimal LiquidNaclAmount2 = liquidMaterial.getLiquidNaCl().add(solidMaterial.getSolidNaCl()).add(liquid.getNaCl());
-                BigDecimal LiquidNaclAmount = LiquidNaclAmount1.min(LiquidNaclAmount2);
-
-                BigDecimal LiquidCaso4Amount1 = LiquidH2OAmount.multiply(LiquidCaso4Ratio);
-                BigDecimal LiquidCaso4Amount2 = liquidMaterial.getLiquidCaSO4().add(solidMaterial.getSolidCaSO4()).add(liquid.getCaSO4());
-                BigDecimal LiquidCaso4Amount = LiquidCaso4Amount1.min(LiquidCaso4Amount2);
-
-                BigDecimal LiquidKclAmount1 = (
-                        LiquidNaclAmount.divide(LiquidH2OAmount.add(LiquidCaso4Amount), RoundingMode.HALF_UP)
-                                .multiply(BigDecimal.valueOf(-0.497825381))
-                                .add(BigDecimal.valueOf(0.2648))
-                ).divide(
-                        BigDecimal.ONE.subtract(
-                                LiquidNaclAmount.divide(LiquidH2OAmount.add(LiquidCaso4Amount), RoundingMode.HALF_UP)
-                                        .multiply(BigDecimal.valueOf(-0.497825381))
-                                        .add(BigDecimal.valueOf(0.2648))
-                        ),
-                        RoundingMode.HALF_UP
-                ).multiply(LiquidH2OAmount.add(LiquidCaso4Amount).add(LiquidNaclAmount));
-
-                BigDecimal LiquidKclAmount2 = liquidMaterial.getLiquidKCl().add(solidMaterial.getSolidKCl()).add(liquid.getKCl());
-                BigDecimal LiquidKclAmount = LiquidKclAmount1.min(LiquidKclAmount2);
-
-
-                BigDecimal waste = solidMaterial.getSolidWaste();
-                BigDecimal SolidKclAmount = solidMaterial.getSolidKCl()
-                        .add(liquidMaterial.getLiquidKCl()).add(liquid.getKCl())
-                        .subtract(LiquidKclAmount).max(BigDecimal.ZERO);
-
-                BigDecimal SolidNaclAmount = solidMaterial.getSolidNaCl()
-                        .add(liquidMaterial.getLiquidNaCl()).add(liquid.getNaCl())
-                        .subtract(LiquidNaclAmount).max(BigDecimal.ZERO);
-
-                BigDecimal SolidCaso4Amount = solidMaterial.getSolidCaSO4()
-                        .add(liquidMaterial.getLiquidCaSO4()).add(liquid.getCaSO4())
-                        .subtract(LiquidCaso4Amount).max(BigDecimal.ZERO);
-
-                BigDecimal liquidQ = LiquidH2OAmount.add(LiquidNaclAmount)
-                        .add(LiquidCaso4Amount).add(LiquidKclAmount);
-                BigDecimal solidQ = waste.add(SolidNaclAmount)
-                        .add(SolidCaso4Amount).add(SolidKclAmount);
-                BigDecimal ratio = liquidQ.divide(solidQ, RoundingMode.HALF_UP);
-
-                BigDecimal  WasteCaso4 = waste.add(SolidCaso4Amount);
-
-
-
-                BigDecimal LiquidH2OPercent = LiquidH2OAmount.divide(liquidQ, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
-
-                BigDecimal LiquidNaclPercent = LiquidNaclAmount.divide(liquidQ, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
-
-                BigDecimal LiquidCaso4Percent = LiquidCaso4Amount.divide(liquidQ, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
-                BigDecimal LiquidTotalPercent = LiquidH2OPercent.add(LiquidNaclPercent).add(LiquidCaso4Percent);
-
-                BigDecimal LiquidKclPercent = (BigDecimal.valueOf(100).subtract(LiquidTotalPercent));
-
-
-                BigDecimal SolidKclPercent = SolidKclAmount.divide(solidQ, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
-
-                BigDecimal SolidNaclPercent = SolidNaclAmount.divide(solidQ, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
-
-                BigDecimal SolidTotalPercent = SolidKclPercent.add(SolidNaclPercent);
-                BigDecimal  WasteCaso4Percent = (BigDecimal.valueOf(100).subtract(SolidTotalPercent));
-
-                vishelachivanie.setH2O(liquid.getH2O());
-                vishelachivanie.setL_Q(liquidQ);
-                vishelachivanie.setLiquidH2O(LiquidH2OAmount);
-                vishelachivanie.setLiquidKCl(LiquidKclAmount);
-                vishelachivanie.setLiquidNaCl(LiquidNaclAmount);
-                vishelachivanie.setLiquidCaSO4(LiquidCaso4Amount);
-
-
-                vishelachivanie.setS_Q(solidQ);
-                vishelachivanie.setSolidKCl(SolidKclAmount);
-                vishelachivanie.setSolidNaCl(SolidNaclAmount);
-                vishelachivanie.setSolidCaSO4(SolidCaso4Amount);
-                vishelachivanie.setSolidWaste(waste);
-
-                // Update labels with calculated values
-                liquidQResultValue.setText(liquidQ.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-                liquidH2oResultValue.setText(LiquidH2OAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-                liquidKclResultValue.setText(LiquidKclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-                liquidNaclResultValue.setText(LiquidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-                liquidCaso4ResultValue.setText(LiquidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-
-                solidQResultValue.setText(solidQ.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-                solidKclResultValue.setText(SolidKclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-                solidNaclResultValue.setText(SolidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-                wasteResultValue.setText(WasteCaso4.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-                ratioResultValue.setText(ratio.setScale(2, RoundingMode.HALF_UP).toString());
-
-
-                liquidPieChart.getData().clear();
-                liquidPieChart.getData().addAll(
-                        new PieChart.Data("H2O, " + formatPercent(LiquidH2OPercent), LiquidH2OPercent.doubleValue()),
-                        new PieChart.Data("NaCl, " + formatPercent(LiquidNaclPercent), LiquidNaclPercent.doubleValue()),
-                        new PieChart.Data("CaSO4, " + formatPercent(LiquidCaso4Percent), LiquidCaso4Percent.doubleValue()),
-                        new PieChart.Data("KCl, " + formatPercent(LiquidKclPercent), LiquidKclPercent.doubleValue())
-                );
-
-                // Add data to solid PieChart
-                solidPieChart.getData().clear();
-                solidPieChart.getData().addAll(
-                        new PieChart.Data("H.O. + CaSO4, " + formatPercent(WasteCaso4Percent), WasteCaso4Percent.doubleValue()),
-                        new PieChart.Data("KCl, " + formatPercent(SolidKclPercent), SolidKclPercent.doubleValue()),
-                        new PieChart.Data("NaCl, " + formatPercent(SolidNaclPercent), SolidNaclPercent.doubleValue())
-                );
+                calculateVishelachivanieSection(liquid, solidMaterial, liquidMaterial, vishelachivanie, grid);
 
             } catch (NumberFormatException e) {
                 showError("Ошибка");
@@ -480,6 +385,125 @@ public class Application extends javafx.application.Application {
 
         return grid;
     }
+
+    private void calculateVishelachivanieSection(Liquid liquid, SolidMaterial solidMaterial, LiquidMaterial liquidMaterial, Vishelachivanie vishelachivanie, GridPane grid) {
+        try {
+
+
+            // Calculation logic here (same as your provided code)
+            BigDecimal LiquidNaClRatio = BigDecimal.valueOf(0.197 / 0.678);
+            BigDecimal LiquidCaso4Ratio = BigDecimal.valueOf(0.004 / 0.678);
+            BigDecimal LiquidH2OAmount = liquidMaterial.getLiquidH2O().add(liquid.getH2O());
+
+            BigDecimal LiquidNaclAmount1 = LiquidH2OAmount.multiply(LiquidNaClRatio);
+            BigDecimal LiquidNaclAmount2 = liquidMaterial.getLiquidNaCl().add(solidMaterial.getSolidNaCl()).add(liquid.getNaCl());
+            BigDecimal LiquidNaclAmount = LiquidNaclAmount1.min(LiquidNaclAmount2);
+
+            BigDecimal LiquidCaso4Amount1 = LiquidH2OAmount.multiply(LiquidCaso4Ratio);
+            BigDecimal LiquidCaso4Amount2 = liquidMaterial.getLiquidCaSO4().add(solidMaterial.getSolidCaSO4()).add(liquid.getCaSO4());
+            BigDecimal LiquidCaso4Amount = LiquidCaso4Amount1.min(LiquidCaso4Amount2);
+
+            BigDecimal LiquidKclAmount1 = (
+                    LiquidNaclAmount.divide(LiquidH2OAmount.add(LiquidCaso4Amount), RoundingMode.HALF_UP)
+                            .multiply(BigDecimal.valueOf(-0.497825381))
+                            .add(BigDecimal.valueOf(0.2648))
+            ).divide(
+                    BigDecimal.ONE.subtract(
+                            LiquidNaclAmount.divide(LiquidH2OAmount.add(LiquidCaso4Amount), RoundingMode.HALF_UP)
+                                    .multiply(BigDecimal.valueOf(-0.497825381))
+                                    .add(BigDecimal.valueOf(0.2648))
+                    ),
+                    RoundingMode.HALF_UP
+            ).multiply(LiquidH2OAmount.add(LiquidCaso4Amount).add(LiquidNaclAmount));
+
+            BigDecimal LiquidKclAmount2 = liquidMaterial.getLiquidKCl().add(solidMaterial.getSolidKCl()).add(liquid.getKCl());
+            BigDecimal LiquidKclAmount = LiquidKclAmount1.min(LiquidKclAmount2);
+
+
+            BigDecimal waste = solidMaterial.getSolidWaste();
+            BigDecimal SolidKclAmount = solidMaterial.getSolidKCl()
+                    .add(liquidMaterial.getLiquidKCl()).add(liquid.getKCl())
+                    .subtract(LiquidKclAmount).max(BigDecimal.ZERO);
+
+            BigDecimal SolidNaclAmount = solidMaterial.getSolidNaCl()
+                    .add(liquidMaterial.getLiquidNaCl()).add(liquid.getNaCl())
+                    .subtract(LiquidNaclAmount).max(BigDecimal.ZERO);
+
+            BigDecimal SolidCaso4Amount = solidMaterial.getSolidCaSO4()
+                    .add(liquidMaterial.getLiquidCaSO4()).add(liquid.getCaSO4())
+                    .subtract(LiquidCaso4Amount).max(BigDecimal.ZERO);
+
+            BigDecimal liquidQ = LiquidH2OAmount.add(LiquidNaclAmount)
+                    .add(LiquidCaso4Amount).add(LiquidKclAmount);
+            BigDecimal solidQ = waste.add(SolidNaclAmount)
+                    .add(SolidCaso4Amount).add(SolidKclAmount);
+            BigDecimal ratio = liquidQ.divide(solidQ, RoundingMode.HALF_UP);
+
+            BigDecimal  WasteCaso4 = waste.add(SolidCaso4Amount);
+
+
+
+            BigDecimal LiquidH2OPercent = LiquidH2OAmount.divide(liquidQ, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+
+            BigDecimal LiquidNaclPercent = LiquidNaclAmount.divide(liquidQ, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+
+            BigDecimal LiquidCaso4Percent = LiquidCaso4Amount.divide(liquidQ, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+            BigDecimal LiquidTotalPercent = LiquidH2OPercent.add(LiquidNaclPercent).add(LiquidCaso4Percent);
+
+            BigDecimal LiquidKclPercent = (BigDecimal.valueOf(100).subtract(LiquidTotalPercent));
+
+
+            BigDecimal SolidKclPercent = SolidKclAmount.divide(solidQ, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+
+            BigDecimal SolidNaclPercent = SolidNaclAmount.divide(solidQ, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+
+            BigDecimal SolidTotalPercent = SolidKclPercent.add(SolidNaclPercent);
+            BigDecimal  WasteCaso4Percent = (BigDecimal.valueOf(100).subtract(SolidTotalPercent));
+
+            vishelachivanie.setH2O(liquid.getH2O());
+            vishelachivanie.setL_Q(liquidQ);
+            vishelachivanie.setLiquidH2O(LiquidH2OAmount);
+            vishelachivanie.setLiquidKCl(LiquidKclAmount);
+            vishelachivanie.setLiquidNaCl(LiquidNaclAmount);
+            vishelachivanie.setLiquidCaSO4(LiquidCaso4Amount);
+
+
+            vishelachivanie.setS_Q(solidQ);
+            vishelachivanie.setSolidKCl(SolidKclAmount);
+            vishelachivanie.setSolidNaCl(SolidNaclAmount);
+            vishelachivanie.setSolidCaSO4(SolidCaso4Amount);
+            vishelachivanie.setSolidWaste(waste);
+
+
+            // Update labels with calculated values
+
+
+            updateLabel(grid, 1, 1, liquidQ.setScale(2, RoundingMode.HALF_UP).toString() + " т/ч");
+            updateLabel(grid, 2, 1, LiquidH2OAmount.setScale(2, RoundingMode.HALF_UP).toString() + " т/ч");
+            updateLabel(grid, 3, 1, LiquidKclAmount.setScale(2, RoundingMode.HALF_UP).toString() + " т/ч");
+            updateLabel(grid, 4, 1, LiquidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString() + " т/ч");
+            updateLabel(grid, 5, 1, LiquidCaso4Amount.setScale(2, RoundingMode.HALF_UP).toString() + " т/ч");
+            updateLabel(grid, 6, 1, ratio.setScale(2, RoundingMode.HALF_UP).toString());
+
+            updateLabel(grid, 1, 3, solidQ.setScale(2, RoundingMode.HALF_UP).toString() + " т/ч");
+            updateLabel(grid, 2, 3, SolidKclAmount.setScale(2, RoundingMode.HALF_UP).toString() + " т/ч");  // Update KCl label
+            updateLabel(grid, 3, 3, SolidNaclAmount.setScale(2, RoundingMode.HALF_UP).toString() + " т/ч");  // Update NaCl label
+            updateLabel(grid, 4, 3, WasteCaso4.setScale(2, RoundingMode.HALF_UP).toString() + " т/ч");  // Update Combined label
+
+
+            PieChart liquidPieChart = (PieChart) getNodeByRowColumnIndex(7, 0, grid);  // Assuming liquidPieChart is at row 10, column 1
+            PieChart solidPieChart = (PieChart) getNodeByRowColumnIndex(7, 2, grid);   // Assuming solidPieChart is at row 11, column 1
+            // Update pie charts
+            updateLiquidPieChart(liquidPieChart, LiquidH2OPercent, LiquidNaclPercent, LiquidCaso4Percent, LiquidKclPercent);
+            updateSolidPieChart(solidPieChart, WasteCaso4Percent, SolidKclPercent, SolidNaclPercent);
+
+        } catch (NumberFormatException e) {
+            showError("Введите корректные значения, Ж/Т это десятичная дробь через точку.");
+        }
+    }
+
+
+
 
     private GridPane createHydrocycloneSection(Vishelachivanie vishelachivanie, HydrocycloneSolid hydrocycloneSolid, HydrocycloneLiquid hydrocycloneLiquid) {
         GridPane grid = createAlignedGridPane(8);
@@ -1175,6 +1199,24 @@ public class Application extends javafx.application.Application {
     }
 
 
+    private void updateLiquidPieChart(PieChart liquidPieChart, BigDecimal LiquidH2OPercent, BigDecimal LiquidNaclPercent, BigDecimal LiquidCaso4Percent, BigDecimal LiquidKclPercent) {
+        liquidPieChart.getData().clear();
+        liquidPieChart.getData().addAll(
+                new PieChart.Data("H2O, " + formatPercent(LiquidH2OPercent), LiquidH2OPercent.doubleValue()),
+                new PieChart.Data("NaCl, " + formatPercent(LiquidNaclPercent), LiquidNaclPercent.doubleValue()),
+                new PieChart.Data("CaSO4, " + formatPercent(LiquidCaso4Percent), LiquidCaso4Percent.doubleValue()),
+                new PieChart.Data("KCl, " + formatPercent(LiquidKclPercent), LiquidKclPercent.doubleValue())
+        );
+    }
+
+    private void updateSolidPieChart(PieChart solidPieChart, BigDecimal WasteCaso4Percent, BigDecimal SolidKclPercent, BigDecimal SolidNaclPercent) {
+        solidPieChart.getData().clear();
+        solidPieChart.getData().addAll(
+                new PieChart.Data("H.O. + CaSO4, " + formatPercent(WasteCaso4Percent), WasteCaso4Percent.doubleValue()),
+                new PieChart.Data("KCl, " + formatPercent(SolidKclPercent), SolidKclPercent.doubleValue()),
+                new PieChart.Data("NaCl, " + formatPercent(SolidNaclPercent), SolidNaclPercent.doubleValue())
+        );
+    }
 
 
     private void showError(String message) {
