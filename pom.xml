@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -11,31 +10,16 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <junit.version>5.10.0</junit.version>
-    <java.version>23</java.version> <!-- Add Java 23 version here -->
+    <java.version>23</java.version>
   </properties>
 
   <dependencies>
-      <!-- Jackson Databind -->
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-        <version>2.15.2</version> <!-- Use the latest stable version -->
-      </dependency>
-
-      <!-- Jackson Core (for basic JSON processing) -->
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-core</artifactId>
-        <version>2.15.2</version>
-      </dependency>
-
-      <!-- Jackson Annotations (for JSON annotations like @JsonProperty) -->
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-annotations</artifactId>
-        <version>2.15.2</version>
-      </dependency>
+    <!-- Jackson Databind -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.15.2</version>
+    </dependency>
 
     <!-- JavaFX Base -->
     <dependency>
@@ -65,8 +49,8 @@
       <version>11.1.2</version>
     </dependency>
 
-
   </dependencies>
+
   <repositories>
     <repository>
       <id>openjfx-repo</id>
@@ -89,7 +73,8 @@
           </archive>
         </configuration>
       </plugin>
-      <!-- Compiler plugin to use Java 23 -->
+
+      <!-- Maven Compiler plugin to support Java 23 and modules -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -97,24 +82,26 @@
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
-
+          <release>${java.version}</release>
         </configuration>
       </plugin>
 
-      <!-- JavaFX Maven plugin -->
+      <!-- JavaFX Maven plugin for packaging with jlink -->
       <plugin>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
         <version>0.0.8</version>
         <executions>
           <execution>
-            <!-- Default configuration for running with: mvn clean javafx:run -->
-            <id>default-cli</id>
+            <id>jlink</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jlink</goal>
+            </goals>
             <configuration>
-              <mainClass>com.mike.kcl.Application</mainClass> <!-- Fully qualified main class -->
-              <launcher>app</launcher>
-              <jlinkZipName>app</jlinkZipName>
-              <jlinkImageName>app</jlinkImageName>
+              <mainClass>com.mike.kcl.Application</mainClass>
+              <jlinkImageName>runtime-image</jlinkImageName>
+              <jlinkZipName>app.zip</jlinkZipName>
               <noManPages>true</noManPages>
               <stripDebug>true</stripDebug>
               <noHeaderFiles>true</noHeaderFiles>
@@ -124,7 +111,6 @@
       </plugin>
 
     </plugins>
-
   </build>
 
 </project>
