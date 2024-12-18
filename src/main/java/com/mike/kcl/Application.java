@@ -51,6 +51,7 @@ public class Application extends javafx.application.Application {
         layout.setAlignment(Pos.TOP_CENTER); // Center-align the components
         layout.setStyle("-fx-background-color: #707070;"); // Light gray background
 
+
         // Sections
         layout.getChildren().addAll(
                 createSection("Входные данные", createCombinedSection(liquid,solidMaterial, liquidMaterial, vishelachivanie, hydrocycloneSolid, hydrocycloneLiquid, centrifugeSolid, centrifugeLiquid, sushka)));
@@ -124,7 +125,7 @@ public class Application extends javafx.application.Application {
     }
 
     private GridPane createCombinedSection(Liquid liquid, SolidMaterial solidMaterial, LiquidMaterial liquidMaterial, Vishelachivanie vishelachivanie, HydrocycloneSolid hydrocycloneSolid, HydrocycloneLiquid hydrocycloneLiquid, CentrifugeSolid centrifugeSolid, CentrifugeLiquid centrifugeLiquid, Sushka sushka) {
-        GridPane grid = createAlignedGridPane(8);
+        GridPane grid = createAlignedGridPane(7);
         // Layout
         grid.setHgap(5); // Horizontal spacing
         grid.setVgap(5); // Vertical spacing
@@ -584,7 +585,7 @@ public class Application extends javafx.application.Application {
         Label solidKclResultLabelSushka = new Label("KCl:");
         Label solidNaclResultLabelSushka = new Label("NaCl:");
         Label wasteResultLabelSushka = new Label("H.O. + CaSO4:");
-        Label h2oResultLabelSushka = new Label("H20:");
+        Label h2oResultLabelSushka = new Label("H2O:");
         Label ExtractionResultLabelSushka = new Label("Извлечение узла:");
         Label solidQResultValueSushka = new Label();
         Label solidKclResultValueSushka = new Label();
@@ -604,13 +605,14 @@ public class Application extends javafx.application.Application {
         grid.add(solidNaclResultValueSushka, 1, 82);
         grid.add(wasteResultLabelSushka, 0, 83);
         grid.add(wasteResultValueSushka, 1, 83);
-        grid.addRow(4, h2oResultLabelSushka, h2oResultValueSushka);
+        grid.addRow(84, h2oResultLabelSushka, h2oResultValueSushka);
         grid.add(ExtractionResultLabelSushka, 0, 85);
         grid.add(ExtractionResultValueSushka, 1, 85);
 
         PieChart finalPieChart = new PieChart();
         finalPieChart.setTitle("Готовый продукт");
 
+        grid.add(finalPieChart, 0, 87, 2, 2);
 
 
         // --------------------- Event Handlers ---------------------
@@ -641,8 +643,9 @@ public class Application extends javafx.application.Application {
                 BigDecimal combinedAmountInputSection = solidQInputSection.multiply(CaSO4PercentInputSection).add(WastePercentInputSection);
                 solidMaterial.setSolidKCl(kclAmountInputSection);
                 solidMaterial.setSolidNaCl(naclAmountInputSection);
-                solidMaterial.setSolidCaSO4(solidQInputSection.multiply(BigDecimal.valueOf(0.036)));
-                solidMaterial.setSolidWaste(solidQInputSection.multiply(BigDecimal.valueOf(0.002)));
+                solidMaterial.setSolidCaSO4(solidQInputSection.multiply(CaSO4PercentInputSection));
+                BigDecimal TotalInputSectionPercent =  BigDecimal.ONE.subtract(KClPercentInputSection).subtract(NaCLPercentInputSection).subtract(CaSO4PercentInputSection);
+                solidMaterial.setSolidWaste(solidQInputSection.multiply(TotalInputSectionPercent));
                 kclResultValue.setText(kclAmountInputSection.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
                 naclResultValue.setText(naclAmountInputSection.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
                 combinedResultValue.setText(combinedAmountInputSection.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
