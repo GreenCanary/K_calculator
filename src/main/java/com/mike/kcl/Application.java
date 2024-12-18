@@ -136,7 +136,7 @@ public class Application extends javafx.application.Application {
         grid.setPadding(new Insets(5));
 
         // Section 1: Liquid Section
-        Label liquidTitleLabel = new Label("Вода");
+        Label liquidTitleLabel = new Label("Вода на выщелачивание");
         TextField liquidQInput = new TextField();
         Label h2oResultLabel = new Label("H2O:");
         Label h2oResultValue = new Label();
@@ -278,7 +278,7 @@ public class Application extends javafx.application.Application {
 
         Button calculateButton = new Button("Рассчитать выщелачивание");
         Label liquidHeader = new Label("Жидкая фаза");
-        Label solidHeader = new Label("Твёердая фаза");
+        Label solidHeader = new Label("Твёрдая фаза");
 
 
 
@@ -344,7 +344,7 @@ public class Application extends javafx.application.Application {
 
 
         PieChart solidPieChart = new PieChart();
-        solidPieChart.setTitle("Твёердая фаза");
+        solidPieChart.setTitle("Твёрдая фаза");
 
         grid.add(liquidPieChart, 0, 7, 2, 2);
         grid.add(solidPieChart, 2, 7, 2, 2);
@@ -490,7 +490,7 @@ public class Application extends javafx.application.Application {
 
 // --------------------- Solid Section ---------------------
         Label solidLiquidHeader = new Label("Жидкая фаза");
-        Label solidSolidHeader = new Label("Твёердая фаза");
+        Label solidSolidHeader = new Label("Твёрдая фаза");
 
 // Liquid result labels for Solid Section
         Label solidLiquidQResultLabel = new Label("Q:");
@@ -516,7 +516,7 @@ public class Application extends javafx.application.Application {
 
 // --------------------- Liquid Section ---------------------
         Label liquidLiquidHeader = new Label("Жидкая фаза");
-        Label liquidSolidHeader = new Label("Твёердая фаза");
+        Label liquidSolidHeader = new Label("Твёрдая фаза");
 
 // Liquid result labels for Liquid Section
         Label liquidLiquidQResultLabel = new Label("Q:");
@@ -545,7 +545,7 @@ public class Application extends javafx.application.Application {
         liqRatTextField.setPromptText("Введите Ж/Т");
 
         TextField solQuartRatioTextField = new TextField();
-        solQuartRatioTextField.setPromptText("Твердые менее 0,25мм, %");
+        solQuartRatioTextField.setPromptText("Твёрдые менее 0,25мм, %");
 
 // --------------------- Adding UI Elements ---------------------
 // Solid Section
@@ -580,10 +580,12 @@ public class Application extends javafx.application.Application {
 
 
         PieChart solidPieChart = new PieChart();
-        solidPieChart.setTitle("Твёердая фаза");
+        solidPieChart.setTitle("Твёрдая фаза");
 
         PieChart liquidPieChart2 = new PieChart();
         liquidPieChart2.setTitle("Жидкая фаза");
+        PieChart solidPieChart2 = new PieChart();
+        solidPieChart2.setTitle("Твёрдая фаза");
 
 
 
@@ -619,7 +621,7 @@ public class Application extends javafx.application.Application {
 
 
         grid.add(liquidPieChart2, 0, 24, 2, 2);
-
+        grid.add(solidPieChart2, 2, 24, 2, 2);
 
         grid.add(liqRatTextField, 0, 26);
         grid.add(solQuartRatioTextField, 0, 27);
@@ -633,7 +635,7 @@ public class Application extends javafx.application.Application {
 
                             // Get the value of liqRat from the text field
                             BigDecimal LiqSolRat = new BigDecimal(liqRatTextField.getText());
-                            BigDecimal SolQuartRatio = new BigDecimal(solQuartRatioTextField.getText()).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
+                            BigDecimal SolQuartRatio = new BigDecimal(solQuartRatioTextField.getText()).divide(BigDecimal.valueOf(100));
                             hydrocycloneSolid.setSolQuartRatio(SolQuartRatio);
                             hydrocycloneSolid.setLiqSolRat(LiqSolRat);
 
@@ -767,6 +769,21 @@ public class Application extends javafx.application.Application {
 
 
 
+                            BigDecimal SolidKclPercent2 = solidQ.compareTo(BigDecimal.ZERO) == 0
+                                    ? BigDecimal.ZERO
+                                    : SolidKclAmount.divide(solidQ, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+
+                            BigDecimal SolidNaclPercent2 = solidQ.compareTo(BigDecimal.ZERO) == 0
+                                    ? BigDecimal.ZERO
+                                    : SolidNaclAmount.divide(solidQ, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+
+
+
+                            BigDecimal  WasteCaso4Percent2 = WasteCaso4.compareTo(BigDecimal.ZERO) == 0
+                                    ? BigDecimal.ZERO
+                                    : WasteCaso4.divide(solidQ, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+
+
 
 
                             liquidPieChart.getData().clear();
@@ -792,6 +809,13 @@ public class Application extends javafx.application.Application {
                                     new PieChart.Data("CaSO4, " + formatPercent(LiquidCaso4Percent2), LiquidCaso4Percent2.doubleValue()),
                                     new PieChart.Data("KCl, " + formatPercent(LiquidKclPercent2), LiquidKclPercent2.doubleValue())
                             );
+
+                            solidPieChart2.getData().clear();
+                            solidPieChart2.getData().addAll(
+                                    new PieChart.Data("H.O. + CaSO4, " + formatPercent(WasteCaso4Percent2), WasteCaso4Percent2.doubleValue()),
+                                    new PieChart.Data("KCl, " + formatPercent(SolidKclPercent2), SolidKclPercent2.doubleValue()),
+                                    new PieChart.Data("NaCl, " + formatPercent(SolidNaclPercent2), SolidNaclPercent2.doubleValue())
+                            );
                         } catch (NumberFormatException e) {
                         showError("Ошибка");
                     }
@@ -810,7 +834,7 @@ public class Application extends javafx.application.Application {
         Label solidTitle = new Label("Кек центрифуги");
         Button calculateButton = new Button("Рассчитать работу центрифуги");
         Label liquidHeader = new Label("Жидкая фаза");
-        Label solidHeader = new Label("Твёердая фаза");
+        Label solidHeader = new Label("Твёрдая фаза");
 
 // Liquid result labels
         Label liquidQResultLabel = new Label("Q:");
@@ -859,7 +883,7 @@ public class Application extends javafx.application.Application {
 
 
         PieChart solidPieChart = new PieChart();
-        solidPieChart.setTitle("Твёердая фаза");
+        solidPieChart.setTitle("Твёрдая фаза");
 
         grid.add(liquidPieChart, 0, 7, 2, 2);
         grid.add(solidPieChart, 2, 7, 2, 2);
@@ -1040,6 +1064,7 @@ public class Application extends javafx.application.Application {
                         new PieChart.Data("CaSO4, " + formatPercent(LiquidCaso4Percent2), LiquidCaso4Percent2.doubleValue()),
                         new PieChart.Data("KCl, " + formatPercent(LiquidKclPercent2), LiquidKclPercent2.doubleValue())
                 );
+
 
             } catch (NumberFormatException e) {
                 showError("Ошибка");
