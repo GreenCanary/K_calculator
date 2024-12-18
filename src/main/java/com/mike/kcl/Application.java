@@ -53,7 +53,7 @@ public class Application extends javafx.application.Application {
 
         // Sections
         layout.getChildren().addAll(
-                createSection("Входные данные", createCombinedSection(liquid,solidMaterial, liquidMaterial)),
+                createSection("Входные данные", createCombinedSection(liquid,solidMaterial, liquidMaterial, vishelachivanie, hydrocycloneSolid, hydrocycloneLiquid, centrifugeSolid, centrifugeLiquid, sushka)),
                 createSection("Выщелачивание", createVishelachivanieSection(liquid, liquidMaterial, solidMaterial, vishelachivanie)),
                 createSection("Гидроциклон", createHydrocycloneSection(vishelachivanie, hydrocycloneSolid, hydrocycloneLiquid)),
                 createSection("Центрифуга", createCentrifugeSection(hydrocycloneSolid, centrifugeSolid, centrifugeLiquid)),
@@ -128,7 +128,7 @@ public class Application extends javafx.application.Application {
         return section;
     }
 
-    private GridPane createCombinedSection(Liquid liquid, SolidMaterial solidMaterial, LiquidMaterial liquidMaterial) {
+    private GridPane createCombinedSection(Liquid liquid, SolidMaterial solidMaterial, LiquidMaterial liquidMaterial, Vishelachivanie vishelachivanie, HydrocycloneSolid hydrocycloneSolid, HydrocycloneLiquid hydrocycloneLiquid, CentrifugeSolid centrifugeSolid, CentrifugeLiquid centrifugeLiquid, Sushka sushka) {
         GridPane grid = createAlignedGridPane(8);
         // Layout
         grid.setHgap(5); // Horizontal spacing
@@ -144,6 +144,9 @@ public class Application extends javafx.application.Application {
 // Section 2: Solid Material Section
         Label solidMaterialTitleLabel = new Label("Руда");
         TextField solidQInput = new TextField();
+        TextField KClPercentInput = new TextField();
+        TextField NaClPercentInput = new TextField();
+        TextField CaSO4PercentInput = new TextField();
         Label kclResultLabel = new Label("KCl:");
         Label naclResultLabel = new Label("NaCl:");
         Label combinedResultLabel = new Label("H.O. + CaSO4:");
@@ -170,7 +173,7 @@ public class Application extends javafx.application.Application {
 
 
 // Liquid Section
-        int liquidColumn = 0;
+        int liquidColumn = 2;
         int rowIndex = 0;
         grid.add(liquidTitleLabel, liquidColumn, rowIndex++, 2, 1); // Spanning two columns
 
@@ -181,13 +184,20 @@ public class Application extends javafx.application.Application {
         grid.add(h2oResultValue, liquidColumn + 1, rowIndex++);
 
 // Solid Material Section
-        int solidColumn = 2;
+        int solidColumn = 0;
         rowIndex = 0;
         grid.add(solidMaterialTitleLabel, solidColumn, rowIndex++, 2, 1);
 
 // Removing "Q, т/ч:" label and using it as a hint in the TextField
         solidQInput.setPromptText("Q, т/ч"); // Setting hint text
+        KClPercentInput.setPromptText("KCl %");
+        NaClPercentInput.setPromptText("NaCl %");
+        CaSO4PercentInput.setPromptText("CaSO4 %");
         grid.add(solidQInput, solidColumn, rowIndex++);
+        grid.add(KClPercentInput, solidColumn, rowIndex++);
+        grid.add(NaClPercentInput, solidColumn, rowIndex++);
+        grid.add(CaSO4PercentInput, solidColumn, rowIndex++);
+
         grid.add(kclResultLabel, solidColumn, rowIndex);
         grid.add(kclResultValue, solidColumn + 1, rowIndex++);
         grid.add(naclResultLabel, solidColumn, rowIndex);
@@ -201,7 +211,9 @@ public class Application extends javafx.application.Application {
         grid.add(liquidMaterialTitleLabel, liquidMaterialColumn, rowIndex++, 2, 1);
 
 // Removing "Ж/Т:" label and using it as a hint in the TextField
-        ratioInput.setPromptText("Ж/Т"); // Setting hint text
+        ratioInput.setPromptText("Ж/Т Маточника");
+
+        // Setting hint text
         grid.add(ratioInput, liquidMaterialColumn, rowIndex++);
         grid.add(liquidQResultLabel, liquidMaterialColumn, rowIndex);
         grid.add(liquidQResultValue, liquidMaterialColumn + 1, rowIndex++);
@@ -232,10 +244,15 @@ public class Application extends javafx.application.Application {
 
                 // Solid Section
                 BigDecimal solidQ = new BigDecimal(solidQInput.getText());
+                BigDecimal KClPercent = new BigDecimal(KClPercentInput.getText()).divide(BigDecimal.valueOf(100));
+                BigDecimal NaCLPercent = new BigDecimal(NaClPercentInput.getText()).divide(BigDecimal.valueOf(100));
+                BigDecimal CaSO4Percent = new BigDecimal(CaSO4PercentInput.getText()).divide(BigDecimal.valueOf(100));
+                BigDecimal WastePercent = BigDecimal.ONE.subtract(KClPercent).subtract(NaCLPercent).subtract(CaSO4Percent);
+
                 solidMaterial.setS_Q(solidQ);
-                BigDecimal kclAmount = solidQ.multiply(BigDecimal.valueOf(0.901));
-                BigDecimal naclAmount = solidQ.multiply(BigDecimal.valueOf(0.061));
-                BigDecimal combinedAmount = solidQ.multiply(BigDecimal.valueOf(0.036)).add(solidQ.multiply(BigDecimal.valueOf(0.002)));
+                BigDecimal kclAmount = solidQ.multiply(KClPercent);
+                BigDecimal naclAmount = solidQ.multiply(NaCLPercent);
+                BigDecimal combinedAmount = solidQ.multiply(CaSO4Percent).add(WastePercent);
                 solidMaterial.setSolidKCl(kclAmount);
                 solidMaterial.setSolidNaCl(naclAmount);
                 solidMaterial.setSolidCaSO4(solidQ.multiply(BigDecimal.valueOf(0.036)));
