@@ -15,6 +15,7 @@ import java.math.RoundingMode;
 import javafx.geometry.Pos;
 import javafx.stage.WindowEvent;
 
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class Application extends javafx.application.Application {
@@ -61,6 +62,14 @@ public class Application extends javafx.application.Application {
         scrollPane.setFitToWidth(true); // Ensures content scales with window width
         scrollPane.setStyle("-fx-background: transparent;"); // Transparent scroll background
 
+
+        scrollPane.setOnScroll(event -> {
+            double deltaY = event.getDeltaY(); // Get the scroll delta (distance)
+            double multiplier = 2.0; // Adjust this to increase scroll speed
+            scrollPane.setVvalue(scrollPane.getVvalue() - deltaY * multiplier / scrollPane.getHeight());
+            event.consume(); // Prevent default scrolling behavior
+        });
+
         // Scene and Stage setup
         Scene scene = new Scene(scrollPane, 1600, 800);
         primaryStage.setScene(scene);
@@ -74,22 +83,6 @@ public class Application extends javafx.application.Application {
         // Load saved values
 
         primaryStage.show();
-    }
-    private void saveState() {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("appState.dat"))) {
-            out.writeObject(this.liquid);
-            out.writeObject(this.solidMaterial);
-            out.writeObject(this.liquidMaterial);
-            out.writeObject(this.vishelachivanie);
-            out.writeObject(this.hydrocycloneSolid);
-            out.writeObject(this.hydrocycloneLiquid);
-            out.writeObject(this.centrifugeSolid);
-            out.writeObject(this.centrifugeLiquid);
-            out.writeObject(this.sushka);
-            System.out.println("State saved.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -635,12 +628,18 @@ public class Application extends javafx.application.Application {
 
         Button saveButton = new Button("Сохранить внесенные данные");
         Button loadButton = new Button("Заргрузить внесенные дынные");
-        saveButton.setStyle("-fx-background-color: A91D3A; -fx-text-fill: #EEEEEE;-fx-text-fill: black;");
-        loadButton.setStyle("-fx-background-color: A91D3A; -fx-text-fill: #EEEEEE;-fx-text-fill: black;");
+        Button resetButton = new Button("Очистить ячейки данных");
 
-        grid.add(saveButton, 0, 90, 6, 1);
-        grid.add(loadButton, 0, 91, 6, 1);
+        saveButton.setStyle("-fx-background-color: gray; -fx-text-fill: #EEEEEE;-fx-text-fill: black;");
+        loadButton.setStyle("-fx-background-color: gray; -fx-text-fill: #EEEEEE;-fx-text-fill: black;");
+        resetButton.setStyle("-fx-background-color: gray; -fx-text-fill: #EEEEEE;-fx-text-fill: black;");
+
+        grid.add(saveButton, 2, 9, 6, 1);
+        grid.add(loadButton, 2, 10, 6, 1);
+        grid.add(resetButton, 2, 11, 6, 1);
         // --------------------- Event Handlers ---------------------
+
+
 
 
 
@@ -1199,7 +1198,25 @@ public class Application extends javafx.application.Application {
             solQuartRatioTextFieldHydrocyclone.setText(prefs.get("solQuartRatioTextFieldHydrocyclone", ""));
             liqRatTextFieldCentrifuge.setText(prefs.get("liqRatTextFieldCentrifuge", ""));
             System.out.println("Data loaded!");
+
+
         });
+        resetButton.setOnAction(event -> {
+
+            // Reset all text fields to default (empty)
+            liquidQInput.setText("");
+            solidQInput.setText("");
+            KClPercentInput.setText("");
+            NaClPercentInput.setText("");
+            CaSO4PercentInput.setText("");
+            ratioInput.setText("");
+            liqRatTextFieldHydrocyclone.setText("");
+            solQuartRatioTextFieldHydrocyclone.setText("");
+            liqRatTextFieldCentrifuge.setText("");
+
+
+        });
+
 
 
 
@@ -1209,8 +1226,6 @@ public class Application extends javafx.application.Application {
     String formatPercent(BigDecimal value) {
         return String.format("%.2f%%", value.doubleValue());
     }
-
-
 
 
 
