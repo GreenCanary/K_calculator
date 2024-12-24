@@ -143,7 +143,7 @@ public class Application extends javafx.application.Application {
 
 // Combined Button
         Button calculateButton = new Button("Внести данные и расчитать Г.П.");
-        calculateButton.setStyle("-fx-background-color: A91D3A; -fx-text-fill: #EEEEEE; -fx-text-fill: black;");
+        calculateButton.setStyle("-fx-background-color: green; -fx-text-fill: #EEEEEE; -fx-text-fill: black;");
 
         Label Qruda = new Label("Q, т/ч");
         Label KCl = new Label("KCl, %");
@@ -215,7 +215,7 @@ public class Application extends javafx.application.Application {
         grid.add(liquidCaso4ResultValue, liquidMaterialColumn + 1, rowIndex++);
 
 // Add Combined Button (span across all columns)
-        grid.add(calculateButton, 0, 11, 6, 1);
+        grid.add(calculateButton, 2, 8, 6, 1);
 
         Label liquidHeader = new Label("Жидкая фаза");
         Label solidHeader = new Label("Твёрдая фаза");
@@ -655,7 +655,10 @@ public class Application extends javafx.application.Application {
                 liquid.setH2O(liquidQInputSection);
                 liquid.setQ(liquidQInputSection);
                 h2oResultValue.setText(liquidQInputSection.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-
+                if (liquidQInputSection.compareTo(BigDecimal.ZERO) <= 0) {
+                    showError("Вода должна быть больше нуля!");
+                    return; // Stop further execution
+                }
                 // Solid Section
                 BigDecimal solidQInputSection = new BigDecimal(solidQInput.getText());
                 BigDecimal KClPercentInputSection = new BigDecimal(KClPercentInput.getText()).divide(BigDecimal.valueOf(100));
@@ -685,6 +688,11 @@ public class Application extends javafx.application.Application {
 
                 // Liquid Material Section
                 BigDecimal ratioInputSection = new BigDecimal(ratioInput.getText());
+
+                if (ratioInputSection.compareTo(BigDecimal.ZERO) <= 0) {
+                    showError("Соотношение Ж/Т должно быть больше нуля!");
+                    return; // Stop further execution
+                }
                 BigDecimal liquidMaterialQInputSection = solidQInputSection.multiply(ratioInputSection);
                 liquidMaterial.setL_Q(liquidMaterialQInputSection);
                 liquidMaterial.setLiquidH2O(liquidMaterialQInputSection.multiply(BigDecimal.valueOf(0.678)));
@@ -812,7 +820,18 @@ public class Application extends javafx.application.Application {
 
                 // Get the value of liqRat from the text field
                 BigDecimal LiqSolRatHydrocyclone = new BigDecimal(liqRatTextFieldHydrocyclone.getText());
+
+                if (LiqSolRatHydrocyclone.compareTo(BigDecimal.ZERO) <= 0) {
+                    showError("Соотношение Ж/Т должно быть больше нуля!");
+                    return; // Stop further execution
+                }
+
                 BigDecimal SolQuartRatioHydrocyclone = new BigDecimal(solQuartRatioTextFieldHydrocyclone.getText()).divide(BigDecimal.valueOf(100));
+
+                if (SolQuartRatioHydrocyclone.compareTo(BigDecimal.ZERO) < 0) {
+                    showError("Доля твердых должна быть больше или равнаиге нулю!");
+                    return; // Stop further execution
+                }
                 hydrocycloneSolid.setSolQuartRatio(SolQuartRatioHydrocyclone);
                 hydrocycloneSolid.setLiqSolRat(LiqSolRatHydrocyclone);
 
@@ -999,6 +1018,10 @@ public class Application extends javafx.application.Application {
 
 
                 BigDecimal LiqSolRatCentrifuge = new BigDecimal(liqRatTextFieldCentrifuge.getText());
+                if (LiqSolRatHydrocyclone.compareTo(BigDecimal.ZERO) < 0) {
+                    showError("Соотношение Ж/Т должно быть больше нуля!");
+                    return; // Stop further execution
+                }
 
 // Check if the value is greater than 0 and smaller than 101
                 if (LiqSolRatCentrifuge.compareTo(BigDecimal.ZERO) > 0 && LiqSolRatCentrifuge.compareTo(BigDecimal.valueOf(101)) < 0) {
