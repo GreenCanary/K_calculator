@@ -48,7 +48,7 @@ public class Application extends javafx.application.Application {
 
         // Main Layout
         VBox layout = new VBox(20); // Vertical spacing between sections
-        layout.setPadding(new Insets(10));
+        layout.setPadding(new Insets(5));
         layout.setAlignment(Pos.TOP_CENTER); // Center-align the components
         layout.setStyle("-fx-background-color: #151515;"); // Light gray background
 
@@ -76,8 +76,8 @@ public class Application extends javafx.application.Application {
         primaryStage.setTitle("К-калькулятор");
 
         // Responsiveness: Adjust VBox size to window size
-        layout.prefWidthProperty().bind(scene.widthProperty().multiply(0.95)); // Dynamic width
-        layout.prefHeightProperty().bind(scene.heightProperty().multiply(0.95)); // Dynamic height
+        layout.prefWidthProperty().bind(scene.widthProperty().multiply(1.2)); // Dynamic width
+        layout.prefHeightProperty().bind(scene.heightProperty().multiply(1.2)); // Dynamic height
 
 
         // Load saved values
@@ -101,8 +101,8 @@ public class Application extends javafx.application.Application {
     private GridPane createCombinedSection(Liquid liquid, SolidMaterial solidMaterial, LiquidMaterial liquidMaterial, Vishelachivanie vishelachivanie, HydrocycloneSolid hydrocycloneSolid, HydrocycloneLiquid hydrocycloneLiquid, CentrifugeSolid centrifugeSolid, CentrifugeLiquid centrifugeLiquid, Sushka sushka) {
         GridPane grid = createAlignedGridPane(7);
         // Layout
-        grid.setHgap(5); // Horizontal spacing
-        grid.setVgap(5); // Vertical spacing
+        grid.setHgap(2); // Horizontal spacing
+        grid.setVgap(10); // Vertical spacing
         grid.setPadding(new Insets(5));
 
         // Section 1: Liquid Section
@@ -263,9 +263,7 @@ public class Application extends javafx.application.Application {
         grid.add(solQuartRatioLabelHydrocyclone, 1, 9);
         grid.add(solQuartRatioTextFieldHydrocyclone, 0, 9);
 
-        Label empty = new Label("        ");
-        grid.add(empty, 0,   12);
-        rowIndex = 13;
+        rowIndex = 12;
         Label titleVishelachivanie = new Label("Выщелачивание");
         titleVishelachivanie.setStyle("-fx-background-color: #EEEEEE;-fx-font-size: 20px; -fx-text-fill: black;");
 
@@ -303,7 +301,7 @@ public class Application extends javafx.application.Application {
         // Add ratio label spanning both columns
         grid.add(ratioResultLabelVishelachivanie, 0, ++rowIndex, 2, 1);
         grid.add(ratioResultValueVishelachivanie, 1, rowIndex, 2, 1);
-        rowIndex++;
+
         // Add calculate button spanning both columns
         PieChart liquidPieChartVishelachivanie = new PieChart();
         liquidPieChartVishelachivanie.setTitle("Жидкая фаза");
@@ -314,15 +312,18 @@ public class Application extends javafx.application.Application {
         solidPieChartVishelachivanie.setTitle("Твёрдая фаза");
         solidPieChartVishelachivanie.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
 
-        grid.add(liquidPieChartVishelachivanie, 0, ++rowIndex, 2, 2);
-        grid.add(solidPieChartVishelachivanie, 2, rowIndex, 2, 2);
+        grid.add(liquidPieChartVishelachivanie, 0, ++rowIndex, 2, 1);
+        grid.add(solidPieChartVishelachivanie, 2, rowIndex, 2, 1);
 
 
 
         Label titleHydrocyclone = new Label("Гидроциклон");
         titleHydrocyclone.setStyle("-fx-background-color: #EEEEEE;-fx-font-size: 20px; -fx-text-fill: black;");
 
-        grid.add(titleHydrocyclone, 0, 25);
+
+
+
+
 
         // Headers for each section
         Label solidHeaderHydrocyclone = new Label("Пески гидроциклона");
@@ -382,33 +383,7 @@ public class Application extends javafx.application.Application {
 
         Label liquidHeaderHydrocyclone2 = new Label("Жидкая фаза");
         Label solidHeaderHydrocyclone2 = new Label("Твёрдая фаза");
-// --------------------- Adding UI Elements ---------------------
-// Solid Section
-        grid.add(solidHeaderHydrocyclone, 0, 26, 4, 1);
-        grid.add(liquidHeaderHydrocyclone2, 0, 27);
-        grid.add(solidHeaderHydrocyclone2, 2, 27);
 
-// Solid Section - Liquid Results
-        grid.add(solidLiquidQResultLabelHydrocyclone, 0, 28);
-        grid.add(solidLiquidQResultValueHydrocyclone, 1, 28);
-        grid.add(solidLiquidH2oResultLabelHydrocyclone, 0, 29);
-        grid.add(solidLiquidH2oResultValueHydrocyclone, 1, 29);
-        grid.add(solidLiquidKclResultLabelHydrocyclone, 0, 30);
-        grid.add(solidLiquidKclResultValueHydrocyclone, 1, 30);
-        grid.add(solidLiquidNaclResultLabelHydrocyclone, 0, 31);
-        grid.add(solidLiquidNaclResultValueHydrocyclone, 1, 31);
-        grid.add(solidLiquidCaso4ResultLabelHydrocyclone, 0, 32);
-        grid.add(solidLiquidCaso4ResultValueHydrocyclone, 1, 32);
-
-// Solid Section - Solid Results
-        grid.add(solidSolidQResultLabelHydrocyclone, 2, 28);
-        grid.add(solidSolidQResultValueHydrocyclone, 3, 28);
-        grid.add(solidSolidKclResultLabelHydrocyclone, 2, 29);
-        grid.add(solidSolidKclResultValueHydrocyclone, 3, 29);
-        grid.add(solidSolidNaclResultLabelHydrocyclone, 2, 30);
-        grid.add(solidSolidNaclResultValueHydrocyclone, 3, 30);
-        grid.add(solidWasteResultLabelHydrocyclone, 2, 31);
-        grid.add(solidWasteResultValueHydrocyclone, 3, 31);
 
         PieChart liquidPieChartHydrocyclone = new PieChart();
         liquidPieChartHydrocyclone.setTitle("Жидкая фаза");
@@ -426,46 +401,8 @@ public class Application extends javafx.application.Application {
         solidPieChart2Hydrocyclone.setTitle("Твёрдая фаза");
         solidPieChart2Hydrocyclone.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
 
-
-
-        grid.add(liquidPieChartHydrocyclone, 0, 33, 2, 2);
-        grid.add(solidPieChartHydrocyclone, 2, 33, 2, 2);
-
-// Liquid Section
         Label liquidHeaderHydrocyclone3 = new Label("Жидкая фаза");
         Label solidHeaderHydrocyclone3 = new Label("Твёрдая фаза");
-
-        grid.add(liquidHeaderHydrocyclone, 0, 43, 4, 1);
-        grid.add(liquidHeaderHydrocyclone3, 0, 44);
-        grid.add(solidHeaderHydrocyclone3, 2, 44);
-
-// Liquid Section - Liquid Results
-        grid.add(liquidLiquidQResultLabel, 0, 45);
-        grid.add(liquidLiquidQResultValue, 1, 45);
-        grid.add(liquidLiquidH2oResultLabel, 0, 46);
-        grid.add(liquidLiquidH2oResultValue, 1, 46);
-        grid.add(liquidLiquidKclResultLabel, 0, 47);
-        grid.add(liquidLiquidKclResultValue, 1, 47);
-        grid.add(liquidLiquidNaclResultLabel, 0, 48);
-        grid.add(liquidLiquidNaclResultValue, 1, 48);
-        grid.add(liquidLiquidCaso4ResultLabel, 0, 49);
-        grid.add(liquidLiquidCaso4ResultValue, 1, 49);
-
-// Liquid Section - Solid Results
-        grid.add(liquidSolidQResultLabelHydrocyclone, 2, 45);
-        grid.add(liquidSolidQResultValueHydrocyclone, 3, 45);
-        grid.add(liquidSolidKclResultLabelHydrocyclone, 2, 46);
-        grid.add(liquidSolidKclResultValueHydrocyclone, 3, 46);
-        grid.add(liquidSolidNaclResultLabelHydrocyclone, 2, 47);
-        grid.add(liquidSolidNaclResultValueHydrocyclone, 3, 47);
-        grid.add(liquidWasteResultLabelHydrocyclone, 2, 48);
-        grid.add(liquidWasteResultValueHydrocyclone, 3, 48);
-
-
-        grid.add(liquidPieChart2Hydrocyclone, 0, 50, 2, 2);
-        grid.add(solidPieChart2Hydrocyclone, 2, 50, 2, 2);
-
-
         Label solidTitleCentrifuge = new Label("Кек центрифуги");
         Label liquidHeaderCentrifuge = new Label("Жидкая фаза");
         Label solidHeaderCentrifuge = new Label("Твёрдая фаза");
@@ -498,24 +435,6 @@ public class Application extends javafx.application.Application {
 
         Label Cetrifuge = new Label("Центрифуга");
         Cetrifuge.setStyle("-fx-background-color: #EEEEEE;-fx-font-size: 20px;-fx-text-fill: black;");
-// Add headers
-        grid.add(Cetrifuge, 0, 52);
-        grid.add(solidTitleCentrifuge, 0, 53);
-        grid.add(liquidHeaderCentrifuge, 0, 54);
-        grid.add(solidHeaderCentrifuge, 2, 54);
-
-// Add liquid result labels to the first column
-        grid.add(liquidQResultLabelCentrifuge, 0, 55);
-        grid.add(liquidQResultValueCentrifuge, 1, 55);
-        grid.add(liquidH2oResultLabelCentrifuge, 0, 56);
-        grid.add(liquidH2oResultValueCentrifuge, 1, 56);
-        grid.add(liquidKclResultLabelCentrifuge, 0, 57);
-        grid.add(liquidKclResultValueCentrifuge, 1, 57);
-        grid.add(liquidNaclResultLabelCentrifuge, 0, 58);
-        grid.add(liquidNaclResultValueCentrifuge, 1, 58);
-        grid.add(liquidCaso4ResultLabelCentrifuge, 0, 59);
-        grid.add(liquidCaso4ResultValueCentrifuge, 1, 59);
-
         PieChart liquidPieChartCentrifuge = new PieChart();
         liquidPieChartCentrifuge.setTitle("Жидкая фаза");
         liquidPieChartCentrifuge.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
@@ -525,25 +444,7 @@ public class Application extends javafx.application.Application {
         solidPieChartCentrifuge.setTitle("Твёрдая фаза");
         solidPieChartCentrifuge.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
 
-        grid.add(liquidPieChartCentrifuge, 0, 60, 2, 2);
-        grid.add(solidPieChartCentrifuge, 2, 60, 2, 2);
-
-// Add solid result labels to the second column
-        grid.add(solidQResultLabelCentrifuge, 2, 55);
-        grid.add(solidQResultValueCentrifuge, 3, 55);
-        grid.add(solidKclResultLabelCentrifuge, 2, 56);
-        grid.add(solidKclResultValueCentrifuge, 3, 56);
-        grid.add(solidNaclResultLabelCentrifuge, 2, 57);
-        grid.add(solidNaclResultValueCentrifuge, 3, 57);
-        grid.add(wasteResultLabelCentrifuge, 2, 58);
-        grid.add(wasteResultValueCentrifuge, 3, 58);
-
-
         Label liqRatLabelCentrifuge = new Label("Влажность кека центрифуги, %");
-
-// Add input field for liqRat (Ж/Т)
-        grid.add(liqRatLabelCentrifuge, 1, 10);
-        grid.add(liqRatTextFieldCentrifuge, 0, 10);
 
 
         Label LliquidTitleCentrifuge = new Label("Фугат центрифуги");
@@ -565,30 +466,9 @@ public class Application extends javafx.application.Application {
         Label LliquidNaclResultValueCentrifuge = new Label();
         Label LliquidCaso4ResultValueCentrifuge = new Label();
 
-
-
-        grid.add(LliquidTitleCentrifuge, 0, 65);
-        // Add headers
-        grid.add(LliquidHeaderCentrifuge, 0, 66);
-
-        // Add liquid result labels to the first column
-        grid.add(LliquidQResultLabelCentrifuge,  0, 67);
-        grid.add(LliquidQResultValueCentrifuge, 1, 67);
-        grid.add(LliquidH2oResultLabelCentrifuge, 0, 68);
-        grid.add(LliquidH2oResultValueCentrifuge, 1, 68);
-        grid.add(LliquidKclResultLabelCentrifuge, 0, 69);
-        grid.add(LliquidKclResultValueCentrifuge, 1, 69);
-        grid.add(LliquidNaclResultLabelCentrifuge, 0, 70);
-        grid.add(LliquidNaclResultValueCentrifuge, 1, 70);
-        grid.add(LliquidCaso4ResultLabelCentrifuge, 0, 71);
-        grid.add(LliquidCaso4ResultValueCentrifuge, 1, 71);
-
-        grid.add(liquidPieChart2Centrifuge, 0, 72, 2, 2);
-
-
         Label Sushka = new Label("Сушка");
 
-        grid.add(Sushka, 0, 79);
+
         Sushka.setStyle("-fx-background-color: #EEEEEE; -fx-font-size: 20px;-fx-text-fill: black;");
 
         Label solidQResultLabelSushka = new Label("Q:");
@@ -603,9 +483,150 @@ public class Application extends javafx.application.Application {
         Label wasteResultValueSushka = new Label();
         Label h2oResultValueSushka = new Label();
         Label ExtractionResultValueSushka = new Label();
+        PieChart finalPieChart = new PieChart();
+        finalPieChart.setTitle("Готовый продукт");
+        finalPieChart.setStyle("-fx-background-color: #C73659; -fx-text-fill: black;");
+
+
+        Button saveButton = new Button("Сохранить внесенные данные");
+        Button loadButton = new Button("Заргрузить внесенные дынные");
+        Button resetButton = new Button("Очистить ячейки данных");
+
+        saveButton.setStyle("-fx-background-color: gray; -fx-text-fill: #EEEEEE;-fx-text-fill: black;");
+        loadButton.setStyle("-fx-background-color: gray; -fx-text-fill: #EEEEEE;-fx-text-fill: black;");
+        resetButton.setStyle("-fx-background-color: gray; -fx-text-fill: #EEEEEE;-fx-text-fill: black;");
+// --------------------- Adding UI Elements ---------------------
+
+
+        grid.add(liqRatLabelCentrifuge, 1, 10);
+        grid.add(liqRatTextFieldCentrifuge, 0, 10);
+
+
+        grid.add(solidSolidQResultLabelHydrocyclone, 2, 38);
+        grid.add(solidSolidQResultValueHydrocyclone, 3, 38);
+        grid.add(solidSolidKclResultLabelHydrocyclone, 2, 39);
+        grid.add(solidSolidKclResultValueHydrocyclone, 3, 39);
+        grid.add(solidSolidNaclResultLabelHydrocyclone, 2, 40);
+        grid.add(solidSolidNaclResultValueHydrocyclone, 3, 40);
+        grid.add(solidWasteResultLabelHydrocyclone, 2, 41);
+        grid.add(solidWasteResultValueHydrocyclone, 3, 41);
+
+        grid.add(liquidPieChartHydrocyclone, 0, 43, 2, 1);
+        grid.add(solidPieChartHydrocyclone, 2, 43, 2, 1);
+
+        grid.add(titleHydrocyclone, 0, 35);
+
+        grid.add(solidHeaderHydrocyclone, 0, 36, 4, 1);
+        grid.add(liquidHeaderHydrocyclone2, 0, 37);
+        grid.add(solidHeaderHydrocyclone2, 2, 37);
+
+// Solid Section - Liquid Results
+        grid.add(solidLiquidQResultLabelHydrocyclone, 0, 38);
+        grid.add(solidLiquidQResultValueHydrocyclone, 1, 38);
+        grid.add(solidLiquidH2oResultLabelHydrocyclone, 0, 39);
+        grid.add(solidLiquidH2oResultValueHydrocyclone, 1, 39);
+        grid.add(solidLiquidKclResultLabelHydrocyclone, 0, 40);
+        grid.add(solidLiquidKclResultValueHydrocyclone, 1, 40);
+        grid.add(solidLiquidNaclResultLabelHydrocyclone, 0, 41);
+        grid.add(solidLiquidNaclResultValueHydrocyclone, 1, 41);
+        grid.add(solidLiquidCaso4ResultLabelHydrocyclone, 0, 42);
+        grid.add(solidLiquidCaso4ResultValueHydrocyclone, 1, 42);
+
+        grid.add(liquidHeaderHydrocyclone, 0, 45, 4, 1);
+        grid.add(liquidHeaderHydrocyclone3, 0, 46);
+        grid.add(solidHeaderHydrocyclone3, 2, 46);
+
+// Liquid Section - Liquid Results
+        grid.add(liquidLiquidQResultLabel, 0, 47);
+        grid.add(liquidLiquidQResultValue, 1, 47);
+        grid.add(liquidLiquidH2oResultLabel, 0, 48);
+        grid.add(liquidLiquidH2oResultValue, 1, 48);
+        grid.add(liquidLiquidKclResultLabel, 0, 49);
+        grid.add(liquidLiquidKclResultValue, 1, 49);
+        grid.add(liquidLiquidNaclResultLabel, 0, 50);
+        grid.add(liquidLiquidNaclResultValue, 1, 50);
+        grid.add(liquidLiquidCaso4ResultLabel, 0, 51);
+        grid.add(liquidLiquidCaso4ResultValue, 1, 51);
+
+// Liquid Section - Solid Results
+        grid.add(liquidSolidQResultLabelHydrocyclone, 2, 47);
+        grid.add(liquidSolidQResultValueHydrocyclone, 3, 47);
+        grid.add(liquidSolidKclResultLabelHydrocyclone, 2, 48);
+        grid.add(liquidSolidKclResultValueHydrocyclone, 3, 48);
+        grid.add(liquidSolidNaclResultLabelHydrocyclone, 2, 49);
+        grid.add(liquidSolidNaclResultValueHydrocyclone, 3, 49);
+        grid.add(liquidWasteResultLabelHydrocyclone, 2, 50);
+        grid.add(liquidWasteResultValueHydrocyclone, 3, 50);
+
+
+        grid.add(liquidPieChart2Hydrocyclone, 0, 52, 2, 1);
+        grid.add(solidPieChart2Hydrocyclone, 2, 52, 2, 1);
 
 
 
+// Add headers
+        grid.add(Cetrifuge, 0, 54);
+        grid.add(solidTitleCentrifuge, 0, 55);
+        grid.add(liquidHeaderCentrifuge, 0, 56);
+        grid.add(solidHeaderCentrifuge, 2, 56);
+
+// Add liquid result labels to the first column
+        grid.add(liquidQResultLabelCentrifuge, 0, 57);
+        grid.add(liquidQResultValueCentrifuge, 1, 57);
+        grid.add(liquidH2oResultLabelCentrifuge, 0, 58);
+        grid.add(liquidH2oResultValueCentrifuge, 1, 58);
+        grid.add(liquidKclResultLabelCentrifuge, 0, 59);
+        grid.add(liquidKclResultValueCentrifuge, 1, 59);
+        grid.add(liquidNaclResultLabelCentrifuge, 0, 60);
+        grid.add(liquidNaclResultValueCentrifuge, 1, 60);
+        grid.add(liquidCaso4ResultLabelCentrifuge, 0, 61);
+        grid.add(liquidCaso4ResultValueCentrifuge, 1, 61);
+
+        grid.add(solidQResultLabelCentrifuge, 2, 57);
+        grid.add(solidQResultValueCentrifuge, 3, 57);
+        grid.add(solidKclResultLabelCentrifuge, 2, 58);
+        grid.add(solidKclResultValueCentrifuge, 3, 58);
+        grid.add(solidNaclResultLabelCentrifuge, 2, 59);
+        grid.add(solidNaclResultValueCentrifuge, 3, 59);
+        grid.add(wasteResultLabelCentrifuge, 2, 60);
+        grid.add(wasteResultValueCentrifuge, 3, 60);
+
+
+
+
+        grid.add(liquidPieChartCentrifuge, 0, 62, 2, 1);
+        grid.add(solidPieChartCentrifuge, 2, 62, 2, 1);
+
+
+// Add solid result labels to the second column
+
+
+// Add input field for liqRat (Ж/Т)
+
+
+
+
+        grid.add(LliquidTitleCentrifuge, 0, 67);
+        // Add headers
+        grid.add(LliquidHeaderCentrifuge, 0, 68);
+
+        // Add liquid result labels to the first column
+        grid.add(LliquidQResultLabelCentrifuge,  0, 69);
+        grid.add(LliquidQResultValueCentrifuge, 1, 69);
+        grid.add(LliquidH2oResultLabelCentrifuge, 0, 70);
+        grid.add(LliquidH2oResultValueCentrifuge, 1, 70);
+        grid.add(LliquidKclResultLabelCentrifuge, 0, 71);
+        grid.add(LliquidKclResultValueCentrifuge, 1, 71);
+        grid.add(LliquidNaclResultLabelCentrifuge, 0, 72);
+        grid.add(LliquidNaclResultValueCentrifuge, 1, 72);
+        grid.add(LliquidCaso4ResultLabelCentrifuge, 0, 73);
+        grid.add(LliquidCaso4ResultValueCentrifuge, 1, 73);
+
+        grid.add(liquidPieChart2Centrifuge, 0, 75, 2, 1);
+
+
+
+        grid.add(Sushka, 0, 79);
 
         grid.add(solidQResultLabelSushka, 0, 80);
         grid.add(solidQResultValueSushka, 1, 80);
@@ -619,24 +640,19 @@ public class Application extends javafx.application.Application {
         grid.add(ExtractionResultLabelSushka, 0, 85);
         grid.add(ExtractionResultValueSushka, 1, 85);
 
-        PieChart finalPieChart = new PieChart();
-        finalPieChart.setTitle("Готовый продукт");
-        finalPieChart.setStyle("-fx-background-color: #C73659; -fx-text-fill: black;");
 
         grid.add(finalPieChart, 0, 87, 2, 2);
 
 
-        Button saveButton = new Button("Сохранить внесенные данные");
-        Button loadButton = new Button("Заргрузить внесенные дынные");
-        Button resetButton = new Button("Очистить ячейки данных");
-
-        saveButton.setStyle("-fx-background-color: gray; -fx-text-fill: #EEEEEE;-fx-text-fill: black;");
-        loadButton.setStyle("-fx-background-color: gray; -fx-text-fill: #EEEEEE;-fx-text-fill: black;");
-        resetButton.setStyle("-fx-background-color: gray; -fx-text-fill: #EEEEEE;-fx-text-fill: black;");
 
         grid.add(saveButton, 2, 9, 6, 1);
         grid.add(loadButton, 2, 10, 6, 1);
         grid.add(resetButton, 2, 11, 6, 1);
+
+
+        Label Final = new Label("  ");
+        grid.add(Final, 0, 100);
+
         // --------------------- Event Handlers ---------------------
 
 
@@ -665,7 +681,7 @@ public class Application extends javafx.application.Application {
                 BigDecimal NaCLPercentInputSection = new BigDecimal(NaClPercentInput.getText()).divide(BigDecimal.valueOf(100));
                 BigDecimal CaSO4PercentInputSection = new BigDecimal(CaSO4PercentInput.getText()).divide(BigDecimal.valueOf(100));
                 BigDecimal WastePercentInputSection = BigDecimal.ONE.subtract(KClPercentInputSection).subtract(NaCLPercentInputSection).subtract(CaSO4PercentInputSection);
-
+                BigDecimal CaSO4PercentWaste = CaSO4PercentInputSection.add(WastePercentInputSection);
 
                 if (WastePercentInputSection.compareTo(BigDecimal.ZERO) < 0) {
                     showError("Процент состава руды больше 100%.");
@@ -676,15 +692,19 @@ public class Application extends javafx.application.Application {
                 solidMaterial.setS_Q(solidQInputSection);
                 BigDecimal kclAmountInputSection = solidQInputSection.multiply(KClPercentInputSection);
                 BigDecimal naclAmountInputSection = solidQInputSection.multiply(NaCLPercentInputSection);
-                BigDecimal combinedAmountInputSection = solidQInputSection.multiply(CaSO4PercentInputSection).add(WastePercentInputSection);
+                BigDecimal CaSO4AmountInputSection = solidQInputSection.multiply(CaSO4PercentInputSection);
+                BigDecimal TotalInputSectionPercent =  BigDecimal.ONE.subtract(KClPercentInputSection).subtract(NaCLPercentInputSection).subtract(CaSO4PercentInputSection);
+
+                BigDecimal WasteAmountInputSection = solidQInputSection.multiply(TotalInputSectionPercent);
+
                 solidMaterial.setSolidKCl(kclAmountInputSection);
                 solidMaterial.setSolidNaCl(naclAmountInputSection);
-                solidMaterial.setSolidCaSO4(solidQInputSection.multiply(CaSO4PercentInputSection));
-                BigDecimal TotalInputSectionPercent =  BigDecimal.ONE.subtract(KClPercentInputSection).subtract(NaCLPercentInputSection).subtract(CaSO4PercentInputSection);
+                solidMaterial.setSolidCaSO4(CaSO4AmountInputSection);
+
                 solidMaterial.setSolidWaste(solidQInputSection.multiply(TotalInputSectionPercent));
                 kclResultValue.setText(kclAmountInputSection.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
                 naclResultValue.setText(naclAmountInputSection.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
-                combinedResultValue.setText(combinedAmountInputSection.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                combinedResultValue.setText(WasteAmountInputSection.add(CaSO4AmountInputSection).setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
 
                 // Liquid Material Section
                 BigDecimal ratioInputSection = new BigDecimal(ratioInput.getText());
