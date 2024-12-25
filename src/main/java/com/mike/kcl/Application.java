@@ -102,8 +102,9 @@ public class Application extends javafx.application.Application {
         GridPane grid = createAlignedGridPane(7);
         // Layout
         grid.setHgap(2); // Horizontal spacing
-        grid.setVgap(10); // Vertical spacing
-        grid.setPadding(new Insets(5));
+        grid.setVgap(5); // Vertical spacing
+        grid.setPadding(new Insets(10));
+
 
         // Section 1: Liquid Section
         Label liquidTitleLabel = new Label("Вода на выщелачивание");
@@ -306,6 +307,7 @@ public class Application extends javafx.application.Application {
         PieChart liquidPieChartVishelachivanie = new PieChart();
         liquidPieChartVishelachivanie.setTitle("Жидкая фаза");
 
+
         liquidPieChartVishelachivanie.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
 
         PieChart solidPieChartVishelachivanie = new PieChart();
@@ -488,8 +490,25 @@ public class Application extends javafx.application.Application {
         finalPieChart.setStyle("-fx-background-color: #C73659; -fx-text-fill: black;");
 
 
-        Button saveButton = new Button("Сохранить внесенные данные");
-        Button loadButton = new Button("Заргрузить внесенные дынные");
+
+
+        Sushka.setStyle("-fx-background-color: #EEEEEE; -fx-font-size: 20px;-fx-text-fill: black;");
+
+
+        Label ExtractionResultLabelSushka2 = new Label("Извлечение узла:");
+        Label solidQResultValueSushka2 = new Label();
+        Label solidKclResultValueSushka2 = new Label();
+        Label solidNaclResultValueSushka2 = new Label();
+        Label wasteResultValueSushka2 = new Label();
+        Label h2oResultValueSushka2 = new Label();
+        Label ExtractionResultValueSushka2 = new Label();
+        PieChart finalPieChart2 = new PieChart();
+        finalPieChart2.setTitle("Готовый продукт");
+        finalPieChart2.setStyle("-fx-background-color: #C73659; -fx-text-fill: black;");
+
+
+        Button saveButton = new Button("Сохранить данные");
+        Button loadButton = new Button("Загрузить дынные");
         Button resetButton = new Button("Очистить ячейки данных");
 
         saveButton.setStyle("-fx-background-color: gray; -fx-text-fill: #EEEEEE;-fx-text-fill: black;");
@@ -512,7 +531,10 @@ public class Application extends javafx.application.Application {
         grid.add(solidWasteResultValueHydrocyclone, 3, 41);
 
         grid.add(liquidPieChartHydrocyclone, 0, 43, 2, 1);
+
+
         grid.add(solidPieChartHydrocyclone, 2, 43, 2, 1);
+
 
         grid.add(titleHydrocyclone, 0, 35);
 
@@ -636,13 +658,21 @@ public class Application extends javafx.application.Application {
         grid.add(solidNaclResultValueSushka, 1, 82);
         grid.add(wasteResultLabelSushka, 0, 83);
         grid.add(wasteResultValueSushka, 1, 83);
-        grid.addRow(84, h2oResultLabelSushka, h2oResultValueSushka);
+        grid.add(h2oResultLabelSushka, 0, 84);
+        grid.add(h2oResultValueSushka, 1, 84);
         grid.add(ExtractionResultLabelSushka, 0, 85);
         grid.add(ExtractionResultValueSushka, 1, 85);
 
 
         grid.add(finalPieChart, 0, 87, 2, 2);
 
+
+
+        grid.add(ExtractionResultLabelSushka2, 4, 4);
+        grid.add(ExtractionResultValueSushka2, 5, 4);
+
+
+        grid.add(finalPieChart2, 4, 6, 2, 10);
 
 
         grid.add(saveButton, 2, 9, 6, 1);
@@ -685,6 +715,10 @@ public class Application extends javafx.application.Application {
 
                 if (WastePercentInputSection.compareTo(BigDecimal.ZERO) < 0) {
                     showError("Процент состава руды больше 100%.");
+                    return; // Stop further execution
+                }
+                if (WastePercentInputSection.compareTo(BigDecimal.ZERO) != 0) {
+                    showError("Процент состава руды меньше 100%.");
                     return; // Stop further execution
                 }
 
@@ -1197,6 +1231,15 @@ public class Application extends javafx.application.Application {
                         new PieChart.Data("NaCl, " + formatPercent(NaclPercent), NaclPercent.doubleValue()),
                         new PieChart.Data("KCl, " + formatPercent(KclPercent), KclPercent.doubleValue()),
                         new PieChart.Data("H.O. + CaSO4, " + formatPercent(WasteCaso4Percent), WasteCaso4Percent.doubleValue())
+
+                );
+                finalPieChart2.getData().clear();
+                finalPieChart2.getData().addAll(
+                        new PieChart.Data("H2O, " + formatPercent(H2OPercent), H2OPercent.doubleValue()),
+                        new PieChart.Data("NaCl, " + formatPercent(NaclPercent), NaclPercent.doubleValue()),
+                        new PieChart.Data("KCl, " + formatPercent(KclPercent), KclPercent.doubleValue()),
+                        new PieChart.Data("H.O. + CaSO4, " + formatPercent(WasteCaso4Percent), WasteCaso4Percent.doubleValue())
+
                 );
 
                 sushka.setQ(Q);
@@ -1212,6 +1255,13 @@ public class Application extends javafx.application.Application {
                 solidNaclResultValueSushka.setText(nacl.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
                 wasteResultValueSushka.setText(wasteSushka.add(caso4).setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
                 h2oResultValueSushka.setText(h2oSushka.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+
+                ExtractionResultValueSushka2.setText(Extration.setScale(2, RoundingMode.HALF_UP).toString()+ " %");
+                solidQResultValueSushka2.setText(Q.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+                solidKclResultValueSushka2.setText(kcl.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+                solidNaclResultValueSushka2.setText(nacl.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+                wasteResultValueSushka2.setText(wasteSushka.add(caso4).setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+                h2oResultValueSushka2.setText(h2oSushka.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
 
             } catch (NumberFormatException e) {
                 showError("Введите корректные значения. Десятичная дробь должна быть записана через точку. ");
@@ -1275,9 +1325,9 @@ public class Application extends javafx.application.Application {
 
     private GridPane createAlignedGridPane(int numColumns) {
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(5));
-        grid.setHgap(5);
-        grid.setVgap(5);
+        grid.setPadding(new Insets(2));
+        grid.setHgap(2);
+        grid.setVgap(2);
 
 
         // Define consistent column constraints for all columns
