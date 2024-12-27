@@ -2,10 +2,12 @@ package com.mike.kcl;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Side;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 
@@ -74,18 +76,17 @@ public class Application extends javafx.application.Application {
         Scene scene = new Scene(scrollPane, 1600, 800);
         primaryStage.setScene(scene);
         primaryStage.setTitle("К-калькулятор");
+        primaryStage.setFullScreen(true);
 
         // Responsiveness: Adjust VBox size to window size
-        layout.prefWidthProperty().bind(scene.widthProperty().multiply(1.2)); // Dynamic width
-        layout.prefHeightProperty().bind(scene.heightProperty().multiply(1.2)); // Dynamic height
+        layout.prefWidthProperty().bind(scene.widthProperty().multiply(2)); // Dynamic width
+        layout.prefHeightProperty().bind(scene.heightProperty().multiply(2)); // Dynamic height
 
 
         // Load saved values
 
         primaryStage.show();
     }
-
-
 
 
 
@@ -98,12 +99,13 @@ public class Application extends javafx.application.Application {
         return section;
     }
 
+
     private GridPane createCombinedSection(Liquid liquid, SolidMaterial solidMaterial, LiquidMaterial liquidMaterial, Vishelachivanie vishelachivanie, HydrocycloneSolid hydrocycloneSolid, HydrocycloneLiquid hydrocycloneLiquid, CentrifugeSolid centrifugeSolid, CentrifugeLiquid centrifugeLiquid, Sushka sushka) {
         GridPane grid = createAlignedGridPane(7);
         // Layout
         grid.setHgap(2); // Horizontal spacing
         grid.setVgap(5); // Vertical spacing
-        grid.setPadding(new Insets(10));
+        grid.setPadding(new Insets(5));
 
 
         // Section 1: Liquid Section
@@ -218,6 +220,7 @@ public class Application extends javafx.application.Application {
 // Add Combined Button (span across all columns)
         grid.add(calculateButton, 2, 8, 6, 1);
 
+
         Label liquidHeader = new Label("Жидкая фаза");
         Label solidHeader = new Label("Твёрдая фаза");
 
@@ -306,13 +309,17 @@ public class Application extends javafx.application.Application {
         // Add calculate button spanning both columns
         PieChart liquidPieChartVishelachivanie = new PieChart();
         liquidPieChartVishelachivanie.setTitle("Жидкая фаза");
-
-
+        liquidPieChartVishelachivanie.setLegendSide(Side.LEFT);
         liquidPieChartVishelachivanie.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
+        liquidPieChartVishelachivanie.setPrefWidth(10);
+        liquidPieChartVishelachivanie.setPrefHeight(10);
 
         PieChart solidPieChartVishelachivanie = new PieChart();
         solidPieChartVishelachivanie.setTitle("Твёрдая фаза");
+        solidPieChartVishelachivanie.setLegendSide(Side.LEFT);
         solidPieChartVishelachivanie.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
+        solidPieChartVishelachivanie.setPrefWidth(10);
+        solidPieChartVishelachivanie.setPrefHeight(10);
 
         grid.add(liquidPieChartVishelachivanie, 0, ++rowIndex, 2, 1);
         grid.add(solidPieChartVishelachivanie, 2, rowIndex, 2, 1);
@@ -390,18 +397,32 @@ public class Application extends javafx.application.Application {
         PieChart liquidPieChartHydrocyclone = new PieChart();
         liquidPieChartHydrocyclone.setTitle("Жидкая фаза");
         liquidPieChartHydrocyclone.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
+        liquidPieChartHydrocyclone.setPrefWidth(10);
+        liquidPieChartHydrocyclone.setPrefHeight(10);
+        liquidPieChartHydrocyclone.setLegendSide(Side.LEFT);
 
         PieChart solidPieChartHydrocyclone = new PieChart();
         solidPieChartHydrocyclone.setTitle("Твёрдая фаза");
         solidPieChartHydrocyclone.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
+        solidPieChartHydrocyclone.setPrefWidth(10);
+        solidPieChartHydrocyclone.setPrefHeight(10);
+        solidPieChartHydrocyclone.setLegendSide(Side.LEFT);
 
         PieChart liquidPieChart2Hydrocyclone = new PieChart();
         liquidPieChart2Hydrocyclone.setTitle("Жидкая фаза");
         liquidPieChart2Hydrocyclone.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
+        liquidPieChart2Hydrocyclone.setPrefWidth(10);
+        liquidPieChart2Hydrocyclone.setPrefHeight(10);
+        liquidPieChart2Hydrocyclone.setLegendSide(Side.LEFT);
+
 
         PieChart solidPieChart2Hydrocyclone = new PieChart();
         solidPieChart2Hydrocyclone.setTitle("Твёрдая фаза");
         solidPieChart2Hydrocyclone.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
+        solidPieChart2Hydrocyclone.setPrefWidth(10);
+        solidPieChart2Hydrocyclone.setPrefHeight(10);
+        solidPieChart2Hydrocyclone.setLegendSide(Side.LEFT);
+
 
         Label liquidHeaderHydrocyclone3 = new Label("Жидкая фаза");
         Label solidHeaderHydrocyclone3 = new Label("Твёрдая фаза");
@@ -440,11 +461,18 @@ public class Application extends javafx.application.Application {
         PieChart liquidPieChartCentrifuge = new PieChart();
         liquidPieChartCentrifuge.setTitle("Жидкая фаза");
         liquidPieChartCentrifuge.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
+        liquidPieChartCentrifuge.setPrefWidth(10);
+        liquidPieChartCentrifuge.setPrefHeight(10);
+        liquidPieChartCentrifuge.setLegendSide(Side.LEFT);
+
 
 
         PieChart solidPieChartCentrifuge = new PieChart();
         solidPieChartCentrifuge.setTitle("Твёрдая фаза");
         solidPieChartCentrifuge.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
+        solidPieChartCentrifuge.setPrefWidth(10);
+        solidPieChartCentrifuge.setPrefHeight(10);
+        solidPieChartCentrifuge.setLegendSide(Side.LEFT);
 
         Label liqRatLabelCentrifuge = new Label("Влажность кека центрифуги, %");
 
@@ -455,6 +483,9 @@ public class Application extends javafx.application.Application {
         PieChart liquidPieChart2Centrifuge = new PieChart();
         liquidPieChart2Centrifuge.setTitle("Фугат");
         liquidPieChart2Centrifuge.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
+        liquidPieChart2Centrifuge.setPrefWidth(10);
+        liquidPieChart2Centrifuge.setPrefHeight(10);
+        liquidPieChart2Centrifuge.setLegendSide(Side.LEFT);
 
         // Liquid result labels
         Label LliquidQResultLabelCentrifuge = new Label("Q:");
@@ -488,7 +519,9 @@ public class Application extends javafx.application.Application {
         PieChart finalPieChart = new PieChart();
         finalPieChart.setTitle("Готовый продукт");
         finalPieChart.setStyle("-fx-background-color: #C73659; -fx-text-fill: black;");
-
+        finalPieChart.setPrefWidth(10);
+        finalPieChart.setPrefHeight(10);
+        finalPieChart.setLegendSide(Side.LEFT);
 
 
 
@@ -505,6 +538,9 @@ public class Application extends javafx.application.Application {
         PieChart finalPieChart2 = new PieChart();
         finalPieChart2.setTitle("Готовый продукт");
         finalPieChart2.setStyle("-fx-background-color: #C73659; -fx-text-fill: black;");
+        finalPieChart2.setPrefWidth(10);
+        finalPieChart2.setPrefHeight(10);
+
 
 
         Button saveButton = new Button("Сохранить данные");
@@ -664,7 +700,7 @@ public class Application extends javafx.application.Application {
         grid.add(ExtractionResultValueSushka, 1, 85);
 
 
-        grid.add(finalPieChart, 0, 87, 2, 2);
+        grid.add(finalPieChart, 0, 87, 2, 10);
 
 
 
@@ -1227,10 +1263,11 @@ public class Application extends javafx.application.Application {
 
                 finalPieChart.getData().clear();
                 finalPieChart.getData().addAll(
-                        new PieChart.Data("H2O, " + formatPercent(H2OPercent), H2OPercent.doubleValue()),
+                        new PieChart.Data("H.O. + CaSO4, " + formatPercent(WasteCaso4Percent), WasteCaso4Percent.doubleValue()),
                         new PieChart.Data("NaCl, " + formatPercent(NaclPercent), NaclPercent.doubleValue()),
                         new PieChart.Data("KCl, " + formatPercent(KclPercent), KclPercent.doubleValue()),
-                        new PieChart.Data("H.O. + CaSO4, " + formatPercent(WasteCaso4Percent), WasteCaso4Percent.doubleValue())
+                        new PieChart.Data("H2O, " + formatPercent(H2OPercent), H2OPercent.doubleValue())
+
 
                 );
                 finalPieChart2.getData().clear();
