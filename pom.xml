@@ -104,7 +104,7 @@
               <jlinkZipName>app.zip</jlinkZipName>
               <noManPages>true</noManPages>
               <stripDebug>true</stripDebug>
-              <noHeaderFiles>true</noHeaderFiles>
+              <noHeaderFiles>true</noHeaderFiles><!-- Add only required modules -->
             </configuration>
           </execution>
         </executions>
