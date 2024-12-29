@@ -98,6 +98,37 @@ public class Application extends javafx.application.Application {
         section.setCollapsible(false);
         return section;
     }
+    private void updateHints(TextField[] fields) {
+        double total = 0;
+
+        for (TextField field : fields) {
+            String text = field.getText();
+            if (!text.isEmpty()) {
+                try {
+                    total += Double.parseDouble(text.replace("%", ""));
+                } catch (NumberFormatException ignored) {
+                }
+            }
+        }
+
+        double remaining = Math.max(0, 100 - total);
+        int emptyFields = 0;
+
+        for (TextField field : fields) {
+            if (field.getText().isEmpty()) {
+                emptyFields++;
+            }
+        }
+
+        for (TextField field : fields) {
+            if (field.getText().isEmpty() && emptyFields > 0) {
+                field.setPromptText(String.format("%.2f%%", remaining / emptyFields));
+            } else {
+                field.setPromptText("");
+            }
+        }
+    }
+
 
 
     private GridPane createCombinedSection(Liquid liquid, SolidMaterial solidMaterial, LiquidMaterial liquidMaterial, Vishelachivanie vishelachivanie, HydrocycloneSolid hydrocycloneSolid, HydrocycloneLiquid hydrocycloneLiquid, CentrifugeSolid centrifugeSolid, CentrifugeLiquid centrifugeLiquid, Sushka sushka) {
@@ -550,6 +581,12 @@ public class Application extends javafx.application.Application {
         saveButton.setStyle("-fx-background-color: gray; -fx-text-fill: #EEEEEE;-fx-text-fill: black;");
         loadButton.setStyle("-fx-background-color: gray; -fx-text-fill: #EEEEEE;-fx-text-fill: black;");
         resetButton.setStyle("-fx-background-color: gray; -fx-text-fill: #EEEEEE;-fx-text-fill: black;");
+
+        TextField[] fields = {KClPercentInput, NaClPercentInput, CaSO4PercentInput};
+
+        for (TextField field : fields) {
+            field.textProperty().addListener((observable, oldValue, newValue) -> updateHints(fields));
+        }
 // --------------------- Adding UI Elements ---------------------
 
 
@@ -1345,7 +1382,9 @@ public class Application extends javafx.application.Application {
             liqRatTextFieldCentrifuge.setText("");
 
 
+
         });
+
 
 
 
