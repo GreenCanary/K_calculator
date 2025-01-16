@@ -178,6 +178,7 @@ public class Application extends javafx.application.Application {
 // Combined Button
         Button calculateButton = new Button("Внести данные и расчитать Г.П.");
         calculateButton.setStyle("-fx-background-color: green; -fx-text-fill: #EEEEEE; -fx-text-fill: black;");
+//
 
         Label Qruda = new Label("Q, т/ч");
         Label KCl = new Label("KCl, %");
@@ -187,10 +188,10 @@ public class Application extends javafx.application.Application {
         Label Qvoda = new Label("Q, т/ч");
 
 
-        grid.add(Qruda, 1, 1);
-        grid.add(KCl, 1, 2);
-        grid.add(NaCl, 1, 3);
-        grid.add(CaSO4, 1, 4);
+        grid.add(Qruda, 1, 4);
+        grid.add(KCl, 1, 5);
+        grid.add(NaCl, 1, 6);
+        grid.add(CaSO4, 1, 7);
         grid.add(MatochinkJT, 3, 1);
         grid.add(Qvoda, 5, 1);
 
@@ -215,17 +216,19 @@ public class Application extends javafx.application.Application {
         KClPercentInput.setPromptText("KCl, %");
         NaClPercentInput.setPromptText("NaCl, %");
         CaSO4PercentInput.setPromptText("CaSO4, %");
-        grid.add(solidQInput, solidColumn, rowIndex++);
-        grid.add(KClPercentInput, solidColumn, rowIndex++);
-        grid.add(NaClPercentInput, solidColumn, rowIndex++);
-        grid.add(CaSO4PercentInput, solidColumn, rowIndex++);
-
         grid.add(kclResultLabel, solidColumn, rowIndex);
         grid.add(kclResultValue, solidColumn + 1, rowIndex++);
         grid.add(naclResultLabel, solidColumn, rowIndex);
         grid.add(naclResultValue, solidColumn + 1, rowIndex++);
         grid.add(combinedResultLabel, solidColumn, rowIndex);
         grid.add(combinedResultValue, solidColumn + 1, rowIndex++);
+
+        grid.add(solidQInput, solidColumn, rowIndex++);
+        grid.add(KClPercentInput, solidColumn, rowIndex++);
+        grid.add(NaClPercentInput, solidColumn, rowIndex++);
+        grid.add(CaSO4PercentInput, solidColumn, rowIndex++);
+
+
 
 // Liquid Material Section
         int liquidMaterialColumn = 2;
@@ -547,6 +550,7 @@ public class Application extends javafx.application.Application {
         Label wasteResultValueSushka = new Label();
         Label h2oResultValueSushka = new Label();
         Label ExtractionResultValueSushka = new Label();
+        ExtractionResultValueSushka.setStyle("-fx-background-color: green; -fx-text-fill: #EEEEEE; -fx-text-fill: black;");
         PieChart finalPieChart = new PieChart();
         finalPieChart.setTitle("Готовый продукт");
         finalPieChart.setStyle("-fx-background-color: #C73659; -fx-text-fill: black;");
@@ -566,6 +570,7 @@ public class Application extends javafx.application.Application {
         Label wasteResultValueSushka2 = new Label();
         Label h2oResultValueSushka2 = new Label();
         Label ExtractionResultValueSushka2 = new Label();
+        ExtractionResultValueSushka2.setStyle("-fx-background-color: green; -fx-text-fill: #EEEEEE; -fx-text-fill: black;");
         PieChart finalPieChart2 = new PieChart();
         finalPieChart2.setTitle("Готовый продукт");
         finalPieChart2.setStyle("-fx-background-color: #C73659; -fx-text-fill: black;");
@@ -1284,8 +1289,8 @@ public class Application extends javafx.application.Application {
                 BigDecimal h2o2 = Sum.divide(h2o1, RoundingMode.HALF_UP);;
                 BigDecimal h2oSushka = h2o2.multiply(gp);
                 BigDecimal Q = Sum.add(h2oSushka);
-                BigDecimal ExtractionSum = liquidMaterial.getLiquidKCl().add(solidMaterial.getSolidKCl());
-                BigDecimal Extration = kcl.divide(ExtractionSum, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+
+                BigDecimal Extration = kcl.divide(kclAmountInputSection, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
 
 
                 BigDecimal H2OPercent = h2oSushka.divide(Q, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
