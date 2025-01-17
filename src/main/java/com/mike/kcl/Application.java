@@ -147,7 +147,7 @@ public class Application extends javafx.application.Application {
         Label h2oResultValue = new Label();
 
 // Section 2: Solid Material Section
-        Label solidMaterialTitleLabel = new Label("Руда");
+        Label solidMaterialTitleLabel = new Label("Концентрат на выщелачивание");
         solidMaterialTitleLabel.setStyle("-fx-background-color: #EEEEEE; -fx-font-size: 20px;-fx-text-fill: black;");
         TextField solidQInput = new TextField();
         TextField KClPercentInput = new TextField();
@@ -288,7 +288,7 @@ public class Application extends javafx.application.Application {
 
 
         TextField liqRatTextFieldHydrocyclone = new TextField();
-        liqRatTextFieldHydrocyclone.setPromptText("Ж/Т");
+        liqRatTextFieldHydrocyclone.setPromptText("Ж/Т:");
         Label liqRatLabelHydrocyclone = new Label("Ж/Т, гидроциклон");
 
         TextField solQuartRatioTextFieldHydrocyclone = new TextField();
@@ -335,10 +335,9 @@ public class Application extends javafx.application.Application {
         grid.add(wasteResultLabelVishelachivanie, 2, ++rowIndex);
         grid.add(wasteResultValueVishelachivanie, 3, rowIndex);
 
-        rowIndex++;
         // Add ratio label spanning both columns
-        grid.add(ratioResultLabelVishelachivanie, 0, ++rowIndex, 2, 1);
-        grid.add(ratioResultValueVishelachivanie, 1, rowIndex, 2, 1);
+        grid.add(ratioResultLabelVishelachivanie, 2, ++rowIndex, 2, 1);
+        grid.add(ratioResultValueVishelachivanie, 3, rowIndex, 2, 1);
 
         // Add calculate button spanning both columns
         PieChart liquidPieChartVishelachivanie = new PieChart();
@@ -429,21 +428,21 @@ public class Application extends javafx.application.Application {
 
 
         PieChart liquidPieChartHydrocyclone = new PieChart();
-        liquidPieChartHydrocyclone.setTitle("Жидкая фаза");
+        liquidPieChartHydrocyclone.setTitle("Жидкая фаза (Пески гидроциклона)");
         liquidPieChartHydrocyclone.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
         liquidPieChartHydrocyclone.setPrefWidth(10);
         liquidPieChartHydrocyclone.setPrefHeight(10);
         liquidPieChartHydrocyclone.setLegendSide(Side.LEFT);
 
         PieChart solidPieChartHydrocyclone = new PieChart();
-        solidPieChartHydrocyclone.setTitle("Твёрдая фаза");
+        solidPieChartHydrocyclone.setTitle("Твёрдая фаза (Пески гидроциклона)");
         solidPieChartHydrocyclone.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
         solidPieChartHydrocyclone.setPrefWidth(10);
         solidPieChartHydrocyclone.setPrefHeight(10);
         solidPieChartHydrocyclone.setLegendSide(Side.LEFT);
 
         PieChart liquidPieChart2Hydrocyclone = new PieChart();
-        liquidPieChart2Hydrocyclone.setTitle("Жидкая фаза");
+        liquidPieChart2Hydrocyclone.setTitle("Жидкая фаза (Слив гидроциклона)");
         liquidPieChart2Hydrocyclone.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
         liquidPieChart2Hydrocyclone.setPrefWidth(10);
         liquidPieChart2Hydrocyclone.setPrefHeight(10);
@@ -451,7 +450,7 @@ public class Application extends javafx.application.Application {
 
 
         PieChart solidPieChart2Hydrocyclone = new PieChart();
-        solidPieChart2Hydrocyclone.setTitle("Твёрдая фаза");
+        solidPieChart2Hydrocyclone.setTitle("Твёрдая фаза (Слив гидроциклона)");
         solidPieChart2Hydrocyclone.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
         solidPieChart2Hydrocyclone.setPrefWidth(10);
         solidPieChart2Hydrocyclone.setPrefHeight(10);
@@ -493,7 +492,7 @@ public class Application extends javafx.application.Application {
         Label Cetrifuge = new Label("Центрифуга");
         Cetrifuge.setStyle("-fx-background-color: #EEEEEE;-fx-font-size: 20px;-fx-text-fill: black;");
         PieChart liquidPieChartCentrifuge = new PieChart();
-        liquidPieChartCentrifuge.setTitle("Жидкая фаза");
+        liquidPieChartCentrifuge.setTitle("Жидкая фаза (Кек центрифуги)");
         liquidPieChartCentrifuge.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
         liquidPieChartCentrifuge.setPrefWidth(10);
         liquidPieChartCentrifuge.setPrefHeight(10);
@@ -502,7 +501,7 @@ public class Application extends javafx.application.Application {
 
 
         PieChart solidPieChartCentrifuge = new PieChart();
-        solidPieChartCentrifuge.setTitle("Твёрдая фаза");
+        solidPieChartCentrifuge.setTitle("Твёрдая фаза (Кек центрифуги)");
         solidPieChartCentrifuge.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
         solidPieChartCentrifuge.setPrefWidth(10);
         solidPieChartCentrifuge.setPrefHeight(10);
@@ -570,7 +569,6 @@ public class Application extends javafx.application.Application {
         Label wasteResultValueSushka2 = new Label();
         Label h2oResultValueSushka2 = new Label();
         Label ExtractionResultValueSushka2 = new Label();
-        ExtractionResultValueSushka2.setStyle("-fx-background-color: green; -fx-text-fill: #EEEEEE; -fx-text-fill: black;");
         PieChart finalPieChart2 = new PieChart();
         finalPieChart2.setTitle("Готовый продукт");
         finalPieChart2.setStyle("-fx-background-color: #C73659; -fx-text-fill: black;");
@@ -580,7 +578,7 @@ public class Application extends javafx.application.Application {
 
 
         Button saveButton = new Button("Сохранить данные");
-        Button loadButton = new Button("Загрузить дынные");
+        Button loadButton = new Button("Загрузить данные");
         Button resetButton = new Button("Очистить ячейки данных");
 
         saveButton.setStyle("-fx-background-color: gray; -fx-text-fill: #EEEEEE;-fx-text-fill: black;");
@@ -605,8 +603,14 @@ public class Application extends javafx.application.Application {
         grid.add(solidSolidKclResultValueHydrocyclone, 3, 39);
         grid.add(solidSolidNaclResultLabelHydrocyclone, 2, 40);
         grid.add(solidSolidNaclResultValueHydrocyclone, 3, 40);
+
+        Label ratioLabelHydrocycloneSolid = new Label("Ж/Т:");
+        Label ratioResultHydrocycloneSolid = new Label();
         grid.add(solidWasteResultLabelHydrocyclone, 2, 41);
         grid.add(solidWasteResultValueHydrocyclone, 3, 41);
+        grid.add(ratioLabelHydrocycloneSolid, 2, 42);
+        grid.add(ratioResultHydrocycloneSolid, 3, 42);
+
 
         grid.add(liquidPieChartHydrocyclone, 0, 43, 2, 1);
 
@@ -1065,6 +1069,9 @@ public class Application extends javafx.application.Application {
                 liquidSolidNaclResultValueHydrocyclone.setText(SolidNaclAmountHydrocyclone.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
                 liquidWasteResultValueHydrocyclone.setText(WasteCaso4Hydrocyclone.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
 
+
+
+
                 BigDecimal LiquidH2OPercentHydrocyclone = sLiquidH2OAmountHydrocyclone.divide(sliquidQHydrocyclone, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
 
                 BigDecimal LiquidNaclPercentHydrocyclone = sLiquidNaclAmountHydrocyclone.divide(sliquidQHydrocyclone, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
@@ -1110,6 +1117,7 @@ public class Application extends javafx.application.Application {
                 BigDecimal  WasteCaso4Percent2Hydrocyclone = WasteCaso4Hydrocyclone.compareTo(BigDecimal.ZERO) == 0
                         ? BigDecimal.ZERO
                         : WasteCaso4Hydrocyclone.divide(solidQHydrocyclone, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+
 
 
 
@@ -1291,6 +1299,7 @@ public class Application extends javafx.application.Application {
                 BigDecimal Q = Sum.add(h2oSushka);
 
                 BigDecimal Extration = kcl.divide(kclAmountInputSection, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+                Extration = Extration.max(BigDecimal.ZERO).min(BigDecimal.valueOf(100));
 
 
                 BigDecimal H2OPercent = h2oSushka.divide(Q, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
@@ -1328,6 +1337,15 @@ public class Application extends javafx.application.Application {
                 sushka.setWaste(wasteSushka);
                 sushka.setH2O(h2oSushka);
 
+                if (Extration.compareTo(BigDecimal.valueOf(94.0)) > 0){
+                    ExtractionResultValueSushka.setStyle("-fx-background-color: green; -fx-text-fill: #EEEEEE; -fx-text-fill: black;");
+                    ExtractionResultValueSushka2.setStyle("-fx-background-color: green; -fx-text-fill: #EEEEEE; -fx-text-fill: black;");
+                }
+                else {
+                    ExtractionResultValueSushka.setStyle("-fx-background-color: brown; -fx-text-fill: #EEEEEE; -fx-text-fill: black;");
+                    ExtractionResultValueSushka2.setStyle("-fx-background-color: brown; -fx-text-fill: #EEEEEE; -fx-text-fill: black;");
+                }
+
                 ExtractionResultValueSushka.setText(Extration.setScale(2, RoundingMode.HALF_UP).toString()+ " %");
                 solidQResultValueSushka.setText(Q.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
                 solidKclResultValueSushka.setText(kcl.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
@@ -1341,6 +1359,10 @@ public class Application extends javafx.application.Application {
                 solidNaclResultValueSushka2.setText(nacl.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
                 wasteResultValueSushka2.setText(wasteSushka.add(caso4).setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
                 h2oResultValueSushka2.setText(h2oSushka.setScale(2, RoundingMode.HALF_UP).toString()+ " т/ч");
+
+
+                BigDecimal ratioHydrocycloneSolid = hydrocycloneSolid.getL_Q().divide(hydrocycloneSolid.getS_Q(), RoundingMode.HALF_UP);
+                ratioResultHydrocycloneSolid.setText(ratioHydrocycloneSolid.setScale(2, RoundingMode.HALF_UP).toString());
 
             } catch (NumberFormatException e) {
                 showError("Введите корректные значения. Десятичная дробь должна быть записана через точку. ");
@@ -1370,6 +1392,9 @@ public class Application extends javafx.application.Application {
             solQuartRatioTextFieldHydrocyclone.setText(prefs.get("solQuartRatioTextFieldHydrocyclone", ""));
             liqRatTextFieldCentrifuge.setText(prefs.get("liqRatTextFieldCentrifuge", ""));
             System.out.println("Data loaded!");
+
+
+
 
 
         });
