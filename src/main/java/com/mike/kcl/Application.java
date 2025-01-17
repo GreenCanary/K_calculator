@@ -606,6 +606,13 @@ public class Application extends javafx.application.Application {
 
         Label ratioLabelHydrocycloneSolid = new Label("Ж/Т:");
         Label ratioResultHydrocycloneSolid = new Label();
+
+        Label ratioLabelHydrocycloneLuquid = new Label("Ж/Т:");
+        Label ratioResultHydrocycloneLiquid = new Label();
+
+        Label ratioLabelCentrifuge= new Label("Ж/Т:");
+        Label ratioResultCentrifuge = new Label();
+
         grid.add(solidWasteResultLabelHydrocyclone, 2, 41);
         grid.add(solidWasteResultValueHydrocyclone, 3, 41);
         grid.add(ratioLabelHydrocycloneSolid, 2, 42);
@@ -662,6 +669,9 @@ public class Application extends javafx.application.Application {
         grid.add(liquidWasteResultLabelHydrocyclone, 2, 50);
         grid.add(liquidWasteResultValueHydrocyclone, 3, 50);
 
+        grid.add(ratioLabelHydrocycloneLuquid, 2, 51);
+        grid.add(ratioResultHydrocycloneLiquid, 3, 51);
+
 
         grid.add(liquidPieChart2Hydrocyclone, 0, 52, 2, 1);
         grid.add(solidPieChart2Hydrocyclone, 2, 52, 2, 1);
@@ -694,6 +704,8 @@ public class Application extends javafx.application.Application {
         grid.add(solidNaclResultValueCentrifuge, 3, 59);
         grid.add(wasteResultLabelCentrifuge, 2, 60);
         grid.add(wasteResultValueCentrifuge, 3, 60);
+        grid.add(ratioLabelCentrifuge, 2, 61);
+        grid.add(ratioResultCentrifuge, 3, 61);
 
 
 
@@ -1363,7 +1375,18 @@ public class Application extends javafx.application.Application {
 
                 BigDecimal ratioHydrocycloneSolid = hydrocycloneSolid.getL_Q().divide(hydrocycloneSolid.getS_Q(), RoundingMode.HALF_UP);
                 ratioResultHydrocycloneSolid.setText(ratioHydrocycloneSolid.setScale(2, RoundingMode.HALF_UP).toString());
+                BigDecimal ratioHydrocycloneLiquid;
 
+                if (hydrocycloneLiquid.getS_Q().compareTo(BigDecimal.ZERO) == 0) {
+                    ratioHydrocycloneLiquid = BigDecimal.ZERO;
+                } else {
+                    ratioHydrocycloneLiquid = hydrocycloneLiquid.getL_Q().divide(hydrocycloneLiquid.getS_Q(), RoundingMode.HALF_UP);
+                }
+
+                ratioResultHydrocycloneLiquid.setText(ratioHydrocycloneLiquid.setScale(2, RoundingMode.HALF_UP).toString());
+
+                BigDecimal ratioCentrifuge = centrifugeSolid.getL_Q().divide(centrifugeSolid.getS_Q(), RoundingMode.HALF_UP);
+                ratioResultCentrifuge.setText(ratioCentrifuge.setScale(2, RoundingMode.HALF_UP).toString());
             } catch (NumberFormatException e) {
                 showError("Введите корректные значения. Десятичная дробь должна быть записана через точку. ");
             }
