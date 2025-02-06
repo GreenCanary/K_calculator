@@ -143,7 +143,8 @@ public class Application extends javafx.application.Application {
         Label liquidTitleLabel = new Label("Вода на выщелачивание");
         liquidTitleLabel.setStyle("-fx-background-color: #EEEEEE; -fx-font-size: 20px; -fx-text-fill: black;");
         TextField liquidQInput = new TextField();
-        Label h2oResultLabel = new Label("H2O:");
+        TextField Ginput = new TextField();
+        Label h2oResultLabel = new Label("Q, т/ч:");
         Label h2oResultValue = new Label();
 
 // Section 2: Solid Material Section
@@ -185,7 +186,9 @@ public class Application extends javafx.application.Application {
         Label NaCl = new Label("NaCl, %");
         Label CaSO4 = new Label("CaSO4, %");
         Label MatochinkJT = new Label("Ж/Т, маточник");
-        Label Qvoda = new Label("Q, т/ч");
+        Label Qvoda = new Label("q, кг/т");
+        Label G = new Label("G, т/ч");
+
 
 
         grid.add(Qruda, 1, 4);
@@ -194,6 +197,7 @@ public class Application extends javafx.application.Application {
         grid.add(CaSO4, 1, 7);
         grid.add(MatochinkJT, 3, 1);
         grid.add(Qvoda, 5, 1);
+        grid.add(G, 5, 2);
 
 // Liquid Section
         int liquidColumn = 4;
@@ -201,8 +205,10 @@ public class Application extends javafx.application.Application {
         grid.add(liquidTitleLabel, liquidColumn, rowIndex++, 2, 1); // Spanning two columns
 
 // Removing "Q, т/ч:" label and using it as a hint in the TextField
-        liquidQInput.setPromptText("Q, т/ч"); // Setting hint text
+        liquidQInput.setPromptText("Расход воды в кг на тонну конц.");
+        Ginput.setPromptText("Производительность по конц.");
         grid.add(liquidQInput, liquidColumn, rowIndex++);
+        grid.add(Ginput, liquidColumn, rowIndex++);
         grid.add(h2oResultLabel, liquidColumn, rowIndex);
         grid.add(h2oResultValue, liquidColumn + 1, rowIndex++);
 
@@ -790,8 +796,10 @@ public class Application extends javafx.application.Application {
 
 
 
+
                 // Liquid Section
-                BigDecimal liquidQInputSection = new BigDecimal(liquidQInput.getText());
+                BigDecimal GinputSection = new BigDecimal(Ginput.getText());
+                BigDecimal liquidQInputSection = new BigDecimal(liquidQInput.getText()).divide(BigDecimal.valueOf(1000)).multiply(GinputSection);
                 liquid.setH2O(liquidQInputSection);
                 liquid.setQ(liquidQInputSection);
                 h2oResultValue.setText(liquidQInputSection.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
@@ -1393,6 +1401,7 @@ public class Application extends javafx.application.Application {
         });
 
         saveButton.setOnAction(event -> {
+            prefs.put("Ginput", Ginput.getText());
             prefs.put("liquidQInput", liquidQInput.getText());
             prefs.put("solidQInput", solidQInput.getText());
             prefs.put("KClPercentInput", KClPercentInput.getText());
@@ -1405,6 +1414,7 @@ public class Application extends javafx.application.Application {
             System.out.println("Data saved!");
         });
         loadButton.setOnAction(event -> {
+            Ginput.setText(prefs.get("Ginput", ""));
             liquidQInput.setText(prefs.get("liquidQInput", ""));
             solidQInput.setText(prefs.get("solidQInput", ""));
             KClPercentInput.setText(prefs.get("KClPercentInput", ""));
@@ -1424,6 +1434,7 @@ public class Application extends javafx.application.Application {
         resetButton.setOnAction(event -> {
 
             // Reset all text fields to default (empty)
+            Ginput.setText("");
             liquidQInput.setText("");
             solidQInput.setText("");
             KClPercentInput.setText("");
