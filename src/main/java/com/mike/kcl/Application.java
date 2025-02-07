@@ -143,7 +143,6 @@ public class Application extends javafx.application.Application {
         Label liquidTitleLabel = new Label("Вода на выщелачивание");
         liquidTitleLabel.setStyle("-fx-background-color: #EEEEEE; -fx-font-size: 20px; -fx-text-fill: black;");
         TextField liquidQInput = new TextField();
-        TextField Ginput = new TextField();
         Label h2oResultLabel = new Label("G, м3:");
         Label h2oResultValue = new Label();
 
@@ -197,7 +196,7 @@ public class Application extends javafx.application.Application {
         grid.add(CaSO4, 1, 7);
         grid.add(MatochinkJT, 3, 1);
         grid.add(Qvoda, 5, 1);
-        grid.add(G, 5, 2);
+
 
 // Liquid Section
         int liquidColumn = 4;
@@ -206,9 +205,7 @@ public class Application extends javafx.application.Application {
 
 // Removing "Q, т/ч:" label and using it as a hint in the TextField
         liquidQInput.setPromptText("Расход воды в кг на тонну конц.");
-        Ginput.setPromptText("Производительность по конц.");
         grid.add(liquidQInput, liquidColumn, rowIndex++);
-        grid.add(Ginput, liquidColumn, rowIndex++);
         grid.add(h2oResultLabel, liquidColumn, rowIndex);
         grid.add(h2oResultValue, liquidColumn + 1, rowIndex++);
 
@@ -796,19 +793,18 @@ public class Application extends javafx.application.Application {
 
 
 
-
+                BigDecimal solidQInputSection = new BigDecimal(solidQInput.getText());
                 // Liquid Section
-                BigDecimal GinputSection = new BigDecimal(Ginput.getText());
-                BigDecimal liquidQInputSection = new BigDecimal(liquidQInput.getText()).divide(BigDecimal.valueOf(1000)).multiply(GinputSection);
+                BigDecimal liquidQInputSection = new BigDecimal(liquidQInput.getText()).divide(BigDecimal.valueOf(1000)).multiply(solidQInputSection);
                 liquid.setH2O(liquidQInputSection);
                 liquid.setQ(liquidQInputSection);
-                h2oResultValue.setText(liquidQInputSection.setScale(2, RoundingMode.HALF_UP).toString()+" т/ч");
+                h2oResultValue.setText(liquidQInputSection.setScale(2, RoundingMode.HALF_UP).toString()+" м3");
                 if (liquidQInputSection.compareTo(BigDecimal.ZERO) <= 0) {
                     showError("Вода должна быть больше нуля!");
                     return; // Stop further execution
                 }
                 // Solid Section
-                BigDecimal solidQInputSection = new BigDecimal(solidQInput.getText());
+
                 BigDecimal KClPercentInputSection = new BigDecimal(KClPercentInput.getText()).divide(BigDecimal.valueOf(100));
                 BigDecimal NaCLPercentInputSection = new BigDecimal(NaClPercentInput.getText()).divide(BigDecimal.valueOf(100));
                 BigDecimal CaSO4PercentInputSection = new BigDecimal(CaSO4PercentInput.getText()).divide(BigDecimal.valueOf(100));
@@ -1401,7 +1397,6 @@ public class Application extends javafx.application.Application {
         });
 
         saveButton.setOnAction(event -> {
-            prefs.put("Ginput", Ginput.getText());
             prefs.put("liquidQInput", liquidQInput.getText());
             prefs.put("solidQInput", solidQInput.getText());
             prefs.put("KClPercentInput", KClPercentInput.getText());
@@ -1414,7 +1409,6 @@ public class Application extends javafx.application.Application {
             System.out.println("Data saved!");
         });
         loadButton.setOnAction(event -> {
-            Ginput.setText(prefs.get("Ginput", ""));
             liquidQInput.setText(prefs.get("liquidQInput", ""));
             solidQInput.setText(prefs.get("solidQInput", ""));
             KClPercentInput.setText(prefs.get("KClPercentInput", ""));
@@ -1434,7 +1428,6 @@ public class Application extends javafx.application.Application {
         resetButton.setOnAction(event -> {
 
             // Reset all text fields to default (empty)
-            Ginput.setText("");
             liquidQInput.setText("");
             solidQInput.setText("");
             KClPercentInput.setText("");
