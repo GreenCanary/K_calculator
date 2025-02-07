@@ -144,7 +144,7 @@ public class Application extends javafx.application.Application {
         liquidTitleLabel.setStyle("-fx-background-color: #EEEEEE; -fx-font-size: 20px; -fx-text-fill: black;");
         TextField liquidQInput = new TextField();
         TextField Ginput = new TextField();
-        Label h2oResultLabel = new Label("Q, т/ч:");
+        Label h2oResultLabel = new Label("G, м3:");
         Label h2oResultValue = new Label();
 
 // Section 2: Solid Material Section
@@ -186,8 +186,8 @@ public class Application extends javafx.application.Application {
         Label NaCl = new Label("NaCl, %");
         Label CaSO4 = new Label("CaSO4, %");
         Label MatochinkJT = new Label("Ж/Т, маточник");
-        Label Qvoda = new Label("q, кг/т");
-        Label G = new Label("G, т/ч");
+        Label Qvoda = new Label("q, л/т");
+        Label G = new Label("Q, т/ч");
 
 
 
