@@ -219,6 +219,8 @@ public class Application extends javafx.application.Application {
         KClPercentInput.setPromptText("KCl, %");
         NaClPercentInput.setPromptText("NaCl, %");
         CaSO4PercentInput.setPromptText("CaSO4, %");
+
+
         grid.add(kclResultLabel, solidColumn, rowIndex);
         grid.add(kclResultValue, solidColumn + 1, rowIndex++);
         grid.add(naclResultLabel, solidColumn, rowIndex);
@@ -255,7 +257,7 @@ public class Application extends javafx.application.Application {
         grid.add(liquidCaso4ResultValue, liquidMaterialColumn + 1, rowIndex++);
 
 // Add Combined Button (span across all columns)
-        grid.add(calculateButton, 2, 8, 6, 1);
+        grid.add(calculateButton, 2, 7, 6, 1);
 
 
         Label liquidHeader = new Label("Жидкая фаза");
@@ -304,7 +306,7 @@ public class Application extends javafx.application.Application {
         grid.add(solQuartRatioLabelHydrocyclone, 1, 9);
         grid.add(solQuartRatioTextFieldHydrocyclone, 0, 9);
 
-        rowIndex = 12;
+        rowIndex = 24;
         Label titleVishelachivanie = new Label("Выщелачивание");
         titleVishelachivanie.setStyle("-fx-background-color: #EEEEEE;-fx-font-size: 20px; -fx-text-fill: black;");
 
@@ -346,14 +348,14 @@ public class Application extends javafx.application.Application {
         PieChart liquidPieChartVishelachivanie = new PieChart();
         liquidPieChartVishelachivanie.setTitle("Жидкая фаза");
         liquidPieChartVishelachivanie.setLegendSide(Side.LEFT);
-        liquidPieChartVishelachivanie.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
+        liquidPieChartVishelachivanie.setStyle("-fx-background-color: #E6676B;-fx-text-fill: black;");
         liquidPieChartVishelachivanie.setPrefWidth(10);
         liquidPieChartVishelachivanie.setPrefHeight(10);
 
         PieChart solidPieChartVishelachivanie = new PieChart();
         solidPieChartVishelachivanie.setTitle("Твёрдая фаза");
         solidPieChartVishelachivanie.setLegendSide(Side.LEFT);
-        solidPieChartVishelachivanie.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
+        solidPieChartVishelachivanie.setStyle("-fx-background-color: #E6676B;-fx-text-fill: black;");
         solidPieChartVishelachivanie.setPrefWidth(10);
         solidPieChartVishelachivanie.setPrefHeight(10);
 
@@ -432,21 +434,21 @@ public class Application extends javafx.application.Application {
 
         PieChart liquidPieChartHydrocyclone = new PieChart();
         liquidPieChartHydrocyclone.setTitle("Жидкая фаза (Пески гидроциклона)");
-        liquidPieChartHydrocyclone.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
+        liquidPieChartHydrocyclone.setStyle("-fx-background-color: #E6676B;-fx-text-fill: black;");
         liquidPieChartHydrocyclone.setPrefWidth(10);
         liquidPieChartHydrocyclone.setPrefHeight(10);
         liquidPieChartHydrocyclone.setLegendSide(Side.LEFT);
 
         PieChart solidPieChartHydrocyclone = new PieChart();
         solidPieChartHydrocyclone.setTitle("Твёрдая фаза (Пески гидроциклона)");
-        solidPieChartHydrocyclone.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
+        solidPieChartHydrocyclone.setStyle("-fx-background-color: #E6676B;-fx-text-fill: black;");
         solidPieChartHydrocyclone.setPrefWidth(10);
         solidPieChartHydrocyclone.setPrefHeight(10);
         solidPieChartHydrocyclone.setLegendSide(Side.LEFT);
 
         PieChart liquidPieChart2Hydrocyclone = new PieChart();
         liquidPieChart2Hydrocyclone.setTitle("Жидкая фаза (Слив гидроциклона)");
-        liquidPieChart2Hydrocyclone.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
+        liquidPieChart2Hydrocyclone.setStyle("-fx-background-color: #E6676B;-fx-text-fill: black;");
         liquidPieChart2Hydrocyclone.setPrefWidth(10);
         liquidPieChart2Hydrocyclone.setPrefHeight(10);
         liquidPieChart2Hydrocyclone.setLegendSide(Side.LEFT);
@@ -454,7 +456,7 @@ public class Application extends javafx.application.Application {
 
         PieChart solidPieChart2Hydrocyclone = new PieChart();
         solidPieChart2Hydrocyclone.setTitle("Твёрдая фаза (Слив гидроциклона)");
-        solidPieChart2Hydrocyclone.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
+        solidPieChart2Hydrocyclone.setStyle("-fx-background-color: #E6676B;-fx-text-fill: black;");
         solidPieChart2Hydrocyclone.setPrefWidth(10);
         solidPieChart2Hydrocyclone.setPrefHeight(10);
         solidPieChart2Hydrocyclone.setLegendSide(Side.LEFT);
@@ -496,7 +498,7 @@ public class Application extends javafx.application.Application {
         Cetrifuge.setStyle("-fx-background-color: #EEEEEE;-fx-font-size: 20px;-fx-text-fill: black;");
         PieChart liquidPieChartCentrifuge = new PieChart();
         liquidPieChartCentrifuge.setTitle("Жидкая фаза (Кек центрифуги)");
-        liquidPieChartCentrifuge.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
+        liquidPieChartCentrifuge.setStyle("-fx-background-color: #E6676B;-fx-text-fill: black;");
         liquidPieChartCentrifuge.setPrefWidth(10);
         liquidPieChartCentrifuge.setPrefHeight(10);
         liquidPieChartCentrifuge.setLegendSide(Side.LEFT);
@@ -505,7 +507,7 @@ public class Application extends javafx.application.Application {
 
         PieChart solidPieChartCentrifuge = new PieChart();
         solidPieChartCentrifuge.setTitle("Твёрдая фаза (Кек центрифуги)");
-        solidPieChartCentrifuge.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
+        solidPieChartCentrifuge.setStyle("-fx-background-color: #E6676B;-fx-text-fill: black;");
         solidPieChartCentrifuge.setPrefWidth(10);
         solidPieChartCentrifuge.setPrefHeight(10);
         solidPieChartCentrifuge.setLegendSide(Side.LEFT);
@@ -518,7 +520,7 @@ public class Application extends javafx.application.Application {
 
         PieChart liquidPieChart2Centrifuge = new PieChart();
         liquidPieChart2Centrifuge.setTitle("Фугат");
-        liquidPieChart2Centrifuge.setStyle("-fx-background-color: #C73659;-fx-text-fill: black;");
+        liquidPieChart2Centrifuge.setStyle("-fx-background-color: #E6676B;-fx-text-fill: black;");
         liquidPieChart2Centrifuge.setPrefWidth(10);
         liquidPieChart2Centrifuge.setPrefHeight(10);
         liquidPieChart2Centrifuge.setLegendSide(Side.LEFT);
@@ -555,7 +557,7 @@ public class Application extends javafx.application.Application {
         ExtractionResultValueSushka.setStyle("-fx-background-color: green; -fx-text-fill: #EEEEEE; -fx-text-fill: black;");
         PieChart finalPieChart = new PieChart();
         finalPieChart.setTitle("Готовый продукт");
-        finalPieChart.setStyle("-fx-background-color: #C73659; -fx-text-fill: black;");
+        finalPieChart.setStyle("-fx-background-color: #E6676B; -fx-text-fill: black;");
         finalPieChart.setPrefWidth(10);
         finalPieChart.setPrefHeight(10);
         finalPieChart.setLegendSide(Side.LEFT);
@@ -574,7 +576,7 @@ public class Application extends javafx.application.Application {
         Label ExtractionResultValueSushka2 = new Label();
         PieChart finalPieChart2 = new PieChart();
         finalPieChart2.setTitle("Готовый продукт");
-        finalPieChart2.setStyle("-fx-background-color: #C73659; -fx-text-fill: black;");
+        finalPieChart2.setStyle("-fx-background-color: #E6676B; -fx-text-fill: black;");
         finalPieChart2.setPrefWidth(10);
         finalPieChart2.setPrefHeight(10);
 
@@ -765,16 +767,20 @@ public class Application extends javafx.application.Application {
 
 
 
-        grid.add(ExtractionResultLabelSushka2, 4, 4);
-        grid.add(ExtractionResultValueSushka2, 5, 4);
+        Label Product = new Label("Готовый продукт");
+        Product.setStyle("-fx-background-color: #EEEEEE; -fx-font-size: 20px; -fx-text-fill: black;");
+        grid.add(Product, 4, 4);
+
+        grid.add(ExtractionResultLabelSushka2, 4, 5);
+        grid.add(ExtractionResultValueSushka2, 5, 5);
 
 
         grid.add(finalPieChart2, 4, 6, 2, 10);
 
 
-        grid.add(saveButton, 2, 9, 6, 1);
-        grid.add(loadButton, 2, 10, 6, 1);
-        grid.add(resetButton, 2, 11, 6, 1);
+        grid.add(saveButton, 2, 8, 6, 1);
+        grid.add(loadButton, 2, 9, 6, 1);
+        grid.add(resetButton, 2, 10, 6, 1);
 
 
         Label Final = new Label("  ");
@@ -1471,7 +1477,7 @@ public class Application extends javafx.application.Application {
         }
 
         // Apply a border to the entire grid
-        grid.setStyle("-fx-border-color: #EEEEEE; -fx-border-width: 2px;-fx-text-fill: black;");
+        grid.setStyle("-fx-border-color: #EEEEEE; -fx-border-width: 3px;-fx-text-fill: black;");
 
         return grid;
     }

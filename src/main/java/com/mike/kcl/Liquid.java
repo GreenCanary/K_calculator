@@ -4,7 +4,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class Liquid implements Serializable {
+public class Liquid  {
     @Serial
     private static final long serialVersionUID = 5;
     private BigDecimal H2O = BigDecimal.ZERO;
